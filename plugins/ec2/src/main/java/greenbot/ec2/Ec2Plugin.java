@@ -18,12 +18,10 @@ public class Ec2Plugin extends Plugin implements ExtensionPoint {
 
 	@Override
 	public void start() {
-		System.out.println("HelloPlugin.start()");
 	}
 
 	@Override
 	public void stop() {
-		System.out.println("HelloPlugin.stop()");
 	}
 
 	@Extension(ordinal = 1)

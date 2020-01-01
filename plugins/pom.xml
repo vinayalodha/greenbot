@@ -2,24 +2,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>template</artifactId>
-	<packaging>jar</packaging>
+	<artifactId>parent-plugins</artifactId>
+	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>greenbot</groupId>
 		<artifactId>parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../../parent/pom.xml</relativePath>
+		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
-
-	<properties>
-		<plugin.id >template</plugin.id>
-		<plugin.class >greenbot.template.TemplatePlugin</plugin.class>
-		<plugin.version >${project.version}</plugin.version>
-		<plugin.provider />
-		<plugin.dependencies />
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>greenbot</groupId>
@@ -31,34 +22,36 @@
 			<artifactId>pf4j</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-		</dependency>
+
 	</dependencies>
+
+	<modules>
+		<module>ec2</module>
+		<module>helloworld</module>
+	</modules>
 
 	<build>
 		<plugins>
-		
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <configuration>
-            <archive>
-              <manifest>
-                <mainClass>${start-class}</mainClass>
-                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              </manifest>
-              						<manifestEntries>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive> 
+						<manifest>
+							<mainClass>${start-class}</mainClass>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
 							<Plugin-Id>${plugin.id}</Plugin-Id>
 							<Plugin-Version>${plugin.version}</Plugin-Version>
 							<Plugin-Provider>${plugin.provider}</Plugin-Provider>
 							<Plugin-Class>${plugin.class}</Plugin-Class>
 							<Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
 						</manifestEntries>
-            </archive>
-          </configuration>
-        </plugin>
-		
+					</archive>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
+
 </project>

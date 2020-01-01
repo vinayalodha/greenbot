@@ -1,4 +1,4 @@
-package greenbot.template;
+package greenbot.helloworld;
 
 import org.pf4j.Extension;
 import org.pf4j.ExtensionPoint;
@@ -10,9 +10,9 @@ import greenbot.plugin.model.PluginRequest;
 import greenbot.plugin.model.PluginResponse;
 
 @Extension
-public class TemplatePlugin extends Plugin implements ExtensionPoint {
+public class HelloWorldPlugin extends Plugin implements ExtensionPoint {
 
-	public TemplatePlugin(PluginWrapper wrapper) {
+	public HelloWorldPlugin(PluginWrapper wrapper) {
 		super(wrapper);
 	}
 
@@ -25,7 +25,7 @@ public class TemplatePlugin extends Plugin implements ExtensionPoint {
 	}
 
 	@Extension(ordinal = 1)
-	public static class TemplateExtension implements GreenbotExtension {
+	public static class HelloWorldExtension implements GreenbotExtension {
 		@Override
 		public PluginResponse doWork(PluginRequest pluginRequest) {
 			return new PluginResponse();

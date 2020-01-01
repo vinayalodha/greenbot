@@ -2,9 +2,9 @@ package greenbot.main;
 
 import java.util.List;
 
-import org.pf4j.DefaultPluginManager;
 import org.pf4j.PluginManager;
 import org.pf4j.RuntimeMode;
+import org.pf4j.ZipPluginManager;
 
 import greenbot.plugin.model.GreenbotExtension;
 
@@ -12,7 +12,7 @@ import greenbot.plugin.model.GreenbotExtension;
 public class Application {
 
 	public static void main(String[] args) {
-		PluginManager pluginManager = new DefaultPluginManager(){
+		PluginManager pluginManager = new ZipPluginManager(){
 			public org.pf4j.RuntimeMode getRuntimeMode() {
 				return RuntimeMode.DEVELOPMENT;
 			};

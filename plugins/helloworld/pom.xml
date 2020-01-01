@@ -2,7 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>ec2</artifactId>
+	<artifactId>helloworld</artifactId>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -13,9 +13,9 @@
 	</parent>
 
 	<properties>
-		<plugin.id >ec2</plugin.id>
-		<plugin.class >greenbot.ec2.Ec2Plugin</plugin.class>
-		<plugin.version >${project.version}</plugin.version>
+		<plugin.id>helloworld</plugin.id>
+		<plugin.class>greenbot.template.HelloWorldPlugin</plugin.class>
+		<plugin.version>${project.version}</plugin.version>
 		<plugin.provider />
 		<plugin.dependencies />
 	</properties>
@@ -27,4 +27,5 @@
 		</dependency>
 	</dependencies>
 
+	
 </project>

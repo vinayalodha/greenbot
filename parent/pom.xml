@@ -27,8 +27,7 @@
 	<modules>
 		<module>../main</module>
 		<module>../plugin.model</module>
-		<module>../plugins/ec2</module>
-		<module>../plugins/template</module>
+		<module>../plugins</module>
 	</modules>
 
 
