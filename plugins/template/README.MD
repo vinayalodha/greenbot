@@ -1,0 +1,1 @@
+template for creating new plugin

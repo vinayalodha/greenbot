@@ -1,4 +1,4 @@
-package greenbot.ec2;
+package greenbot.template;
 
 import org.pf4j.Extension;
 import org.pf4j.ExtensionPoint;
@@ -10,24 +10,22 @@ import greenbot.plugin.model.PluginRequest;
 import greenbot.plugin.model.PluginResponse;
 
 @Extension
-public class Ec2Plugin extends Plugin implements ExtensionPoint {
+public class TemplatePlugin extends Plugin implements ExtensionPoint {
 
-	public Ec2Plugin(PluginWrapper wrapper) {
+	public TemplatePlugin(PluginWrapper wrapper) {
 		super(wrapper);
 	}
 
 	@Override
 	public void start() {
-		System.out.println("HelloPlugin.start()");
 	}
 
 	@Override
 	public void stop() {
-		System.out.println("HelloPlugin.stop()");
 	}
 
 	@Extension(ordinal = 1)
-	public static class Ec2Extension implements GreenbotExtension {
+	public static class TemplateExtension implements GreenbotExtension {
 		@Override
 		public PluginResponse doWork(PluginRequest pluginRequest) {
 			return new PluginResponse();

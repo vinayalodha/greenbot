@@ -17,19 +17,19 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.pi4j</groupId>
-				<artifactId>pi4j</artifactId>
-				<version>1.2</version>
+				<groupId>org.pf4j</groupId>
+				<artifactId>pf4j</artifactId>
+				<version>3.2.0</version>
 			</dependency>
 		</dependencies>
-		
-		
 	</dependencyManagement>
 
 	<modules>
 		<module>../main</module>
 		<module>../plugin.model</module>
 		<module>../plugins/ec2</module>
+		<module>../plugins/template</module>
 	</modules>
+
 
 </project>
