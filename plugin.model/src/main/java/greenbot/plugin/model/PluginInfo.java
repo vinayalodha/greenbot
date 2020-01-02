@@ -7,6 +7,8 @@ import lombok.Value;
 
 @Value
 @Builder
-public class PluginRequest {
+public class PluginInfo {
+	private final List<String> permissions;
+	private final String name;
 	private final List<ConfigParam> configParams;
 }

@@ -6,6 +6,7 @@ import org.pf4j.Plugin;
 import org.pf4j.PluginWrapper;
 
 import greenbot.plugin.model.GreenbotExtension;
+import greenbot.plugin.model.PluginInfo;
 import greenbot.plugin.model.PluginRequest;
 import greenbot.plugin.model.PluginResponse;
 
@@ -29,6 +30,11 @@ public class Ec2Plugin extends Plugin implements ExtensionPoint {
 		@Override
 		public PluginResponse doWork(PluginRequest pluginRequest) {
 			return new PluginResponse();
+		}
+		
+		@Override
+		public PluginInfo getPluginInfo() {
+			return null;
 		}
 
 	}
