@@ -33,9 +33,9 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>../main</module>
-		<module>../plugin.model</module>
-		<module>../plugins</module>
+		<module>main</module>
+		<module>plugin.model</module>
+		<module>plugins</module>
 	</modules>
 
 
