@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GreenBot 🤖</title>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"></link>
+<script defer
+	src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<nav class="navbar" role="navigation" aria-label="main navigation">
+			<div class="navbar-brand">
+				<a class="navbar-item"> GreenBot 🤖</a>
+			</div>
+
+			<div id="navbarBasicExample" class="navbar-menu">
+				<div class="navbar-start">
+					<a class="navbar-item"> Home </a> <a class="navbar-item">
+						Documentation </a>
+
+					<div class="navbar-item has-dropdown is-hoverable">
+						<a class="navbar-link"> More </a>
+
+						<div class="navbar-dropdown">
+							<a class="navbar-item"> About </a> <a class="navbar-item">
+								Jobs </a> <a class="navbar-item"> Contact </a>
+							<hr class="navbar-divider">
+							<a class="navbar-item"> Report an issue </a>
+						</div>
+					</div>
+				</div>
+
+				<div class="navbar-end">
+					<div class="navbar-item">
+						<div class="buttons">
+							<a class="button is-primary"> <strong>Sign up</strong>
+							</a> <a class="button is-light"> Log in </a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+	</div>
+	<section class="section">
+
+		<article class="message is-info">
+			<div class="message-header">
+				<p>Info</p>
+				<button class="delete" aria-label="delete"></button>
+			</div>
+			<div class="message-body">
+				Please make sure you below preconditions are fulfilled before running tool.
+				<ul>
+				<li>One</li>
+				<li>One</li>
+				</ul>
+			</div>
+		</article>
+		<div class="container">
+			<div class="field">
+				<label class="label">Cloud Provider - Currently only AWS is
+					supported</label>
+				<div class="control">
+					<div class="select">
+						<select>
+							<option>AWS</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Config JSON - Please refer
+					documentation for more info. If you are unsure keep it as is</label>
+				<div class="control">
+					<textarea class="textarea" placeholder="Textarea"></textarea>
+				</div>
+			</div>
+
+			<div class="field is-grouped">
+				<div class="control">
+					<button class="button is-link">Analyze</button>
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+	<section class="section is-hidden">
+		<div class="container">
+			<h1 class="title">Results</h1>
+
+			<div class="table-container">
+				<table
+					class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+					<thead>
+						<tr>
+							<th>One</th>
+							<th>Two</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Three</td>
+							<td>Four</td>
+						</tr>
+						<tr>
+							<td>Five</td>
+							<td>Six</td>
+						</tr>
+						<tr>
+							<td>Seven</td>
+							<td>Eight</td>
+						</tr>
+						<tr>
+							<td>Nine</td>
+							<td>Ten</td>
+						</tr>
+						<tr>
+							<td>Eleven</td>
+							<td>Twelve</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+
+
+		</div>
+	</section>
+</body>
+</html>

@@ -20,7 +20,6 @@
 			<outputDirectory></outputDirectory>
 			<destName>main.jar</destName>
 		</file>
-
 	</files>
 
 </assembly>
