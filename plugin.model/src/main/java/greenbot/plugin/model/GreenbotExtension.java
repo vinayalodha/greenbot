@@ -6,5 +6,5 @@ public interface GreenbotExtension extends ExtensionPoint {
 
 	public PluginResponse doWork(PluginRequest pluginRequest);
 
-	public PluginInfo getPluginInfo();
+	public PluginInfo pluginInfo();
 }

@@ -14,10 +14,6 @@
 
 	<artifactId>main</artifactId>
 
-	<properties>
-		<java.version>13</java.version>
-	</properties>
-
 	<dependencies>
 
 		<dependency>
