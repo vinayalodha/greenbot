@@ -15,7 +15,7 @@ import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 
 @Component
-public class OlderEc2GnerationRule implements GreenbotRule {
+public class UnderUtilizedRdsRule implements GreenbotRule {
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
@@ -35,7 +35,7 @@ public class OlderEc2GnerationRule implements GreenbotRule {
 	@Override
 	public RuleInfo ruleInfo() {
 		return RuleInfo.builder()
-				.id("Replace older generation instance with Newer generation AWS EC2 Instance Rule")
+				.id("Check if RDS instances are under utilized rule")
 				.permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
 				.build();
 	}

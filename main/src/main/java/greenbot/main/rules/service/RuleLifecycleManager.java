@@ -35,7 +35,7 @@ public class RuleLifecycleManager {
 	public Map<String, List<ConfigParam>> getConfigParams() {
 		Map<String, List<ConfigParam>> retval = new TreeMap<String, List<ConfigParam>>();
 		rules.forEach(rule -> {
-			retval.put(rule.ruleInfo().getName(), rule.configParams());
+			retval.put(rule.ruleInfo().getId(), rule.configParams());
 		});
 		return retval;
 	}

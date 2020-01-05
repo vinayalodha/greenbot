@@ -7,36 +7,42 @@
 	<div th:replace="fragments/header :: div"></div>
 
 	<section class="container">
-		<div class="container">
-			<div class="message-header">
-				<p>Permissions</p>
+		<div class="message">
+
+			<div class="message-body">
+				Greenbot Analyze your AWS infrastructure to find ways to reduce costs
 			</div>
-			<pre><code class="language-json" data-lang="json" th:text="${ruleInfos}"></code></pre>
+		</div>
+
+		<div class="message">
+
+			<div class="message-body">
+
+				Below is the list permissions needed for each rule. Do make sure your .aws folder is updated with needed
+				IAM roles
+			</div>
+			<pre>
+			<code class="language-json" data-lang="json" th:text="${ruleInfos}"></code></pre>
 		</div>
 		<div class="container">
-			<div class="field">
-				<label class="label">Cloud Provider - Currently only AWS is
-					supported</label>
+			<div class="field ">
+				<label class="label">Timeframe - Timeframe for which data points to analyze/label>
 				<div class="control">
 					<div class="select">
 						<select>
-							<option>AWS</option>
+							<option>5 Minutes</option>
+							<option>1 Day</option>
+							<option>1 Month</option>
+							<option>3 Month</option>
 						</select>
 					</div>
 				</div>
 			</div>
-			<div class="field ">
-				<label class="label">Timeframe</label>
-				<div class="control">
-					<input class="input is-2 tile" type="text" placeholder="Text input" id="timeframe">
-				</div>
-			</div>
 
 			<div class="field">
-				<label class="label">Config JSON - Please refer
-					documentation for more info. If you are unsure keep it as is</label>
+				<label class="label">Config JSON - Config parameter to be used for each rule. Please refer documentation for more info. If you are unsure keep it as is</label>
 				<div class="control">
-					<textarea class="textarea" placeholder="Textarea" id="config-json"></textarea>
+					<textarea style="height: 1000px" class="textarea" placeholder="Textarea" id="config-json" th:text="${configParams}"></textarea>
 				</div>
 			</div>
 			<div class="field is-grouped">
