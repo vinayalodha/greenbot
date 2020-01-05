@@ -17,16 +17,14 @@
 		<div class="message">
 
 			<div class="message-body">
-
-				Below is the list permissions needed for each rule. Do make sure your .aws folder is updated with needed
-				IAM roles
+				Below is the list permissions needed for each rule. Do make sure AWS profile is updated with below IAM roles
 			</div>
 			<pre>
 			<code class="language-json" data-lang="json" th:text="${ruleInfos}"></code></pre>
 		</div>
 		<div class="container">
 			<div class="field ">
-				<label class="label">Timeframe - Timeframe for which data points to analyze/label>
+				<label class="label">Timeframe for which data points to analyzed</label>
 				<div class="control">
 					<div class="select">
 						<select>
@@ -40,7 +38,7 @@
 			</div>
 
 			<div class="field">
-				<label class="label">Config JSON - Config parameter to be used for each rule. Please refer documentation for more info. If you are unsure keep it as is</label>
+				<label class="label">Config parameters to be used for each rule. Please refer documentation for more info. If you are unsure keep it as is</label>
 				<div class="control">
 					<textarea style="height: 1000px" class="textarea" placeholder="Textarea" id="config-json" th:text="${configParams}"></textarea>
 				</div>
