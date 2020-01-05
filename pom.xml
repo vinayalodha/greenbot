@@ -6,17 +6,17 @@
 	<artifactId>parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.2.RELEASE</version>
 		<relativePath />
 	</parent>
-<properties>
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
-</properties>
+	<properties>
+		<maven.compiler.source>8</maven.compiler.source>
+		<maven.compiler.target>8</maven.compiler.target>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -25,21 +25,10 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.pf4j</groupId>
-				<artifactId>pf4j</artifactId>
-				<version>3.2.0</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<modules>
 		<module>main</module>
-		<module>plugin.model</module>
-		<module>plugins</module>
-		<module>distribution</module>
+		<module>rule.model</module>
 	</modules>
 
 

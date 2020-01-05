@@ -1,0 +1,8 @@
+@font-face {
+  font-family: lato;
+  src: url(font/lato-v16-latin-regular.woff);
+}
+
+body {
+    font-family: 'lato' !important;
+}

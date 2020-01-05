@@ -5,20 +5,14 @@
 
 <body>
 	<div th:replace="fragments/header :: div"></div>
+
 	<section class="container">
-		<article class="message is-info">
+		<div class="container">
 			<div class="message-header">
-				<p>Info</p>
-				<button class="delete" aria-label="delete"></button>
+				<p>Permissions</p>
 			</div>
-			<div class="message-body">
-				Please make sure you below preconditions are fulfilled before running tool.
-				<ul>
-					<li>One</li>
-					<li>One</li>
-				</ul>
-			</div>
-		</article>
+			<pre><code class="language-json" data-lang="json" th:text="${ruleInfos}"></code></pre>
+		</div>
 		<div class="container">
 			<div class="field">
 				<label class="label">Cloud Provider - Currently only AWS is
@@ -31,21 +25,49 @@
 					</div>
 				</div>
 			</div>
+			<div class="field ">
+				<label class="label">Timeframe</label>
+				<div class="control">
+					<input class="input is-2 tile" type="text" placeholder="Text input" id="timeframe">
+				</div>
+			</div>
+
 			<div class="field">
 				<label class="label">Config JSON - Please refer
 					documentation for more info. If you are unsure keep it as is</label>
 				<div class="control">
-					<textarea class="textarea" placeholder="Textarea"></textarea>
+					<textarea class="textarea" placeholder="Textarea" id="config-json"></textarea>
 				</div>
 			</div>
-
 			<div class="field is-grouped">
 				<div class="control">
-					<button class="button is-link">Analyze</button>
+					<button class="button is-link" id="analyze">Analyze</button>
 				</div>
 
 			</div>
 		</div>
+
+		<section class="container">
+			<div class="container">
+				<h1 class="title">Results</h1>
+
+				<div class="table-container">
+					<table id="results" class="table is-bordered   is-hoverable is-fullwidth" style="padding-top: 30px">
+						<thead>
+							<tr>
+								<th>Resource Ids</th>
+								<th>Confidence</th>
+								<th>Message</th>
+								<th>Approx Cost Saving</th>
+							</tr>
+						</thead>
+						<tbody id="results-tbody">
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
 	</section>
 	<div th:replace="fragments/footer :: footer"></div>
 </body>
