@@ -6,3 +6,11 @@
 body {
     font-family: 'lato' !important;
 }
+
+pre{
+	background-color: #f5f5f5 !important;
+}
+
+.message-body {
+	border-color: black;
+}
