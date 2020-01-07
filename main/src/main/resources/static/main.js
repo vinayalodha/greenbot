@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    $('#results').DataTable();
     debugger;
     $('code').html(JSON.stringify(JSON.parse($('code').html()), null, 4));
     $('#config-json').val(JSON.stringify(JSON.parse($('#config-json').val()), null, 4));
