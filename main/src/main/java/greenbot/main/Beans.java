@@ -14,6 +14,7 @@ public class Beans {
 	public RuleResponseReducer getRuleResponseReducer() {
 		return new RuleResponseReducer();
 	}
+	
 	@Bean
 	WebMvcConfigurer configurer() {
 	   return new WebMvcConfigurer() {
@@ -22,12 +23,12 @@ public class Beans {
 	          registry
 	                .addResourceHandler("/resources/**")
 	                .addResourceLocations("classpath:/static/")
-	                              .setCachePeriod(0);
+	                              .setCachePeriod(120);
 	          
 	          registry
               .addResourceHandler("/webjars/**")
               .addResourceLocations("/webjars/")
-                            .setCachePeriod(0);
+                            .setCachePeriod(120);
 	      }
 	   };
 	}

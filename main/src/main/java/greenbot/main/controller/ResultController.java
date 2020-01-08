@@ -5,30 +5,32 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import greenbot.main.model.AnalysisRequest;
 import greenbot.main.rules.service.RuleLifecycleManager;
+import greenbot.rule.model.RuleResponse;
 import lombok.AllArgsConstructor;
 
 @Controller
 @AllArgsConstructor
 public class ResultController {
-	private final RuleLifecycleManager ruleLifecycleManager;
 
-	@GetMapping("/result")
-	public String get(final AnalyzeRequest request, final Model model) {
-		model.addAttribute("name", "Hello World");
-
-		model.addAttribute("ruleInfos", ruleLifecycleManager.getRuleInfos());
-		model.addAttribute("configParams", ruleLifecycleManager.getConfigParams());
-		return "result";
+	private RuleLifecycleManager ruleLifecycleManager;
+	@GetMapping("/resultok")
+	public String getOk(){
+		return "resultok";
 	}
+	
 
-	@PostMapping("/result")
-	public String post(@ModelAttribute AnalyzeRequest request, RedirectAttributes redirectAttributes) {
-		redirectAttributes.addAttribute("request", request);
-
-		return "redirect:/result";
+	@PostMapping("/resultnotok")
+	public String getNotOk(@ModelAttribute AnalysisRequest request, final Model model){
+		RuleResponse ruleResponse = ruleLifecycleManager.execute(request);
+		model.addAttribute("ruleResponse", ruleResponse);
+		return "resultnotok";
 	}
-
+	
+	@GetMapping("resultnotok")
+	public String get(final Model model){
+		return "resultnotok";
+	}
 }

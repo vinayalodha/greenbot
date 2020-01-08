@@ -1,78 +1,46 @@
 <!DOCTYPE html>
-
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <div th:replace="fragments/head :: head"></div>
 
 <body>
-	<div th:replace="fragments/header :: div"></div>
+<div th:replace="fragments/header :: div"></div>
 
-	<section class="container">
-		<div class="message">
+<section class="container">
+    <div class="message">
+        <div class="message-body">
+            Greenbot Analyze your AWS infrastructure to find ways to reduce costs
+        </div>
+    </div>
 
-			<div class="message-body">
-				Greenbot Analyze your AWS infrastructure to find ways to reduce costs
-			</div>
-		</div>
+    <div class="message">
+        <div class="message-body">
+            Below is the list permissions needed for each rule. Do make sure
+            <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html" target="_blank">AWS
+                profile</a> is updated with below IAM roles.
+            <pre>
+				<code class="language-json" data-lang="json" th:text="${ruleInfosAsString}"></code>
+			</pre>
+        </div>
+    </div>
+    <form action="/resultnotok" method="POST">
+        <div class="field">
+            <label class="label">Configuration parameters to be used for each rule. Please refer documentation for more
+                info.If you are unsure keep it as is</label>
+            <div class="control">
+					<textarea style="height: 1000px" class="textarea" placeholder="Textarea" id="config-json"
+                              th:text="${configParamsAsString}" name="configJson"></textarea>
+            </div>
+        </div>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-link" id="analyze" type="submit">Analyze</button>
+            </div>
+        </div>
+    </form>
 
-		<div class="message">
+</section>
 
-			<div class="message-body">
-				Below is the list permissions needed for each rule. Do make sure <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html" target="_blank">AWS profile</a> is updated with below IAM roles. 
-			<pre>			<code class="language-json" data-lang="json" th:text="${ruleInfos}"></code></pre>
-			</div>
-		</div>
-		<div class="container">
-			<div class="field ">
-				<label class="label">Timeframe for which data points to analyzed</label>
-				<div class="control">
-					<div class="select">
-						<select>
-							<option>5 Minutes</option>
-							<option>1 Day</option>
-							<option>1 Month</option>
-							<option>3 Month</option>
-						</select>
-					</div>
-				</div>
-			</div>
-
-			<div class="field">
-				<label class="label">Config parameters to be used for each rule. Please refer documentation for more info. If you are unsure keep it as is</label>
-				<div class="control">
-					<textarea style="height: 1000px" class="textarea" placeholder="Textarea" id="config-json" th:text="${configParams}"></textarea>
-				</div>
-			</div>
-			<div class="field is-grouped">
-				<div class="control">
-					<button class="button is-link" id="analyze">Analyze</button>
-				</div>
-
-			</div>
-		</div>
-
-		<section class="container">
-			<div class="container">
-				<h1 class="title">Results</h1>
-
-				<div class="table-container">
-					<table id="results" class="table is-bordered   is-hoverable is-fullwidth" style="padding-top: 30px">
-						<thead>
-							<tr>
-								<th>Resource Ids</th>
-								<th>Confidence</th>
-								<th>Message</th>
-								<th>Approx Cost Saving</th>
-							</tr>
-						</thead>
-						<tbody id="results-tbody">
-
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</section>
-	</section>
-	<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 
 </html>

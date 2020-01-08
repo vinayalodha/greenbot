@@ -1,20 +1,29 @@
 package greenbot.rule.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Singular;
-import lombok.Value;
 
-@Value
+@Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RuleResponse {
+	
 	@Singular
-	private final List<String> infoMessages;
+	private  List<String> infoMessages = new ArrayList<>();
+	
 	@Singular
-	private final List<String> warningMessages;
+	private  List<String> warningMessages = new ArrayList<>();
+	
 	@Singular
-	private final List<String> errorMessages;
+	private  List<String> errorMessages = new ArrayList<>();
+	
 	@Singular
-	private final List<RuleResponseItem> items;;
+	private  List<RuleResponseItem> items = new ArrayList<>();
 }

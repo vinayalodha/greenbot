@@ -9,6 +9,5 @@ import lombok.Value;
 @Builder
 public class RuleRequest {
 	private final Provider provider;
-	private final long timeFrame;
 	private final List<ConfigParam> configParams;
 }

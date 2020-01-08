@@ -6,8 +6,10 @@ import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
+import greenbot.main.model.AnalysisRequest;
 import greenbot.rule.model.ConfigParam;
 import greenbot.rule.model.GreenbotRule;
 import greenbot.rule.model.RuleInfo;
@@ -24,6 +26,11 @@ public class RuleLifecycleManager {
 
 	private final RuleResponseReducer responseReducer;
 
+	private ConversionService conversionService;
+
+	public RuleResponse execute(AnalysisRequest request) {
+		return execute(conversionService.convert(request, RuleRequest.class));
+	}
 	public RuleResponse execute(RuleRequest request) {
 		return rules.stream()
 				.map(rule -> rule.doWork(request))

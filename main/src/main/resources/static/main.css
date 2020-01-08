@@ -14,3 +14,7 @@ pre{
 .message-body {
 	border-color: black;
 }
+
+ul{
+	list-style: circle;
+}
