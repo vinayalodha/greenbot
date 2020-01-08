@@ -36,7 +36,7 @@ public class RuleLifecycleManager {
 	}
 
 	public RuleResponse execute(RuleRequest request) {
-		List<String> errorMessages = new ArrayList<String>();
+		List<String> errorMessages = new ArrayList<>();
 		RuleResponse response = rules.stream()
 				.map(rule -> {
 					try {
@@ -54,10 +54,8 @@ public class RuleLifecycleManager {
 	}
 
 	public Map<String, List<ConfigParam>> getConfigParams() {
-		Map<String, List<ConfigParam>> retval = new TreeMap<String, List<ConfigParam>>();
-		rules.forEach(rule -> {
-			retval.put(rule.ruleInfo().getId(), rule.configParams());
-		});
+		Map<String, List<ConfigParam>> retval = new TreeMap<>();
+		rules.forEach(rule -> retval.put(rule.ruleInfo().getId(), rule.configParams()));
 		return retval;
 	}
 

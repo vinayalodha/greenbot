@@ -16,7 +16,7 @@ public class Beans {
 	}
 	
 	@Bean
-	WebMvcConfigurer configurer() {
+	WebMvcConfigurer webMvcConfigurer() {
 	   return new WebMvcConfigurer() {
 	      @Override
 	      public void addResourceHandlers(ResourceHandlerRegistry registry) {
