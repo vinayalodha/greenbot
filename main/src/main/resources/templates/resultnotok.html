@@ -3,60 +3,64 @@
 <div th:replace="fragments/head :: head"></div>
 
 <body>
-<div th:replace="fragments/header :: div"></div>
+	<div th:replace="fragments/header :: div"></div>
+	<section class="container" id="results_container" style="padding-top: 50px">
+
+		<article class="message is-info" th:if="${not #lists.isEmpty(ruleResponse.infoMessages)}">
+			<div class="message-body">
+				<ul th:each="infoMessage : ${ruleResponse.infoMessages}">
+					<li th:text="${infoMessage}">
+					</li>
+				</ul>
+			</div>
+		</article>
+
+		<article class="message is-warning" th:if="${not #lists.isEmpty(ruleResponse.warningMessages)}">
+			<div class="message-body">
+				<ul th:each="warningMessage : ${ruleResponse.warningMessages}">
+					<li th:text="${warningMessage}">
+					</li>
+				</ul>
+			</div>
+		</article>
 
 
-<section class="container" id="results_container" style="padding-top: 50px">
+		<article class="message is-danger" th:if="${not #lists.isEmpty(ruleResponse.errorMessages)}">
+			<div class="message-body">
+				<ul th:each="errorMessage : ${ruleResponse.errorMessages}">
+					<li th:text="${errorMessage}">
+					</li>
+				</ul>
+			</div>
+		</article>
+		<div class="container">
+			<h1 class="title">Results</h1>
 
-	<article class="message is-info" th:if="${not #lists.isEmpty(ruleResponse.infoMessages)}">
-		<div class="message-body">
-			<ul  th:each="infoMessage : ${ruleResponse.infoMessages}">
-				<li th:text="${infoMessage}">
-				</li>
-			</ul>
+			<div class="table-container">
+				<table id="results" class="table is-bordered   is-hoverable is-fullwidth" style="padding-top: 30px">
+					<thead>
+						<tr>
+							<th>Resource Id's</th>
+							<th>Rule ID</th>
+							<th>Approximate Cost Saving</th>
+							<th>Message</th>
+							<th>Confidence</th>
+						</tr>
+					</thead>
+					<tbody id="results_tbody">
+						<tr th:each="item : ${ruleResponse.items}">
+							<td th:text="${item.resourceIds}"></td>
+							<td th:text="${item.ruleId}"></td>
+							<td th:text="${item.confidence}"></td>
+							<td th:text="${item.message}"></td>
+							<td th:text="${item.approxCostSaving}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
-	</article>
+	</section>
 
-	<article class="message is-warning" th:if="${not #lists.isEmpty(ruleResponse.warningMessages)}">
-		<div class="message-body">
-			<ul  th:each="warningMessage : ${ruleResponse.warningMessages}">
-				<li th:text="${warningMessage}">
-				</li>
-			</ul>
-		</div>
-	</article>
-
-
-	<article class="message is-danger" th:if="${not #lists.isEmpty(ruleResponse.errorMessages)}">
-		<div class="message-body">
-			<ul  th:each="errorMessage : ${ruleResponse.errorMessages}">
-				<li th:text="${errorMessage}">
-				</li>
-			</ul>
-		</div>
-	</article>
-	<div class="container">
-		<h1 class="title">Results</h1>
-
-		<div class="table-container">
-			<table id="results" class="table is-bordered   is-hoverable is-fullwidth" style="padding-top: 30px">
-				<thead>
-					<tr>
-						<th>Resource Id's</th>
-						<th>Confidence</th>
-						<th>Message</th>
-						<th>Approximate Cost Saving</th>
-					</tr>
-				</thead>
-				<tbody id="results_tbody">
-
-				</tbody>
-			</table>
-		</div>
-	</div>
-</section>
-
-<div th:replace="fragments/footer :: footer"></div>
+	<div th:replace="fragments/footer :: footer"></div>
 </body>
-
 </html>

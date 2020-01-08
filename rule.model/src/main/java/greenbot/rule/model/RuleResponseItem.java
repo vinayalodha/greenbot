@@ -9,9 +9,12 @@ import lombok.Value;
 @Value
 @Builder
 public class RuleResponseItem {
+	
 	@Singular
 	private final List<String> resourceIds;
-			
+	
+	private final String ruleId;
+	
 	private final AnalysisConfidence confidence;
 	
 	private final String message;
