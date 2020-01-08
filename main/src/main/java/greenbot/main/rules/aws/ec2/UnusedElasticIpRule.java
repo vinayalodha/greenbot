@@ -14,7 +14,7 @@ import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 
 @Component
-public class OlderEc2GnerationRule extends AbstractGreenbotRule {
+public class UnusedElasticIpRule extends AbstractGreenbotRule {
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {

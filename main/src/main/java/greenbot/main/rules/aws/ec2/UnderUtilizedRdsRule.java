@@ -35,13 +35,14 @@ public class UnderUtilizedRdsRule implements GreenbotRule {
 	@Override
 	public RuleInfo ruleInfo() {
 		return RuleInfo.builder()
-				.id("Check if RDS instances are under utilized rule")
+				.id(null)
+				.name("Check if RDS instances are under utilized rule")
 				.permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
 				.build();
 	}
 
 	@Override
 	public List<ConfigParam> configParams() {
-		return ConfigParamUtils.awsTagConfig();
+		return ConfigParamUtils.awsTagConfigs();
 	}
 }

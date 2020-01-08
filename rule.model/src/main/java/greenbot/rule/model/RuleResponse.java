@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Singular;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class RuleResponse {

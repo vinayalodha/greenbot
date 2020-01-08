@@ -8,11 +8,11 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ConfigParamUtils {
-	public List<ConfigParam> awsTagConfig(){
+	public List<ConfigParam> awsTagConfigs(){
 		ConfigParam unTagged = ConfigParam.builder()
 				.key("onlyIncludeUntaggedResources")
 				.value("false")
-				.description("Analyze AWS resources which are un-taged")
+				.description("Only analyze AWS resources which are un-taged")
 				.build();
 		
 		ConfigParam tagged = ConfigParam.builder()

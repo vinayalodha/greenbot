@@ -9,5 +9,6 @@ import lombok.Value;
 @Builder
 public class RuleInfo {
 	private final String id;
+	private final String name;
 	private final List<String> permissions;
 }
