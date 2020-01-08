@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import greenbot.main.model.AnalysisRequest;
+import greenbot.main.model.ui.AnalysisRequest;
 import greenbot.main.rules.service.RuleLifecycleManager;
 import greenbot.rule.model.RuleResponse;
 import lombok.AllArgsConstructor;

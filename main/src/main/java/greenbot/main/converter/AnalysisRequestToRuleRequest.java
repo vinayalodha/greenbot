@@ -5,7 +5,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.stereotype.Component;
 
-import greenbot.main.model.AnalysisRequest;
+import greenbot.main.model.ui.AnalysisRequest;
 import greenbot.rule.model.RuleRequest;
 import lombok.AllArgsConstructor;
 

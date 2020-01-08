@@ -12,7 +12,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
-import greenbot.main.model.AnalysisRequest;
+import greenbot.main.model.ui.AnalysisRequest;
 import greenbot.rule.model.ConfigParam;
 import greenbot.rule.model.GreenbotRule;
 import greenbot.rule.model.RuleInfo;

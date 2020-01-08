@@ -1,4 +1,4 @@
-package greenbot.main.model;
+package greenbot.main.model.ui;
 
 import java.util.List;
 
