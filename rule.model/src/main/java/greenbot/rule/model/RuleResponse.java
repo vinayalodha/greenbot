@@ -3,11 +3,7 @@ package greenbot.rule.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Singular;
+import lombok.*;
 
 @Data
 @Builder(toBuilder = true)
@@ -16,14 +12,18 @@ import lombok.Singular;
 public class RuleResponse {
 	
 	@Singular
-	private  List<String> infoMessages = new ArrayList<>();
+	@NonNull
+	private  List<String> infoMessages;
 	
 	@Singular
-	private  List<String> warningMessages = new ArrayList<>();
+	@NonNull
+	private  List<String> warningMessages;
 	
 	@Singular
-	private  List<String> errorMessages = new ArrayList<>();
+	@NonNull
+	private  List<String> errorMessages;
 	
 	@Singular
-	private  List<RuleResponseItem> items = new ArrayList<>();
+	@NonNull
+	private  List<RuleResponseItem> items;
 }

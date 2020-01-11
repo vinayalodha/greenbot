@@ -14,23 +14,18 @@ public class Beans {
 	public RuleResponseReducer getRuleResponseReducer() {
 		return new RuleResponseReducer();
 	}
-	
+
 	@Bean
 	WebMvcConfigurer webMvcConfigurer() {
-	   return new WebMvcConfigurer() {
-	      @Override
-	      public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	          registry
-	                .addResourceHandler("/resources/**")
-	                .addResourceLocations("classpath:/static/")
-	                              .setCachePeriod(120);
-	          
-	          registry
-              .addResourceHandler("/webjars/**")
-              .addResourceLocations("/webjars/")
-                            .setCachePeriod(120);
-	      }
-	   };
+		return new WebMvcConfigurer() {
+			@Override
+			public void addResourceHandlers(ResourceHandlerRegistry registry) {
+				registry.addResourceHandler("/resources/**").addResourceLocations("classpath:/static/")
+						.setCachePeriod(120);
+
+				registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/").setCachePeriod(120);
+			}
+		};
 	}
 
 }

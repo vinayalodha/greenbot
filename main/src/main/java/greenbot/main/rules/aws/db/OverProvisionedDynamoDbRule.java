@@ -1,4 +1,4 @@
-package greenbot.main.rules.aws.ec2;
+package greenbot.main.rules.aws.db;
 
 public class OverProvisionedDynamoDbRule {
 

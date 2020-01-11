@@ -1,4 +1,4 @@
-package greenbot.main.rules.aws.ec2;
+package greenbot.main.rules.aws.misc;
 
 public class UnnecessaryElbRule {
 

@@ -37,18 +37,14 @@ public class RuleLifecycleManager {
 
 	public RuleResponse execute(RuleRequest request) {
 		List<String> errorMessages = new ArrayList<>();
-		RuleResponse response = rules.stream()
-				.map(rule -> {
-					try {
-						return rule.doWork(request);
-					} catch (Exception e) {
-						errorMessages.add(StringUtils.abbreviate(ExceptionUtils.getRootCauseMessage(e), 200));
-					}
-					return null;
-				})
-				.filter(Objects::nonNull)
-				.reduce(responseReducer)
-				.orElse(RuleResponse.builder().build());
+		RuleResponse response = rules.stream().map(rule -> {
+			try {
+				return rule.doWork(request);
+			} catch (Exception e) {
+				errorMessages.add(StringUtils.abbreviate(ExceptionUtils.getRootCauseMessage(e), 200));
+			}
+			return null;
+		}).filter(Objects::nonNull).reduce(responseReducer).orElse(RuleResponse.builder().build());
 		response.getErrorMessages().addAll(errorMessages);
 		return response;
 	}
@@ -60,8 +56,6 @@ public class RuleLifecycleManager {
 	}
 
 	public List<RuleInfo> getRuleInfos() {
-		return rules.stream()
-				.map(GreenbotRule::ruleInfo)
-				.collect(Collectors.toList());
+		return rules.stream().map(GreenbotRule::ruleInfo).collect(Collectors.toList());
 	}
 }

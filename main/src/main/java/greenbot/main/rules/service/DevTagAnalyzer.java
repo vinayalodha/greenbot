@@ -22,10 +22,7 @@ public class DevTagAnalyzer {
 	public boolean isDevTagPresent(List<Tag> tags) {
 		if (tags == null)
 			return false;
-		Optional<Boolean> searchResult = tags.stream()
-				.map(this::isDevTagPresent)
-				.filter(o -> o)
-				.findAny();
+		Optional<Boolean> searchResult = tags.stream().map(this::isDevTagPresent).filter(o -> o).findAny();
 		return searchResult.isPresent();
 
 	}
@@ -57,21 +54,20 @@ public class DevTagAnalyzer {
 		}
 		return tags;
 	}
-	
-	private static String[] append(String[] arr){
+
+	private static String[] append(String[] arr) {
 		String[] retval = new String[arr.length];
 		for (int i = 0; i < arr.length; i++) {
 			retval[i] = arr[i] + "_";
 		}
 		return retval;
 	}
-	
-	private static String[] prepend(String[] arr){
+
+	private static String[] prepend(String[] arr) {
 		String[] retval = new String[arr.length];
 		for (int i = 0; i < arr.length; i++) {
-			retval[i] =  "_" + arr[i] ;
+			retval[i] = "_" + arr[i];
 		}
 		return retval;
 	}
 }
-

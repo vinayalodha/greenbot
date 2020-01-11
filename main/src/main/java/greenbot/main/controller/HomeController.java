@@ -16,13 +16,14 @@ public class HomeController {
 	private final RuleLifecycleManager ruleLifecycleManager;
 
 	private final ObjectMapper ObjectMapper;
-	
+
 	@SneakyThrows
 	@GetMapping("/")
 	public String get(final Model model) {
 
 		model.addAttribute("ruleInfosAsString", ObjectMapper.writeValueAsString(ruleLifecycleManager.getRuleInfos()));
-		model.addAttribute("configParamsAsString", ObjectMapper.writeValueAsString(ruleLifecycleManager.getConfigParams()));
+		model.addAttribute("configParamsAsString",
+				ObjectMapper.writeValueAsString(ruleLifecycleManager.getConfigParams()));
 		return "index";
 	}
 

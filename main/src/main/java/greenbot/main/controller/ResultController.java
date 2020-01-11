@@ -16,21 +16,21 @@ import lombok.AllArgsConstructor;
 public class ResultController {
 
 	private RuleLifecycleManager ruleLifecycleManager;
+
 	@GetMapping("/resultok")
-	public String getOk(){
+	public String getOk() {
 		return "resultok";
 	}
-	
 
 	@PostMapping("/resultnotok")
-	public String getNotOk(@ModelAttribute AnalysisRequest request, final Model model){
+	public String getNotOk(@ModelAttribute AnalysisRequest request, final Model model) {
 		RuleResponse ruleResponse = ruleLifecycleManager.execute(request);
 		model.addAttribute("ruleResponse", ruleResponse);
 		return "resultnotok";
 	}
-	
+
 	@GetMapping("resultnotok")
-	public String get(final Model model){
+	public String get(final Model model) {
 		return "resultnotok";
 	}
 }

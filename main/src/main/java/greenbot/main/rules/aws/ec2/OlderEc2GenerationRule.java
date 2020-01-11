@@ -14,30 +14,22 @@ import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 
 @Component
-public class OlderEc2GenerationRule extends AbstractGreenbotRule {
+public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbotRule {
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
-		return RuleResponse.builder()
-				.infoMessage("Info Message 1")
-				.errorMessage("Error Message 1")
+		return RuleResponse.builder().infoMessage("Info Message 1").errorMessage("Error Message 1")
 				.warningMessage("Warning Message 1")
-				.item(RuleResponseItem.builder()
-						.resourceId("resourceId")
-						.approxCostSaving(30)
-						.message("Use T3 instead of T2")
-						.confidence(AnalysisConfidence.HIGH)
-						.build())
+				.item(RuleResponseItem.builder().resourceId("resourceId").approxCostSaving(30)
+						.message("Use T3 instead of T2").confidence(AnalysisConfidence.HIGH).build())
 				.build();
 	}
 
 	@Override
 	public RuleInfo ruleInfo() {
-		return RuleInfo.builder()
-				.id(buildId())
+		return RuleInfo.builder().id(buildId())
 				.name("Replace older generation instance with Newer generation AWS EC2 Instance Rule")
-				.permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
-				.build();
+				.permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch")).build();
 	}
 
 	@Override
