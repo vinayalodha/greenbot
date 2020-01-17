@@ -27,8 +27,9 @@
 	</dependencies>
 
 	<modules>
-		<module>main</module>
+		<module>ui</module>
 		<module>rule.model</module>
+		<module>main</module>
 	</modules>
 
 
