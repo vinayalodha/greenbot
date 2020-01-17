@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.convert.ConversionService;
@@ -51,7 +52,10 @@ public class RuleLifecycleManager {
 
 	public Map<String, List<ConfigParam>> getConfigParams() {
 		Map<String, List<ConfigParam>> retval = new TreeMap<>();
-		rules.forEach(rule -> retval.put(rule.ruleInfo().getId(), rule.configParams()));
+		rules.forEach(rule -> {
+			if (CollectionUtils.isNotEmpty(rule.configParams()))
+				retval.put(rule.ruleInfo().getId(), rule.configParams());
+		});
 		return retval;
 	}
 

@@ -1,6 +1,8 @@
 $(document).ready(function () {
     debugger;
-    $('code').html(JSON.stringify(JSON.parse($('code').html()), null, 4));
+    var jsonObject=JSON.parse($('code').html());
+    var parsedJsonString = JSON.stringify(jsonObject,null, 4);
+    $('code').html(parsedJsonString);
     $('#config-json').val(JSON.stringify(JSON.parse($('#config-json').val()), null, 4));
     
     $('pre code').each(function(i, block) {

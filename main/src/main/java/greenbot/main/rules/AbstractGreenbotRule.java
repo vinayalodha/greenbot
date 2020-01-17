@@ -9,15 +9,16 @@ import greenbot.rule.model.GreenbotRule;
 
 public abstract class AbstractGreenbotRule implements GreenbotRule {
 
-	protected String buildId() {
-		return StringUtils.lowerCase(
-				StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(getClass().getSimpleName()), '_'));
-	}
-	
+    protected String buildId() {
+        char separator = '_';
+        String[] tokens = StringUtils.splitByCharacterTypeCamelCase(getClass().getSimpleName());
+        String name = StringUtils.join(tokens, separator);
+        return StringUtils.lowerCase(name);
+    }
 
-	@Override
-	public List<ConfigParam> configParams() {
-		return null;
-	}
+    @Override
+    public List<ConfigParam> configParams() {
+        return null;
+    }
 
 }

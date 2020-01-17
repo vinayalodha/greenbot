@@ -11,7 +11,7 @@ import greenbot.main.model.Tag;
 
 public class DevTagAnalyzerTest {
 	
-	private DevTagAnalyzer devTagAnalyzer = new DevTagAnalyzer();
+	private final DevTagAnalyzer devTagAnalyzer = new DevTagAnalyzer();
 	
 	@ParameterizedTest
 	@CsvFileSource(resources = "/dev-tags.csv")

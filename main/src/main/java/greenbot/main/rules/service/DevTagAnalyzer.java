@@ -10,14 +10,13 @@ import org.springframework.stereotype.Component;
 
 import greenbot.main.model.Tag;
 
-// TODO Junit
 @Component
 public class DevTagAnalyzer {
-	private static String[] POSSIBLE_DEV_TAG_VALUES = new String[] { "dev", "development", "staging", "test" };
-	private static String[] POSSIBLE_DEV_TAG_VALUES_SUBSTRING = append(prepend(POSSIBLE_DEV_TAG_VALUES));
-	private static String[] POSSIBLE_DEV_TAG_VALUES_START = append(POSSIBLE_DEV_TAG_VALUES);
-	private static String[] POSSIBLE_DEV_TAG_VALUES_END = prepend(POSSIBLE_DEV_TAG_VALUES);
-	private static Set<Tag> POSSIBLE_DEV_TAGS = buildPossibleTags(POSSIBLE_DEV_TAG_VALUES);
+	private static final String[] POSSIBLE_DEV_TAG_VALUES = new String[] { "dev", "development", "staging", "test" };
+	private static final String[] POSSIBLE_DEV_TAG_VALUES_SUBSTRING = append(prepend(POSSIBLE_DEV_TAG_VALUES));
+	private static final String[] POSSIBLE_DEV_TAG_VALUES_START = append(POSSIBLE_DEV_TAG_VALUES);
+	private static final String[] POSSIBLE_DEV_TAG_VALUES_END = prepend(POSSIBLE_DEV_TAG_VALUES);
+	private static final Set<Tag> POSSIBLE_DEV_TAGS = buildPossibleTags(POSSIBLE_DEV_TAG_VALUES);
 
 	public boolean isDevTagPresent(List<Tag> tags) {
 		if (tags == null)
@@ -41,6 +40,7 @@ public class DevTagAnalyzer {
 		if (StringUtils.startsWithAny(value, POSSIBLE_DEV_TAG_VALUES_START)) {
 			return true;
 		}
+		//noinspection RedundantIfStatement
 		if (StringUtils.endsWithAny(value, POSSIBLE_DEV_TAG_VALUES_END)) {
 			return true;
 		}
@@ -48,9 +48,9 @@ public class DevTagAnalyzer {
 	}
 
 	private static Set<Tag> buildPossibleTags(String[] arr) {
-		Set<Tag> tags = new HashSet<Tag>();
-		for (int i = 0; i < arr.length; i++) {
-			tags.add(Tag.builder().key(arr[i]).value("true").build());
+		Set<Tag> tags = new HashSet<>();
+		for (String s : arr) {
+			tags.add(Tag.builder().key(s).value("true").build());
 		}
 		return tags;
 	}

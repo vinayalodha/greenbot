@@ -8,6 +8,7 @@ import lombok.Value;
 @Value
 @Builder
 public class RuleRequest {
-	private final Provider provider;
-	private final List<ConfigParam> configParams;
+    private final Provider provider;
+    private final List<ConfigParam> configParams;
+
 }

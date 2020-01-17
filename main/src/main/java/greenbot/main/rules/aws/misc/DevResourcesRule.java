@@ -1,4 +1,4 @@
-package greenbot.main.rules.aws.ebs;
+package greenbot.main.rules.aws.misc;
 
 import java.util.Arrays;
 
@@ -7,7 +7,7 @@ import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 
-public class DeleteOrphanEbsRule extends AbstractGreenbotRule {
+public class DevResourcesRule extends AbstractGreenbotRule {
     @Override
     public RuleResponse doWork(RuleRequest ruleRequest) {
         // TODO Auto-generated method stub
@@ -18,8 +18,9 @@ public class DeleteOrphanEbsRule extends AbstractGreenbotRule {
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
                 .id(buildId())
-                .description("Any orphan EBS drives")
+                .description("Does dev/staging/test resources runs 24 hours")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();
     }
+
 }

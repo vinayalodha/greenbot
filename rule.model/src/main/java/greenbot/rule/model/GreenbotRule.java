@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface GreenbotRule {
 
-	public RuleResponse doWork(RuleRequest ruleRequest);
+	RuleResponse doWork(RuleRequest ruleRequest);
 
-	public RuleInfo ruleInfo();
+	RuleInfo ruleInfo();
 
-	public List<ConfigParam> configParams();
+	List<ConfigParam> configParams();
 }

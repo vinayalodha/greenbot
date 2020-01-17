@@ -8,7 +8,7 @@ import lombok.Value;
 @Value
 @Builder
 public class RuleInfo {
-	private final String id;
-	private final String name;
-	private final List<String> permissions;
+    private final String id;
+    private final String description;
+    private final List<String> permissions;
 }
