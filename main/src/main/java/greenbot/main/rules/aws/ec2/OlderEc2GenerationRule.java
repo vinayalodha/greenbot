@@ -5,11 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import greenbot.rule.model.*;
 import org.springframework.stereotype.Component;
 
 import greenbot.main.config.ConfigParamUtils;
+import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.AnalysisResponse;
+import greenbot.rule.model.ConfigParam;
+import greenbot.rule.model.RuleInfo;
+import greenbot.rule.model.RuleRequest;
+import greenbot.rule.model.RuleResponseItem;
 
 @Component
 public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbotRule {

@@ -13,15 +13,15 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AnalysisRequestToRuleRequest implements Converter<AnalysisRequest, RuleRequest>, InitializingBean {
 
-	private final ConverterRegistry converterRegistry;
+    private final ConverterRegistry converterRegistry;
 
-	@Override
-	public RuleRequest convert(AnalysisRequest source) {
-		return RuleRequest.builder().configParams(source.getConfigParams()).build();
-	}
+    @Override
+    public RuleRequest convert(AnalysisRequest source) {
+        return RuleRequest.builder().configParams(source.getConfigParams()).build();
+    }
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		converterRegistry.addConverter(this);
-	}
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        converterRegistry.addConverter(this);
+    }
 }

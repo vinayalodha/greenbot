@@ -2,11 +2,14 @@ package greenbot.main.rules.aws.db;
 
 import java.util.Arrays;
 
-import greenbot.rule.model.*;
 import org.springframework.stereotype.Component;
 
 import greenbot.main.rules.AbstractGreenbotRule;
+import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.AnalysisResponse;
+import greenbot.rule.model.RuleInfo;
+import greenbot.rule.model.RuleRequest;
+import greenbot.rule.model.RuleResponseItem;
 
 @Component
 public class UnderUtilizedRdsRule extends AbstractGreenbotRule {

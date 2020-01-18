@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import greenbot.main.rules.AbstractGreenbotRule;
+import greenbot.rule.model.AnalysisResponse;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
-import greenbot.rule.model.AnalysisResponse;
 
 public class SwitchToInf1InstanceRule extends AbstractGreenbotRule {
 

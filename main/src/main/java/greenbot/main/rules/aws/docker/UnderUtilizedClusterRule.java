@@ -3,9 +3,9 @@ package greenbot.main.rules.aws.docker;
 import java.util.Arrays;
 
 import greenbot.main.rules.AbstractGreenbotRule;
+import greenbot.rule.model.AnalysisResponse;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
-import greenbot.rule.model.AnalysisResponse;
 
 public class UnderUtilizedClusterRule extends AbstractGreenbotRule {
 
