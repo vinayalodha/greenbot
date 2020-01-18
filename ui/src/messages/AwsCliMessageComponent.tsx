@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export class AwsCliMessage extends Component<{}> {
+export class AwsCliMessageComponent extends Component<{}> {
 
     render() {
         return (

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-class MessagesListProps {
+class MessagesListComponentProps {
     constructor(messages: Array<String>, type: string) {
         this.messages = messages;
         this.type = type;
@@ -11,7 +11,7 @@ class MessagesListProps {
 }
 
 
-export class MessagesList extends Component<MessagesListProps, {}> {
+export class MessagesListComponent extends Component<MessagesListComponentProps, {}> {
 
 
     render() {

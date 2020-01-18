@@ -3,10 +3,10 @@ import React, {Component} from 'react'; // let's also import Component
 import axios, {AxiosResponse} from 'axios';
 
 
-type PermissionsNeededMessageState = {
+type PermissionsMessageComponentState = {
     ruleInfo: any;
 };
-export class PermissionsNeededMessage extends Component<{}, PermissionsNeededMessageState> {
+export class PermissionsMessageComponent extends Component<{}, PermissionsMessageComponentState> {
 
     constructor(props: {}) {
         super(props);

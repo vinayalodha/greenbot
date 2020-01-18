@@ -3,6 +3,7 @@ package greenbot.main.rules.service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import greenbot.rule.model.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -10,11 +11,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import greenbot.main.model.ui.AnalysisRequest;
-import greenbot.rule.model.ConfigParam;
-import greenbot.rule.model.GreenbotRule;
-import greenbot.rule.model.RuleInfo;
-import greenbot.rule.model.RuleRequest;
-import greenbot.rule.model.RuleResponse;
+import greenbot.rule.model.AnalysisResponse;
 import greenbot.rule.model.utils.RuleResponseReducer;
 import lombok.AllArgsConstructor;
 
@@ -28,20 +25,20 @@ public class RuleLifecycleManager {
 
 	private ConversionService conversionService;
 
-	public RuleResponse execute(AnalysisRequest request) {
+	public AnalysisResponse execute(AnalysisRequest request) {
 		return execute(conversionService.convert(request, RuleRequest.class));
 	}
 
-	public RuleResponse execute(RuleRequest request) {
+	public AnalysisResponse execute(RuleRequest request) {
 		List<String> errorMessages = new ArrayList<>();
-		RuleResponse response = rules.stream().map(rule -> {
+		AnalysisResponse response = rules.stream().map(rule -> {
 			try {
 				return rule.doWork(request);
 			} catch (Exception e) {
 				errorMessages.add(StringUtils.abbreviate(ExceptionUtils.getRootCauseMessage(e), 200));
 			}
 			return null;
-		}).filter(Objects::nonNull).reduce(responseReducer).orElse(RuleResponse.builder().build());
+		}).filter(Objects::nonNull).reduce(responseReducer).orElse(AnalysisResponse.builder().build());
 		response.getErrorMessages().addAll(errorMessages);
 		return response;
 	}

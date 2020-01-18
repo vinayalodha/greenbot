@@ -5,15 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import greenbot.rule.model.*;
 import org.springframework.stereotype.Component;
 
 import greenbot.main.config.ConfigParamUtils;
-import greenbot.rule.model.AnalysisConfidence;
-import greenbot.rule.model.ConfigParam;
-import greenbot.rule.model.RuleInfo;
-import greenbot.rule.model.RuleRequest;
-import greenbot.rule.model.RuleResponse;
-import greenbot.rule.model.RuleResponseItem;
+import greenbot.rule.model.AnalysisResponse;
 
 @Component
 public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbotRule {
@@ -23,8 +19,8 @@ public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbot
     private static final String RULE_DESC = "%s EC2 instance can be replaced with newer generation EC2 %s instance";
 
     @Override
-    public RuleResponse doWork(RuleRequest ruleRequest) {
-        return RuleResponse.builder()
+    public AnalysisResponse doWork(RuleRequest ruleRequest) {
+        return AnalysisResponse.builder()
                 .infoMessage("Info Message 1")
                 .errorMessage("Error Message 1")
                 .warningMessage("Warning Message 1")

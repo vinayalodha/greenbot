@@ -1,15 +1,16 @@
 import React, {ChangeEvent, Component} from "react";
 import {AnalysisResponse} from "./model/AnalysisResponse";
-
-type RequestFormDataState = {
-    configJson: String;
+import axios, {AxiosResponse} from "axios";
+import './css/FormComponent.css'
+type FormComponentState = {
+    configJson: string;
 };
-type  AnalyzeFormProps = {
+type  FormComponentProps = {
     callback: Function;
 }
 
-export class AnalyzeForm extends Component<AnalyzeFormProps, RequestFormDataState> {
-    constructor(props: AnalyzeFormProps) {
+export class FormComponent extends Component<FormComponentProps, FormComponentState> {
+    constructor(props: FormComponentProps) {
         super(props);
         this.state = {
             configJson: ""
@@ -26,6 +27,16 @@ export class AnalyzeForm extends Component<AnalyzeFormProps, RequestFormDataStat
         this.setState({...this.state, configJson: e.target.value});
     };
 
+    componentDidMount(): void {
+        debugger
+        axios.get("/rule/config")
+            .then((value: AxiosResponse) => {
+                debugger
+                console.log(value.data);
+                this.setState({...this.state, configJson: JSON.stringify(value.data, null, 4)});
+            })
+    }
+
     render() {
         return (
             <div>
@@ -40,6 +51,7 @@ export class AnalyzeForm extends Component<AnalyzeFormProps, RequestFormDataStat
                         className="textarea"
                         id="config-json"
                         name="configJson"
+                        value={this.state.configJson}
                         onChange={
                             (e: ChangeEvent<HTMLTextAreaElement>) =>
                                 this.onConfigJsonChanged(e)

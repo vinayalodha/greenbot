@@ -6,18 +6,18 @@
 	<div th:replace="fragments/header :: div"></div>
 	<section class="container" id="results_container" style="padding-top: 50px">
 
-		<article class="message is-info" th:if="${not #lists.isEmpty(ruleResponse.infoMessages)}">
+		<article class="message is-info" th:if="${not #lists.isEmpty(analysisResponse.infoMessages)}">
 			<div class="message-body">
-				<ul th:each="infoMessage : ${ruleResponse.infoMessages}">
+				<ul th:each="infoMessage : ${analysisResponse.infoMessages}">
 					<li th:text="${infoMessage}">
 					</li>
 				</ul>
 			</div>
 		</article>
 
-		<article class="message is-warning" th:if="${not #lists.isEmpty(ruleResponse.warningMessages)}">
+		<article class="message is-warning" th:if="${not #lists.isEmpty(analysisResponse.warningMessages)}">
 			<div class="message-body">
-				<ul th:each="warningMessage : ${ruleResponse.warningMessages}">
+				<ul th:each="warningMessage : ${analysisResponse.warningMessages}">
 					<li th:text="${warningMessage}">
 					</li>
 				</ul>
@@ -25,9 +25,9 @@
 		</article>
 
 
-		<article class="message is-danger" th:if="${not #lists.isEmpty(ruleResponse.errorMessages)}">
+		<article class="message is-danger" th:if="${not #lists.isEmpty(analysisResponse.errorMessages)}">
 			<div class="message-body">
-				<ul th:each="errorMessage : ${ruleResponse.errorMessages}">
+				<ul th:each="errorMessage : ${analysisResponse.errorMessages}">
 					<li th:text="${errorMessage}">
 					</li>
 				</ul>
@@ -48,7 +48,7 @@
 						</tr>
 					</thead>
 					<tbody id="results_tbody">
-						<tr th:each="item : ${ruleResponse.items}">
+						<tr th:each="item : ${analysisResponse.items}">
 							<td th:text="${item.resourceIds}"></td>
 							<td th:text="${item.ruleId}"></td>
 							<td th:text="${item.confidence}"></td>

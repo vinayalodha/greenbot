@@ -1,24 +1,37 @@
 package greenbot.main.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import greenbot.main.model.ui.AnalysisRequest;
 import greenbot.main.rules.service.RuleLifecycleManager;
+import greenbot.rule.model.AnalysisResponse;
+import greenbot.rule.model.ConfigParam;
 import greenbot.rule.model.RuleInfo;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @RestController
 public class RuleController {
 
     RuleLifecycleManager ruleLifecycleManager;
-ObjectMapper objectMapper;
+
     @GetMapping("rule/info")
-    @SneakyThrows
-    public String getRulePermission(){
-        return objectMapper.writeValueAsString(ruleLifecycleManager.getRuleInfos());
+    public List<RuleInfo> getRulePermission() {
+        return ruleLifecycleManager.getRuleInfos();
+    }
+
+    @GetMapping("rule/config")
+    public Map<String, List<ConfigParam>> getConfig() {
+        return ruleLifecycleManager.getConfigParams();
+    }
+
+    @PostMapping("rule")
+    public AnalysisResponse post(@RequestBody AnalysisRequest request) {
+        return ruleLifecycleManager.execute(request);
     }
 }

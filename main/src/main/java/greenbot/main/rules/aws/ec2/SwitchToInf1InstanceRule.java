@@ -6,7 +6,7 @@ import java.util.List;
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
-import greenbot.rule.model.RuleResponse;
+import greenbot.rule.model.AnalysisResponse;
 
 public class SwitchToInf1InstanceRule extends AbstractGreenbotRule {
 
@@ -14,7 +14,7 @@ public class SwitchToInf1InstanceRule extends AbstractGreenbotRule {
     private static final String MESSAGE = "Consider switching to EC2 Inf1 instances";
 
     @Override
-    public RuleResponse doWork(RuleRequest ruleRequest) {
+    public AnalysisResponse doWork(RuleRequest ruleRequest) {
         // TODO Auto-generated method stub
         return null;
     }

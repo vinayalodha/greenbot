@@ -3,13 +3,13 @@ package greenbot.main.rules.aws.ebs;
 import java.util.Arrays;
 
 import greenbot.main.rules.AbstractGreenbotRule;
+import greenbot.rule.model.AnalysisResponse;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
-import greenbot.rule.model.RuleResponse;
 
 public class TooManyAmiRule extends AbstractGreenbotRule {
     @Override
-    public RuleResponse doWork(RuleRequest ruleRequest) {
+    public AnalysisResponse doWork(RuleRequest ruleRequest) {
         // TODO Auto-generated method stub
         return null;
     }

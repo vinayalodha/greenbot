@@ -1,7 +1,7 @@
 import React, {Component} from 'react'; // let's also import Component
 
 
-export class PageHeader extends Component<{}> {
+export class HeaderComponent extends Component<{}> {
 
     // render will know everything!
     render() {
