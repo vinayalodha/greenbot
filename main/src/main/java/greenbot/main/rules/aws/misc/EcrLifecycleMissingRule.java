@@ -3,14 +3,14 @@ package greenbot.main.rules.aws.misc;
 import java.util.Arrays;
 
 import greenbot.main.rules.AbstractGreenbotRule;
-import greenbot.rule.model.AnalysisResponse;
+import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 
 public class EcrLifecycleMissingRule extends AbstractGreenbotRule {
 
     @Override
-    public AnalysisResponse doWork(RuleRequest ruleRequest) {
+    public RuleResponse doWork(RuleRequest ruleRequest) {
         // TODO Auto-generated method stub
         return null;
     }

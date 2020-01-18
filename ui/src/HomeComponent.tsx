@@ -18,7 +18,7 @@ export class HomeComponent extends Component<{}, HomeComponentState> {
 
 	constructor(props: {}) {
 		super(props);
-		let analysisResponse = new AnalysisResponse([]);
+		let analysisResponse = new AnalysisResponse();
 		this.state = {
 			analysisResponse: analysisResponse
 		};
@@ -40,9 +40,9 @@ export class HomeComponent extends Component<{}, HomeComponentState> {
 					<FormComponent
 						callback={(analysisResponse: AnalysisResponse) => this.callBackFunction(analysisResponse)} />
 					<br />
-					<MessagesListComponent messages={this.state.analysisResponse.errors} type={"message is-danger"} />
-					<MessagesListComponent messages={this.state.analysisResponse.errors} type={"message is-warning"} />
-					<MessagesListComponent messages={this.state.analysisResponse.errors} type={"message is-info"} />
+					<MessagesListComponent messages={this.state.analysisResponse.errorMessages} type={"message is-danger"} />
+					<MessagesListComponent messages={this.state.analysisResponse.warningMessages} type={"message is-warning"} />
+					<MessagesListComponent messages={this.state.analysisResponse.infoMessages} type={"message is-info"} />
 					<ResultComponent result={this.state.analysisResponse}></ResultComponent>
 					<FooterComponent />
 				</section>

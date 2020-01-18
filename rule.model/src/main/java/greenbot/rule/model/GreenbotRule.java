@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface GreenbotRule {
 
-	AnalysisResponse doWork(RuleRequest ruleRequest);
+	RuleResponse doWork(RuleRequest ruleRequest);
 
 	RuleInfo ruleInfo();
 

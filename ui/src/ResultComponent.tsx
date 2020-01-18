@@ -1,16 +1,20 @@
-import React, {Component} from "react";
-import {AnalysisResponse} from "./model/AnalysisResponse";
+import { Component } from "react";
+import { AnalysisResponse } from "./model/AnalysisResponse";
 
 type ResultProps = {
-
-    result: AnalysisResponse
+	result: AnalysisResponse
 }
-
 
 export class ResultComponent extends Component<ResultProps, {}> {
 
 
-    render() {
-        return null;
-    }
+	render() {
+
+		if (this.props.result.items.length === 0) {
+			return null;
+		}
+		const items = []
+		return null;
+
+	}
 }

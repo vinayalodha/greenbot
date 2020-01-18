@@ -13,7 +13,7 @@ import lombok.Singular;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnalysisResponse {
+public class RuleResponse {
 
     @Singular
     @NonNull
@@ -31,7 +31,7 @@ public class AnalysisResponse {
     @NonNull
     private List<RuleResponseItem> items;
 
-    public static AnalysisResponse empty() {
-        return AnalysisResponse.builder().build();
+    public static RuleResponse empty() {
+        return RuleResponse.builder().build();
     }
 }

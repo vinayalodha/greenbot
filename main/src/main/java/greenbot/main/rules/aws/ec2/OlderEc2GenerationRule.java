@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 
 import greenbot.main.config.ConfigParamUtils;
 import greenbot.rule.model.AnalysisConfidence;
-import greenbot.rule.model.AnalysisResponse;
 import greenbot.rule.model.ConfigParam;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
+import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 
 @Component
@@ -23,14 +23,14 @@ public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbot
     private static final String RULE_DESC = "%s EC2 instance can be replaced with newer generation EC2 %s instance";
 
     @Override
-    public AnalysisResponse doWork(RuleRequest ruleRequest) {
-        return AnalysisResponse.builder()
+    public RuleResponse doWork(RuleRequest ruleRequest) {
+        return RuleResponse.builder()
                 .infoMessage("Info Message 1")
                 .errorMessage("Error Message 1")
                 .warningMessage("Warning Message 1")
                 .item(RuleResponseItem.builder()
                         .resourceId("resourceId")
-                        .approxCostSaving(30)
+                        .approxCostSaving("30")
                         .message("Use T3 instead of T2")
                         .confidence(AnalysisConfidence.HIGH).build())
                 .build();

@@ -1,6 +1,6 @@
 package greenbot.rule.model;
 
-import java.util.List;
+import java.util.Map;
 
 import lombok.Builder;
 import lombok.Value;
@@ -9,6 +9,6 @@ import lombok.Value;
 @Builder
 public class RuleRequest {
     private final Provider provider;
-    private final List<ConfigParam> configParams;
+    private final Map<String, ConfigParam> configParams;
 
 }

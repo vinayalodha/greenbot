@@ -2,13 +2,13 @@ package greenbot.rule.model.utils;
 
 import java.util.function.BinaryOperator;
 
-import greenbot.rule.model.AnalysisResponse;
+import greenbot.rule.model.RuleResponse;
 
-public class RuleResponseReducer implements BinaryOperator<AnalysisResponse>{
+public class RuleResponseReducer implements BinaryOperator<RuleResponse>{
 	
 	@Override
-	public AnalysisResponse apply(AnalysisResponse one, AnalysisResponse two) {
-		return AnalysisResponse.builder()
+	public RuleResponse apply(RuleResponse one, RuleResponse two) {
+		return RuleResponse.builder()
 				.infoMessages(one.getInfoMessages())
 				.infoMessages(two.getInfoMessages())
 				.warningMessages(one.getWarningMessages())

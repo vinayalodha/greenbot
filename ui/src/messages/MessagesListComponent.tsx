@@ -1,20 +1,15 @@
 import React, {Component} from "react";
 
 class MessagesListComponentProps {
-    constructor(messages: Array<String>, type: string) {
-        this.messages = messages;
-        this.type = type;
-    }
-
-    messages: Array<String>;
-    type: string
+    messages: String[] = [];
+    type!: string
 }
 
 
 export class MessagesListComponent extends Component<MessagesListComponentProps, {}> {
 
-
     render() {
+        debugger;
         if (this.props.messages.length === 0) {
             return null;
         }
