@@ -24,6 +24,9 @@ export class FormComponent extends Component<FormComponentProps, FormComponentSt
 			.then((analysisResponse: AxiosResponse) => {
 				this.props.callback(analysisResponse.data);
 			})
+			.catch((err:any )=>{
+				alert('something went wrong, please create a bug');
+			})
 	}
 
 	private onConfigJsonChanged = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -39,6 +42,10 @@ export class FormComponent extends Component<FormComponentProps, FormComponentSt
 				console.log(value.data);
 				this.setState({ ...this.state, configJson: JSON.stringify(value.data, null, 4) });
 			})
+			.catch((err:any )=>{
+				alert('something went wrong, please create a bug');
+			})
+
 	}
 
 	render() {

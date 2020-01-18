@@ -21,6 +21,10 @@ export class PermissionsMessageComponent extends Component<{}, PermissionsMessag
                 console.log(value.data);
                 this.setState({...this.state, ruleInfo: JSON.stringify(value.data, null, 4)});
             })
+			.catch((err:any )=>{
+				alert('something went wrong, please create a bug');
+			})
+
     }
 
 
