@@ -11,5 +11,4 @@ class RuleResponseItem {
 	confidence: String = "";
 	message: String = "";
 	approxCostSaving: String = "";
-
 }
