@@ -4,11 +4,13 @@ export class Footer extends Component<{}> {
 
     render() {
         return (
-            <div className="content has-text-centered">
-                <p className="subtitle">
-                    <a href="mailto:vinay.a.lodha@gmail.com">Contact me</a> if you need Sidekick to optimize AWS cost.
-                </p>
-            </div>
+            <footer className="footer">
+                <div className="content has-text-centered">
+                    <p className="subtitle">
+                        <a href="mailto:vinay.a.lodha@gmail.com">Contact me</a> if you need cloud consultation service
+                    </p>
+                </div>
+            </footer>
         );
     }
 }
