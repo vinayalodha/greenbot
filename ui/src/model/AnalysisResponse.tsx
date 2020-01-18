@@ -2,7 +2,7 @@ export class AnalysisResponse {
 	infoMessages: String[] = [];
 	warningMessages: String[] = [];
 	errorMessages: String[] = [];
-	items!: RuleResponseItem[];
+	items: RuleResponseItem[] = [];
 }
 
 class RuleResponseItem {

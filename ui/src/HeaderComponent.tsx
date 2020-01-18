@@ -1,4 +1,4 @@
-import React, {Component} from 'react'; // let's also import Component
+import React, {Component} from 'react'; 
 
 
 export class HeaderComponent extends Component<{}> {
