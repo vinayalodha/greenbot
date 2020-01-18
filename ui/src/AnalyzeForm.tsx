@@ -17,8 +17,6 @@ export class AnalyzeForm extends Component<AnalyzeFormProps, RequestFormDataStat
     }
 
     handleFormSubmit() {
-        debugger;
-        console.log(this.state.configJson);
         let analysisResponse = new AnalysisResponse(['Apple', 'Orange', 'Banana']);
         this.props.callback(analysisResponse);
     }

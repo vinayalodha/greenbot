@@ -10,7 +10,6 @@ import greenbot.main.rules.service.RuleLifecycleManager;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
-@Controller
 @AllArgsConstructor
 public class HomeController {
 	private final RuleLifecycleManager ruleLifecycleManager;
@@ -18,7 +17,6 @@ public class HomeController {
 	private final ObjectMapper ObjectMapper;
 
 	@SneakyThrows
-	@GetMapping("/")
 	public String get(final Model model) {
 
 		model.addAttribute("ruleInfosAsString", ObjectMapper.writeValueAsString(ruleLifecycleManager.getRuleInfos()));

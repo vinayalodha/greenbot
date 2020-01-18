@@ -11,25 +11,21 @@ import greenbot.main.rules.service.RuleLifecycleManager;
 import greenbot.rule.model.RuleResponse;
 import lombok.AllArgsConstructor;
 
-@Controller
 @AllArgsConstructor
 public class ResultController {
 
 	private RuleLifecycleManager ruleLifecycleManager;
 
-	@GetMapping("/resultok")
 	public String getOk() {
 		return "resultok";
 	}
 
-	@PostMapping("/resultnotok")
 	public String getNotOk(@ModelAttribute AnalysisRequest request, final Model model) {
 		RuleResponse ruleResponse = ruleLifecycleManager.execute(request);
 		model.addAttribute("ruleResponse", ruleResponse);
 		return "resultnotok";
 	}
 
-	@GetMapping("resultnotok")
 	public String get(final Model model) {
 		return "resultnotok";
 	}

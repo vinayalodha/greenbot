@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    debugger;
     var jsonObject=JSON.parse($('code').html());
     var parsedJsonString = JSON.stringify(jsonObject,null, 4);
     $('code').html(parsedJsonString);

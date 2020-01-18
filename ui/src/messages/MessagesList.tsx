@@ -15,8 +15,7 @@ export class MessagesList extends Component<MessagesListProps, {}> {
 
 
     render() {
-        debugger;
-        if (this.props.messages.length == 0) {
+        if (this.props.messages.length === 0) {
             return null;
         }
         const items = []

@@ -1,10 +1,6 @@
 package greenbot.main.rules.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -62,4 +58,5 @@ public class RuleLifecycleManager {
 	public List<RuleInfo> getRuleInfos() {
 		return rules.stream().map(GreenbotRule::ruleInfo).collect(Collectors.toList());
 	}
+
 }

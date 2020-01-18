@@ -6,8 +6,8 @@ import {AwsCliMessage} from "./messages/AwsCliMessage";
 import {PermissionsNeededMessage} from "./messages/PermissionsNeededMessage";
 import {AnalysisResponse} from "./model/AnalysisResponse";
 import {MessagesList} from "./messages/MessagesList";
-
-
+import './css/App.css'
+import {Footer} from "./messages/Footer";
 type AppState = {
     analysisResponse: AnalysisResponse
 }
@@ -23,9 +23,7 @@ export class App extends Component<{}, AppState> {
     }
 
     callBackFunction(analysisResponse: AnalysisResponse) {
-        debugger;
         this.setState({...this.state, analysisResponse: analysisResponse});
-
     }
 
     render() {
@@ -43,6 +41,7 @@ export class App extends Component<{}, AppState> {
                     <MessagesList messages={this.state.analysisResponse.errors} type={"message is-danger"}/>
                     <MessagesList messages={this.state.analysisResponse.errors} type={"message is-warning"}/>
                     <MessagesList messages={this.state.analysisResponse.errors} type={"message is-info"}/>
+                    <Footer/>
                 </section>
             </div>
         );
