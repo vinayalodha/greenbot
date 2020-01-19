@@ -22,7 +22,7 @@ export class PermissionsMessageComponent extends Component<{}, PermissionsMessag
                 this.setState({...this.state, ruleInfo: JSON.stringify(value.data, null, 4)});
             })
 			.catch((err:any )=>{
-				alert('something went wrong, please create a bug');
+				alert('Something went wrong, please check application console');
 			})
 
     }

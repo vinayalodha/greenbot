@@ -9,6 +9,7 @@ import { MessagesListComponent } from "./messages/MessagesListComponent";
 import { FooterComponent } from "./messages/FooterComponent";
 import './css/HomeComponent.css'
 import { ResultComponent } from "./ResultComponent";
+import 'bulma/css/bulma.css'
 
 type HomeComponentState = {
 	analysisResponse: AnalysisResponse

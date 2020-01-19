@@ -25,7 +25,7 @@ export class FormComponent extends Component<FormComponentProps, FormComponentSt
 				this.props.callback(analysisResponse.data);
 			})
 			.catch((err:any )=>{
-				alert('something went wrong, please create a bug');
+				alert('Something went wrong, please check application console');
 			})
 	}
 
@@ -35,15 +35,12 @@ export class FormComponent extends Component<FormComponentProps, FormComponentSt
 	};
 
 	componentDidMount(): void {
-		debugger
 		axios.get("/rule/config")
 			.then((value: AxiosResponse) => {
-				debugger
-				console.log(value.data);
 				this.setState({ ...this.state, configJson: JSON.stringify(value.data, null, 4) });
 			})
-			.catch((err:any )=>{
-				alert('something went wrong, please create a bug');
+			.catch((_err:any )=>{
+				alert('Something went wrong, please check application console');
 			})
 
 	}

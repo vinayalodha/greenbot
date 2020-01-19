@@ -9,7 +9,6 @@ class MessagesListComponentProps {
 export class MessagesListComponent extends Component<MessagesListComponentProps, {}> {
 
     render() {
-        debugger;
         if (this.props.messages.length === 0) {
             return null;
         }
