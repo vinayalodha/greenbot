@@ -17,8 +17,8 @@ export class HeaderComponent extends Component<{}> {
 								<a className="navbar-link"> More </a>
 
 								<div className="navbar-dropdown">
-									<a className="navbar-item"> About </a> <a className="navbar-item">
-										Jobs </a>
+									<a className="navbar-item"> Raise an issue</a>
+									<a className="navbar-item"> Jobs </a>
 									<a className="navbar-item"> Contact </a>
 									<hr className="navbar-divider"></hr>
 									<a className="navbar-item"> Report an issue </a>
