@@ -18,7 +18,6 @@ export class PermissionsMessageComponent extends Component<{}, PermissionsMessag
     componentDidMount(): void {
         axios.get("/rule/info")
             .then((value: AxiosResponse) => {
-                console.log(value.data);
                 this.setState({...this.state, ruleInfo: JSON.stringify(value.data, null, 4)});
             })
 			.catch((err:any )=>{
