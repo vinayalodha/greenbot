@@ -9,10 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootApplication
-public class ApplicationImpl implements ApplicationRunner {
+public class GreenbotServer implements ApplicationRunner {
 
     public static void main(String[] args) {
-        SpringApplication.run(ApplicationImpl.class, args);
+        SpringApplication.run(GreenbotServer.class, args);
     }
 
     @Override
