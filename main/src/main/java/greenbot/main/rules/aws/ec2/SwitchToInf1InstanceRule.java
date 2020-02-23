@@ -22,7 +22,7 @@ public class SwitchToInf1InstanceRule extends AbstractGreenbotRule {
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("Consider switching to EC2 Inf1 instances for inference workload")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

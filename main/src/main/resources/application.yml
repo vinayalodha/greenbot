@@ -1,5 +1,8 @@
 server:
-    port: 5000
+   port: 5000
 spring:
-    main:
-        banner-mode: off
+   main:
+      banner-mode: off
+   cache:
+      caffeine:
+         spec: expireAfterWrite=180s

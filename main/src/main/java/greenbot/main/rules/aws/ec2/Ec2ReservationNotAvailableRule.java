@@ -18,7 +18,7 @@ public class Ec2ReservationNotAvailableRule extends AbstractGreenbotRule {
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("Is EC2 reservation is available or not")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

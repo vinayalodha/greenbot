@@ -17,7 +17,7 @@ public class UnusedElasticIpRule extends AbstractGreenbotRule {
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("Check if unused elastic IP exists")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

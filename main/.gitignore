@@ -29,3 +29,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+**/*.tfstate*
+**/.terraform
+/.apt_generated_tests/

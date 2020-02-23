@@ -18,7 +18,7 @@ public class EcrLifecycleMissingRule extends AbstractGreenbotRule {
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("ECR lifecycle to cleanup old images exits?")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

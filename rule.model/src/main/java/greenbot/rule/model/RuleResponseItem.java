@@ -3,21 +3,22 @@ package greenbot.rule.model;
 import java.util.List;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Singular;
 import lombok.Value;
 
-@Value
+@Data
 @Builder
 public class RuleResponseItem {
 
-    @Singular
-    private final List<String> resourceIds;
+	@Singular
+	private List<String> resourceIds;
 
-    private final String ruleId;
+	private String ruleId;
 
-    private final AnalysisConfidence confidence;
+	private AnalysisConfidence confidence;
 
-    private final String message;
+	private String message;
 
-    private final String approxCostSaving;
+	private String approxCostSaving;
 }

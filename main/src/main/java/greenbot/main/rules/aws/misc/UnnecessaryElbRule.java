@@ -17,7 +17,7 @@ public class UnnecessaryElbRule extends AbstractGreenbotRule {
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("Is ALB with ASG of min and max of 1 exists?")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

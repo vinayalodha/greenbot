@@ -17,7 +17,7 @@ public class DeleteOrphanEbsRule extends AbstractGreenbotRule {
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("Any orphan EBS drives")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

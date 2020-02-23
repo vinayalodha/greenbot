@@ -2,8 +2,6 @@ package greenbot.main.rules.aws.db;
 
 import java.util.Arrays;
 
-import org.springframework.stereotype.Component;
-
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.RuleInfo;
@@ -11,7 +9,6 @@ import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 
-@Component
 public class UnderUtilizedRdsRule extends AbstractGreenbotRule {
 
     @Override
@@ -26,7 +23,7 @@ public class UnderUtilizedRdsRule extends AbstractGreenbotRule {
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("Is RDS instances are under-utilized")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

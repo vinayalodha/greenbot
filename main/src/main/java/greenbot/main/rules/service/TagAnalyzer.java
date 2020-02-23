@@ -8,11 +8,11 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import greenbot.main.model.Tag;
+import greenbot.provider.model.Tag;
 
 @Component
-public class DevTagAnalyzer {
-    private static final String[] POSSIBLE_DEV_TAG_VALUES = new String[] { "dev", "development", "staging", "test" };
+public class TagAnalyzer {
+    private static final String[] POSSIBLE_DEV_TAG_VALUES = { "dev", "development", "staging", "test" , "testing"};
     private static final String[] POSSIBLE_DEV_TAG_VALUES_SUBSTRING = append(prepend(POSSIBLE_DEV_TAG_VALUES));
     private static final String[] POSSIBLE_DEV_TAG_VALUES_START = append(POSSIBLE_DEV_TAG_VALUES);
     private static final String[] POSSIBLE_DEV_TAG_VALUES_END = prepend(POSSIBLE_DEV_TAG_VALUES);
@@ -40,7 +40,6 @@ public class DevTagAnalyzer {
         if (StringUtils.startsWithAny(value, POSSIBLE_DEV_TAG_VALUES_START)) {
             return true;
         }
-        // noinspection RedundantIfStatement
         if (StringUtils.endsWithAny(value, POSSIBLE_DEV_TAG_VALUES_END)) {
             return true;
         }

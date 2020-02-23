@@ -18,7 +18,7 @@ public class UnderUtilizedFargateRule extends AbstractGreenbotRule {
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("Is fargate container under-utilized")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

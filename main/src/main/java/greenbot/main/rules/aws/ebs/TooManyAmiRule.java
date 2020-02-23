@@ -17,7 +17,7 @@ public class TooManyAmiRule extends AbstractGreenbotRule {
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("Too may AMI, Is cleanup policy exits")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

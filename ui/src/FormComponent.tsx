@@ -1,9 +1,13 @@
 import React, { ChangeEvent, Component } from "react";
 import axios, { AxiosResponse } from "axios";
 import './css/FormComponent.css'
+
 type FormComponentState = {
 	configJson: string;
+	analyzeButtonText : string;
+	disableForm: boolean;
 };
+
 type FormComponentProps = {
 	callback: Function;
 }
@@ -12,20 +16,25 @@ export class FormComponent extends Component<FormComponentProps, FormComponentSt
 	constructor(props: FormComponentProps) {
 		super(props);
 		this.state = {
-			configJson: ""
+			configJson: "",
+			analyzeButtonText : "Analyze",
+			disableForm: false
 		};
 	}
 
 	handleFormSubmit() {
+		this.setState({ ...this.state, analyzeButtonText: "Working on it! this may take a while" , disableForm: true});
+
 		axios.post("/rule",
 			{
 				configJson: this.state.configJson
 			})
 			.then((analysisResponse: AxiosResponse) => {
 				this.props.callback(analysisResponse.data);
+				this.setState({ ...this.state, analyzeButtonText: "Analyze", disableForm: false });
 			})
 			.catch((err:any )=>{
-				alert('Something went wrong, please check application console');
+				this.setState({ ...this.state, disableForm: true, analyzeButtonText: "Something went wrong, please check application console. Raise bug report if needed" });
 			})
 	}
 
@@ -35,6 +44,7 @@ export class FormComponent extends Component<FormComponentProps, FormComponentSt
 	};
 
 	componentDidMount(): void {
+
 		axios.get("/rule/config")
 			.then((value: AxiosResponse) => {
 				this.setState({ ...this.state, configJson: JSON.stringify(value.data, null, 4) });
@@ -74,12 +84,14 @@ export class FormComponent extends Component<FormComponentProps, FormComponentSt
 							id="analyze"
 							type="submit"
 							onClick={this.handleFormSubmit.bind(this)}
+							disabled={this.state.disableForm}
 						>
-							Analyze
+							{this.state.analyzeButtonText}
                         </button>
 					</div>
-				</div>
+				</div>				
 			</div>
+			
 		);
 	}
 }

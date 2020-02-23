@@ -15,11 +15,9 @@ import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 
-@Component
 public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbotRule {
-
-    private static final Map<String, String> INSTANCE_REPLACE_MAP = buildInstanceReplaceMap();
-
+	
+	private static final Map<String, String> INSTANCE_REPLACE_MAP = buildInstanceReplaceMap();
     private static final String RULE_DESC = "%s EC2 instance can be replaced with newer generation EC2 %s instance";
 
     @Override
@@ -39,7 +37,7 @@ public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbot
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("Is older generation of instances are used")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

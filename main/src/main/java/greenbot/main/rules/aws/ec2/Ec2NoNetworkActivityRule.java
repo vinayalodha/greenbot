@@ -18,7 +18,7 @@ public class Ec2NoNetworkActivityRule extends AbstractGreenbotRule {
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("If EC2 have no activity then check if it used at all")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

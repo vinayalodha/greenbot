@@ -18,7 +18,7 @@ public class UnderUtilizedEc2InstanceRule extends AbstractGreenbotRule {
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
-                .id(buildId())
+                .id(buildRuleId())
                 .description("TODO")
                 .permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
                 .build();

@@ -19,7 +19,9 @@ import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.utils.RuleResponseReducer;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class RuleLifecycleManager {
@@ -34,6 +36,7 @@ public class RuleLifecycleManager {
                     try {
                         return rule.doWork(request);
                     } catch (Exception e) {
+                    	log.error("", e);
                         errorMessages.add(StringUtils.abbreviate(ExceptionUtils.getRootCauseMessage(e), 200));
                     }
                     return null;
@@ -56,5 +59,7 @@ public class RuleLifecycleManager {
     public List<RuleInfo> getRuleInfos() {
         return rules.stream().map(GreenbotRule::ruleInfo).collect(Collectors.toList());
     }
+    
+    
 
 }
