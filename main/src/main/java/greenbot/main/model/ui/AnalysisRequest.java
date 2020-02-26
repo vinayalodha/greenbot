@@ -1,7 +1,6 @@
 package greenbot.main.model.ui;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import greenbot.rule.model.ConfigParam;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AnalysisRequest {
 
-    @Builder.Default
-    private Map<String, ConfigParam> configParams = new HashMap<String, ConfigParam>();
+	private List<ConfigParam> configParams;
 
 }

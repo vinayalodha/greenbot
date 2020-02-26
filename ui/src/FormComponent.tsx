@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import './css/FormComponent.css'
 
 type FormComponentState = {
-	configJson: string;
+	configJson: any;
 	analyzeButtonText : string;
 	disableForm: boolean;
 };
@@ -27,7 +27,7 @@ export class FormComponent extends Component<FormComponentProps, FormComponentSt
 
 		axios.post("/rule",
 			{
-				configJson: this.state.configJson
+				configParams: JSON.parse(this.state.configJson)
 			})
 			.then((analysisResponse: AxiosResponse) => {
 				this.props.callback(analysisResponse.data);

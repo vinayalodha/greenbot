@@ -8,15 +8,24 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ConfigParamUtils {
-    public List<ConfigParam> awsTagConfigs() {
-        ConfigParam unTagged = ConfigParam.builder().key("onlyIncludeUntaggedResources").value("false")
-                .description("Only analyze AWS resources which are un-tagged").build();
 
-        ConfigParam tagged = ConfigParam.builder().key("filterBasedOnTags").value("").description(
-                "comma separated value for tags. Analyze AWS resources which matches given tag. Keep it empty to analyze all tags. For example tag1=value1,tag2-value2")
-                .build();
+	public static final String EXCLUDED_TAG = "excludedTag";
+	public static final String INCLUDED_TAG = "includedTag";
 
-        return Arrays.asList(unTagged, tagged);
+	public List<ConfigParam> buildEmpty() {
+		ConfigParam excludedTag = ConfigParam.builder()
+				.key(EXCLUDED_TAG)
+				.value("")
+				.description("Resources with this tag will not be analyzed. Format <key>=<value>")
+				.build();
 
-    }
+		ConfigParam includedTag = ConfigParam.builder()
+				.key(INCLUDED_TAG)
+				.value("")
+				.description("Only resources with this tag will be analyzed. Format <key>=<value>")
+				.build();
+
+		return Arrays.asList(excludedTag, includedTag);
+	}
+
 }

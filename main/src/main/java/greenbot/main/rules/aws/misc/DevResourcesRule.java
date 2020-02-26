@@ -28,7 +28,7 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
 		// TODO also check for RDS
-		List<Compute> computes = computeService.list(null, null);
+		List<Compute> computes = computeService.list(ruleRequest.getIncludedTag(), ruleRequest.getExcludedTag());
 		List<String> filteredComputes = computes.stream()
 				.filter(compute -> devTagAnalyzer.isDevTagPresent(compute.getTags()))
 				.map(Compute::getId)
@@ -40,10 +40,11 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 		RuleResponseItem item = RuleResponseItem.builder()
 				.resourceIds(filteredComputes)
 				.confidence(AnalysisConfidence.LOW)
-				.message("Consider adding lifecycle around dev/staging/test resources")
+				.message(
+						"Usually dev/staging/test resources don't need to run for 24 hours. Consider adding mechanism to stop them for part of day when it is unused.")
 				.ruleId(buildRuleId())
 				.build();
-		
+
 		return RuleResponse.builder()
 				.item(item)
 				.build();

@@ -1,7 +1,6 @@
 package greenbot.main.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,21 +20,21 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RuleController {
 
-    private final ConversionService conversionService;
-    private final RuleLifecycleManager ruleLifecycleManager;
+	private final ConversionService conversionService;
+	private final RuleLifecycleManager ruleLifecycleManager;
 
-    @GetMapping("rule/info")
-    public List<RuleInfo> getRulePermission() {
-        return ruleLifecycleManager.getRuleInfos();
-    }
+	@GetMapping("rule/info")
+	public List<RuleInfo> getRulePermission() {
+		return ruleLifecycleManager.getRuleInfos();
+	}
 
-    @GetMapping("rule/config")
-    public Map<String, List<ConfigParam>> getConfig() {
-        return ruleLifecycleManager.getConfigParams();
-    }
+	@GetMapping("rule/config")
+	public List<ConfigParam> getConfig() {
+		return ruleLifecycleManager.getConfigParams();
+	}
 
-    @PostMapping("rule")
-    public RuleResponse post(@RequestBody AnalysisRequest request) {
-        return ruleLifecycleManager.execute(conversionService.convert(request, RuleRequest.class));
-    }
+	@PostMapping("rule")
+	public RuleResponse post(@RequestBody AnalysisRequest request) {
+		return ruleLifecycleManager.execute(conversionService.convert(request, RuleRequest.class));
+	}
 }

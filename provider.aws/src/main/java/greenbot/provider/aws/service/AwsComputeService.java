@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.DescribeInstancesResponse;
 import software.amazon.awssdk.services.ec2.model.Instance;
-import software.amazon.awssdk.services.ec2.model.InstanceState;
 import software.amazon.awssdk.services.ec2.model.Reservation;
 import software.amazon.awssdk.services.ec2.paginators.DescribeInstancesIterable;
 
@@ -27,8 +26,8 @@ public class AwsComputeService implements ComputeService {
 	private ConversionService conversionService;
 
 	@Override
-	@Cacheable("AwsComputeService")
-	public List<Compute> list(Tag excluded) {
+	@Cacheable("awsComputeService")
+	public List<Compute> list(Tag includedTag, Tag excludedTag) {
 		return regionService.regions()
 				.parallelStream()
 				.map(region -> Ec2Client.builder().region(region).build())
@@ -46,7 +45,12 @@ public class AwsComputeService implements ComputeService {
 					return false;
 				})
 				.map(this::convert)
-				.filter(compute -> !compute.getTags().contains(excluded))
+				.filter(compute -> {
+					return includedTag == null || compute.getTags().contains(includedTag);
+				})
+				.filter(compute -> {
+					return excludedTag == null || !compute.getTags().contains(excludedTag);
+				})
 				.collect(Collectors.toList());
 	}
 

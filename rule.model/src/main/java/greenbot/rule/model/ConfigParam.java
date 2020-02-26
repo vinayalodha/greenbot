@@ -1,12 +1,16 @@
 package greenbot.rule.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConfigParam {
-	private final String key;
-	private final Object value;
-	private final String description;
+	private String key;
+	private String value;
+	private String description;
 }
