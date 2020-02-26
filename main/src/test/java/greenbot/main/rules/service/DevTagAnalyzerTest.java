@@ -7,7 +7,7 @@ import java.util.Arrays;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-import greenbot.provider.model.Tag;
+import greenbot.rule.model.Tag;
 
 public class DevTagAnalyzerTest {
 	

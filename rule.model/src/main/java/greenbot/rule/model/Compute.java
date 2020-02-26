@@ -1,4 +1,4 @@
-package greenbot.provider.model;
+package greenbot.rule.model;
 
 import java.util.List;
 

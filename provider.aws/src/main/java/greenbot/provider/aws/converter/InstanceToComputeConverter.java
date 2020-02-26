@@ -7,8 +7,8 @@ import java.util.List;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import greenbot.provider.model.Compute;
-import greenbot.provider.model.Tag;
+import greenbot.rule.model.Compute;
+import greenbot.rule.model.Tag;
 import software.amazon.awssdk.services.ec2.model.Instance;
 
 @Component

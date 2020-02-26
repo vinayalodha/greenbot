@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.main.rules.service.TagAnalyzer;
-import greenbot.provider.model.Compute;
 import greenbot.provider.service.ComputeService;
+import greenbot.rule.model.AnalysisConfidence;
+import greenbot.rule.model.Compute;
+import greenbot.rule.model.RuleInfo;
+import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 import lombok.AllArgsConstructor;
-import greenbot.rule.model.AnalysisConfidence;
-import greenbot.rule.model.RuleInfo;
-import greenbot.rule.model.RuleRequest;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +28,7 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
 		// TODO also check for RDS
-		List<Compute> computes = computeService.list();
+		List<Compute> computes = computeService.list(null, null);
 		List<String> filteredComputes = computes.stream()
 				.filter(compute -> devTagAnalyzer.isDevTagPresent(compute.getTags()))
 				.map(Compute::getId)
@@ -54,7 +54,7 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 		return RuleInfo.builder()
 				.id(buildRuleId())
 				.description("Does dev/staging/test resources running 24 hours?")
-				.permissions(Arrays.asList("ReadEc2State"))
+				.permissions(Arrays.asList("ec2:DescribeInstances", "ec2:DescribeRegions"))
 				.build();
 	}
 

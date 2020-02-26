@@ -6,8 +6,7 @@ export class AwsCliMessageComponent extends Component<{}> {
         return (
             <div className="message">
                 <div className="message-body">
-                    Do make sure <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html"
-                                    target="_blank" rel="noopener noreferrer">AWS profile</a> is updated with below IAM roles.
+                    Do make sure <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html" target="_blank" rel="noopener noreferrer">AWS cli</a> is configured with correct IAM roles
                 </div>
             </div>
         );

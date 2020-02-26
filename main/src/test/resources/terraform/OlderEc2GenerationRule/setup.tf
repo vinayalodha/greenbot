@@ -28,6 +28,6 @@ resource "aws_instance" "web" {
 
   tags = {
     development = "true"
-	  Name = "Bad EC2"
+	  Name = "T2 Instance"
   }
 }

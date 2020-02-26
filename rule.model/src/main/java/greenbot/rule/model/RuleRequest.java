@@ -10,5 +10,5 @@ import lombok.Value;
 public class RuleRequest {
     private final Provider provider;
     private final Map<String, ConfigParam> configParams;
-
+    
 }

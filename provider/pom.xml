@@ -13,10 +13,18 @@
 	</parent>
 
 	<dependencies>
+			<!-- Internal projects -->
+		<dependency>
+			<groupId>greenbot</groupId>
+			<artifactId>rule.model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+					<!-- Spring projects -->
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 		</dependency>
-
 	</dependencies>
 </project>

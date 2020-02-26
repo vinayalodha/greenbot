@@ -58,6 +58,14 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- Terraform -->
+		<dependency>
+			<groupId>com.microsoft.terraform</groupId>
+			<artifactId>terraform-client</artifactId>
+			<version>1.0.0</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Apache stuff -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -82,7 +90,6 @@
 				<executions>
 					<execution>
 						<id>copy-resources</id>
-						<!-- here the phase you need -->
 						<phase>validate</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -98,6 +105,18 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M4</version>
+				<configuration>
+					<properties>
+						<groups>!terraform_test</groups>
+						<excludedGroups>terraform_test</excludedGroups>
+					</properties>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

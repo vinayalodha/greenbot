@@ -8,7 +8,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import greenbot.provider.model.Tag;
+import greenbot.rule.model.Tag;
 
 @Component
 public class TagAnalyzer {
