@@ -15,6 +15,7 @@ public class TerraformUtils {
 			client.setErrorListener(System.err::println);
 
 			client.setWorkingDirectory(new File(path));
+			client.plan().get();
 			client.apply().get();
 		}
 	}
