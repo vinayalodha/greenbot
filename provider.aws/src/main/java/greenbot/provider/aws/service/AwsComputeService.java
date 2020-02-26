@@ -18,8 +18,8 @@ import software.amazon.awssdk.services.ec2.model.Instance;
 import software.amazon.awssdk.services.ec2.model.Reservation;
 import software.amazon.awssdk.services.ec2.paginators.DescribeInstancesIterable;
 
+@Service
 @AllArgsConstructor
-@Service("awsComputeService")
 public class AwsComputeService implements ComputeService {
 
 	private RegionService regionService;

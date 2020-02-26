@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import greenbot.main.rules.AbstractGreenbotRule;
@@ -34,14 +35,14 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 				.map(Compute::getId)
 				.collect(toList());
 
-		if (filteredComputes.isEmpty())
+		if (CollectionUtils.isEmpty(filteredComputes))
 			return null;
 
 		RuleResponseItem item = RuleResponseItem.builder()
 				.resourceIds(filteredComputes)
 				.confidence(AnalysisConfidence.LOW)
 				.message(
-						"Usually dev/staging/test resources don't need to run for 24 hours. Consider adding mechanism to stop them for part of day when it is unused.")
+						"Usually dev/staging/test resources don't need to run for 24 hours. Consider adding mechanism to stop them for part of day/weekend when it is unused.")
 				.ruleId(buildRuleId())
 				.build();
 
