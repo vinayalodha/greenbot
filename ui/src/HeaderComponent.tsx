@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import React, { Component } from 'react';
+import './css/HeaderComponent.css'
 
 
 export class HeaderComponent extends Component<{}> {
@@ -25,7 +26,10 @@ export class HeaderComponent extends Component<{}> {
 				<nav role="navigation" className="navbar bd-navbar navbar has-shadow is-spaced" aria-label="main navigation">
 					<div id="navbarBasicExample" className="navbar-menu">
 						<div className="navbar-start">
-							<a className="navbar-item" href="/"> Greenbot <span>🤖</span> </a> 
+							<a className="" href="/"> 
+								<strong className="green-color">Greenbot</strong> 
+								<img src="favicon.svg" alt="image"/>  
+							</a> 
 						</div>
 						<div className="navbar-end">
 							<div className="navbar-item">
