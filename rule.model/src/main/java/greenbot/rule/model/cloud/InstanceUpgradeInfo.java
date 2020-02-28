@@ -27,4 +27,5 @@ public class InstanceUpgradeInfo {
 	private String currentFamily;
 	private Compute compute;
 	private String newFamily;
+	private String reason;
 }

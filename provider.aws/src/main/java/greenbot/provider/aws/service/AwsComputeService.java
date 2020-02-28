@@ -44,7 +44,12 @@ import software.amazon.awssdk.services.ec2.paginators.DescribeInstancesIterable;
 @Service
 @AllArgsConstructor
 public class AwsComputeService implements ComputeService {
+
 	private static final Map<String, String> INSTANCE_UPGRADE_MAP = buildInstanceUpgradeMap();
+
+	private static final String REASON1 = "\"%s\" ec2 family can be replaced with \"%s\" ec2 family";
+	private static final String REASON2 = "\"%s\" ec2 family can be replaced with \"inf1\" ec2 family if you performing machine learning inference or with g4";
+	private static final String REASON3 = "\"g4\" ec2 family can be replaced with \"inf1\" ec2 family if you performing machine learning inference ";
 
 	private RegionService regionService;
 	private ConversionService conversionService;
@@ -84,9 +89,18 @@ public class AwsComputeService implements ComputeService {
 				.stream()
 				.map(key -> {
 					if (compute.getInstanceType().startsWith(key) && !isAmd(compute.getInstanceType())) {
+						String reason;
+						if (isG4(compute.getInstanceType())) {
+							reason = REASON3;
+						} else if (isG2G3(compute.getInstanceType())) {
+							reason = String.format(REASON2, key);
+						} else {
+							reason = String.format(REASON1, key, INSTANCE_UPGRADE_MAP.get(key));
+						}
 						return InstanceUpgradeInfo.builder()
 								.currentFamily(key)
 								.compute(compute)
+								.reason(reason)
 								.newFamily(INSTANCE_UPGRADE_MAP.get(key))
 								.build();
 					}
@@ -95,6 +109,14 @@ public class AwsComputeService implements ComputeService {
 				.filter(Objects::nonNull)
 				.findAny();
 		return obj.orElse(null);
+	}
+
+	private boolean isG2G3(String instanceType) {
+		return instanceType.startsWith("g2") || instanceType.startsWith("g3");
+	}
+
+	private boolean isG4(String instanceType) {
+		return instanceType.startsWith("g4");
 	}
 
 	private boolean isAmd(String instanceType) {

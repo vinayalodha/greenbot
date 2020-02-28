@@ -45,8 +45,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbotRule {
 
-	private static final String RULE_DESC = "\"%s\" ec2 family can be replaced with \"%s\" ec2 family";
-
 	private ComputeService computeService;
 
 	@Override
@@ -70,8 +68,7 @@ public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbot
 					return RuleResponseItem.builder()
 							.resourceIds(ids)
 							.confidence(AnalysisConfidence.HIGH)
-							.message(
-									String.format(RULE_DESC, currentInstanceFamily, upgrades.get(0).getNewFamily()))
+							.message(upgrades.get(0).getReason())
 							.ruleId(buildRuleId())
 							.build();
 				})
@@ -86,7 +83,7 @@ public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbot
 	public RuleInfo ruleInfo() {
 		return RuleInfo.builder()
 				.id(buildRuleId())
-				.description("Are older generation of EC2 instances being used?")
+				.description("Are older generation of EC2 instance family being used?")
 				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
 				.build();
 	}

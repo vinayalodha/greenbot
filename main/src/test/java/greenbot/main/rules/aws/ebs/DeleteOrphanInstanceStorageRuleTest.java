@@ -26,6 +26,10 @@ import greenbot.main.dataprovider.RuleRequestDataProvider;
 import greenbot.main.terraform.TerraformUtils;
 import greenbot.rule.model.RuleResponse;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 @SpringBootTest
 public class DeleteOrphanInstanceStorageRuleTest {
 
