@@ -31,11 +31,6 @@ export class HeaderComponent extends Component<{}> {
 							<div className="navbar-item">
 							<div className="field is-grouped is-grouped-multiline">
 							<p className="control">
-            					<a className="button" rel="noopener noreferrer" target='_blank'  href="https://github.com/vinay-lodha/greenbot/issues">
-              						<strong>Report Bug</strong>
-            					</a>
-          					</p>
-							<p className="control">
             					<a className="button" rel="noopener noreferrer" target='_blank' href="https://github.com/vinay-lodha/greenbot">
               						<strong>Github <span>⭐</span></strong>
             					</a>
