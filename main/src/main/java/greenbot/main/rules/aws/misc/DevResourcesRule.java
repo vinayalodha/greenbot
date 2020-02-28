@@ -12,11 +12,11 @@ import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.main.rules.service.TagAnalyzer;
 import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.AnalysisConfidence;
-import greenbot.rule.model.Compute;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
+import greenbot.rule.model.cloud.Compute;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -56,7 +56,7 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 		return RuleInfo.builder()
 				.id(buildRuleId())
 				.description("Does dev/staging/test resources running 24 hours?")
-				.permissions(Arrays.asList("ec2:DescribeInstances", "ec2:DescribeRegions"))
+				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
 				.build();
 	}
 

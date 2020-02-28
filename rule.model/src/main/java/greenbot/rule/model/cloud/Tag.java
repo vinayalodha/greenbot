@@ -1,4 +1,4 @@
-package greenbot.rule.model;
+package greenbot.rule.model.cloud;
 
 import lombok.Builder;
 import lombok.Data;

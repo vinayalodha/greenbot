@@ -10,8 +10,8 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import greenbot.provider.service.InstanceStorageService;
-import greenbot.rule.model.InstanceStorage;
-import greenbot.rule.model.Tag;
+import greenbot.rule.model.cloud.InstanceStorage;
+import greenbot.rule.model.cloud.Tag;
 import lombok.AllArgsConstructor;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.DescribeVolumesResponse;

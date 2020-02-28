@@ -7,14 +7,14 @@ body {
     font-family: 'lato' !important;
 }
 
-pre{
+pre {
     background-color: #f5f5f5 !important;
 }
 
 .message-body {
-    border-color: black;
+    border-color: black !important;
 }
 
-ul{
+ul {
     list-style: circle;
 }

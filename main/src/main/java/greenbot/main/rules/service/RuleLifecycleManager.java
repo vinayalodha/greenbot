@@ -26,6 +26,7 @@ public class RuleLifecycleManager {
 
 	private final List<GreenbotRule> rules;
 	private final RuleResponseReducer responseReducer;
+	private final ConfigParamUtils configParamUtils;
 
 	public RuleResponse execute(RuleRequest request) {
 		List<String> errorMessages = new ArrayList<>();
@@ -46,7 +47,7 @@ public class RuleLifecycleManager {
 	}
 
 	public List<ConfigParam> getConfigParams() {
-		return ConfigParamUtils.buildEmpty();
+		return configParamUtils.buildEmpty();
 	}
 
 	public List<RuleInfo> getRuleInfos() {

@@ -1,55 +1,52 @@
 package greenbot.main.rules.aws.ebs;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import greenbot.main.rules.AbstractGreenbotRule;
-import greenbot.provider.service.InstanceStorageService;
+import greenbot.provider.service.InstanceImageService;
 import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
-import greenbot.rule.model.cloud.InstanceStorage;
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class DeleteOrphanInstanceStorageRule extends AbstractGreenbotRule {
+public class TooManyInstanceImagesRule extends AbstractGreenbotRule {
 
-	private InstanceStorageService instanceStorageService;
+	private InstanceImageService instanceImageService;
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
-		List<InstanceStorage> orphans = instanceStorageService.orphans(ruleRequest.getIncludedTag(),
+		boolean result = instanceImageService.isGreaterThanThreshold(ruleRequest.getAmiThreshold(),
+				ruleRequest.getIncludedTag(),
 				ruleRequest.getExcludedTag());
-		if (CollectionUtils.isEmpty(orphans))
+		if (!result)
 			return null;
 
 		RuleResponseItem item = RuleResponseItem.builder()
-				.resourceIds(orphans.stream().map(InstanceStorage::getId).collect(toList()))
+				.resourceIds(Collections.emptyList())
 				.confidence(AnalysisConfidence.MEDIUM)
-				.message("EBS storage is not attached to EC2, are they used?")
+				.message("AMI count exceeds " + ruleRequest.getAmiThreshold()
+						+ " (refer too_many_ami_threshold config param)")
 				.ruleId(buildRuleId())
 				.build();
 
 		return RuleResponse.builder()
 				.item(item)
 				.build();
-
 	}
 
 	@Override
 	public RuleInfo ruleInfo() {
 		return RuleInfo.builder()
 				.id(buildRuleId())
-				.description("Is orphan EBS drives present?")
-				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeVolumes"))
+				.description("Too may AMI exists, Is cleanup policy exits?")
+				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeImages"))
 				.build();
 	}
 }

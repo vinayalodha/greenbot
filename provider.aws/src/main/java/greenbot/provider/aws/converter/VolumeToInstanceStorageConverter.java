@@ -7,8 +7,8 @@ import java.util.List;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import greenbot.rule.model.InstanceStorage;
-import greenbot.rule.model.Tag;
+import greenbot.rule.model.cloud.InstanceStorage;
+import greenbot.rule.model.cloud.Tag;
 import lombok.AllArgsConstructor;
 import software.amazon.awssdk.services.ec2.model.Volume;
 

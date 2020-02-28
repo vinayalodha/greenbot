@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import greenbot.main.config.ConfigParamUtils;
 import greenbot.main.model.ui.AnalysisRequest;
 import greenbot.rule.model.RuleRequest;
-import greenbot.rule.model.Tag;
+import greenbot.rule.model.cloud.Tag;
 import lombok.AllArgsConstructor;
 
 @Component
@@ -39,9 +39,17 @@ public class AnalysisRequestToRuleRequest implements Converter<AnalysisRequest, 
 				.findAny()
 				.orElseGet(() -> null);
 
+		Integer amiThreshold = source.getConfigParams()
+				.stream()
+				.filter(cp -> cp.getKey().equals(ConfigParamUtils.TOO_MANY_AMI_THRESHOLD))
+				.map(cp -> Integer.valueOf(cp.getValue()))
+				.findAny()
+				.get();
+
 		return RuleRequest.builder()
 				.includedTag(includedTag)
 				.excludedTag(excludedTag)
+				.amiThreshold(amiThreshold)
 				.build();
 	}
 

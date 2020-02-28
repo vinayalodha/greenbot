@@ -6,3 +6,7 @@ spring:
    cache:
       caffeine:
          spec: expireAfterWrite=180s
+         
+         
+threshold:
+   ami: 5000

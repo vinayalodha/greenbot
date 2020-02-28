@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import greenbot.rule.model.Tag;
+import greenbot.rule.model.cloud.Tag;
 
 @Component
 public class StringToTagConverter implements Converter<String, Tag> {

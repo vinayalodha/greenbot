@@ -3,7 +3,7 @@ package greenbot.provider.aws.converter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import greenbot.rule.model.Tag;
+import greenbot.rule.model.cloud.Tag;
 
 @Component
 public class Ec2TagToTagConverter implements Converter<software.amazon.awssdk.services.ec2.model.Tag, Tag> {

@@ -2,6 +2,17 @@ provider "aws" {
   region = "us-east-2"
 }
 
+resource "aws_ami_copy" "example" {
+  name              = "terraform-example"
+  description       = "A copy of ami-xxxxxxxx"
+  source_ami_id     = "${data.aws_ami.ubuntu.id}"
+  source_ami_region = "us-east-2"
+
+  tags = {
+    Name  = "HelloWorld"
+    owner = "greenbot"
+  }
+}
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -16,15 +27,4 @@ data "aws_ami" "ubuntu" {
   }
 
   owners = ["099720109477"] # Canonical
-}
-
-resource "aws_instance" "web" {
-  ami           = "${data.aws_ami.ubuntu.id}"
-  instance_type = "t2.micro"
-
-  tags = {
-    development = "true"
-    Name        = "Bad EC2"
-    owner       = "greenbot"
-  }
 }

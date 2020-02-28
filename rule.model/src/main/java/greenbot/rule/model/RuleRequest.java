@@ -1,5 +1,6 @@
 package greenbot.rule.model;
 
+import greenbot.rule.model.cloud.Tag;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,5 +11,5 @@ public class RuleRequest {
 
 	private Tag excludedTag;
 	private Tag includedTag;
-
+	private int amiThreshold;
 }

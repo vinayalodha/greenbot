@@ -7,12 +7,12 @@ import java.util.Arrays;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-import greenbot.rule.model.Tag;
+import greenbot.rule.model.cloud.Tag;
 
 public class DevTagAnalyzerTest {
-	
+
 	private final TagAnalyzer devTagAnalyzer = new TagAnalyzer();
-	
+
 	@ParameterizedTest
 	@CsvFileSource(resources = "/dev-tags.csv")
 	void withCsvSource(String key, String value, Boolean outcome) {
