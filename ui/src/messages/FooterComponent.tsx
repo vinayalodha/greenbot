@@ -21,9 +21,9 @@ export class FooterComponent extends Component<{}> {
         return (
             <footer className="footer">
                 <div className="content has-text-centered">
-                    <p><strong>Maintained by <a href="https://www.linkedin.com/in/vinaylodha/" target='_blank' rel="noopener noreferrer">Vinay Lodha</a></strong>
+                    <p><strong>Maintained by <a href="https://www.linkedin.com/in/vinaylodha/" target='_blank' rel="noopener noreferrer">Vinay Lodha</a>
                     <br/>
-                    <a href="mailto:vinay.a.lodha@gmail.com">Feedback</a> | <a target="_blank" href="https://github.com/vinay-lodha/greenbot/issues">Report Bug</a> </p>
+                    <a href="mailto:vinay.a.lodha@gmail.com">Feedback</a> | <a target="_blank" href="https://github.com/vinay-lodha/greenbot/issues">Report Bug</a> </strong></p>
                 </div>
             </footer>
         );
