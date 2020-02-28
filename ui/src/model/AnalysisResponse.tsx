@@ -9,6 +9,6 @@ class RuleResponseItem {
 	resourceIds: String[] = [];
 	ruleId: String = "";
 	confidence: String = "";
-	message: String = "";
+	message: string = "";
 	approxCostSaving: String = "";
 }

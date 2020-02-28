@@ -33,6 +33,9 @@ import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.InstanceStorage;
 import lombok.AllArgsConstructor;
 
+/**
+ * @author Vinay Lodha
+ */
 @Component
 @AllArgsConstructor
 public class DeleteOrphanInstanceStorageRule extends AbstractGreenbotRule {

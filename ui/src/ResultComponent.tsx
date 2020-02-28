@@ -28,15 +28,13 @@ export class ResultComponent extends Component<ResultProps, {}> {
 			return null;
 		}
 		const items = []
-
 		for (const item of this.props.result.items) {
 			items.push(
 				<tr>
-					<td>{item.resourceIds}</td>
+					<td>{item.resourceIds.toString()}</td>
 					<td>{item.ruleId}</td>
 					<td>{item.confidence}</td>
 					<td>{item.message}</td>
-					<td>{item.approxCostSaving}</td>
 				</tr>
 			)
 		}
@@ -49,7 +47,6 @@ export class ResultComponent extends Component<ResultProps, {}> {
 							<th>Rule Id</th>
 							<th>Confidence</th>
 							<th>Message</th>
-							<th>Approx Cost Saving</th>
 						</tr>
 					</thead>
 					<tbody>

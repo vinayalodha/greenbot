@@ -23,6 +23,9 @@ import org.springframework.stereotype.Component;
 
 import greenbot.rule.model.ConfigParam;
 
+/**
+ * @author Vinay Lodha
+ */
 @Component
 public class ConfigParamUtils {
 

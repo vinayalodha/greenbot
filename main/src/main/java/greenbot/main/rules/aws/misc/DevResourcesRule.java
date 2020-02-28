@@ -34,6 +34,10 @@ import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Compute;
 import lombok.AllArgsConstructor;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 @Service
 @AllArgsConstructor
 public class DevResourcesRule extends AbstractGreenbotRule {
@@ -53,7 +57,7 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 		if (CollectionUtils.isEmpty(filteredComputes))
 			return null;
 
-		RuleResponseItem item = RuleResponseItem.builder()
+		RuleResponseItem ruleResponseItem = RuleResponseItem.builder()
 				.resourceIds(filteredComputes)
 				.confidence(AnalysisConfidence.LOW)
 				.message(
@@ -62,7 +66,7 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 				.build();
 
 		return RuleResponse.builder()
-				.item(item)
+				.item(ruleResponseItem)
 				.build();
 	}
 

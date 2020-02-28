@@ -15,8 +15,16 @@
  */
 package greenbot.rule.model.cloud;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * @author Vinay Lodha
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 public class Compute extends Resource {
+	private String instanceType;
 }

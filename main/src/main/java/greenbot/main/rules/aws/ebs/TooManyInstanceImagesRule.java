@@ -29,6 +29,9 @@ import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 import lombok.AllArgsConstructor;
 
+/**
+ * @author Vinay Lodha
+ */
 @Component
 @AllArgsConstructor
 public class TooManyInstanceImagesRule extends AbstractGreenbotRule {

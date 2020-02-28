@@ -27,6 +27,10 @@ import greenbot.rule.model.cloud.Tag;
 import lombok.AllArgsConstructor;
 import software.amazon.awssdk.services.ec2.model.Instance;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 @Component
 @AllArgsConstructor
 public class InstanceToComputeConverter implements Converter<Instance, Compute> {
@@ -42,6 +46,7 @@ public class InstanceToComputeConverter implements Converter<Instance, Compute> 
 
 		return Compute.builder()
 				.id(instance.instanceId())
+				.instanceType(instance.instanceTypeAsString())
 				.tags(tags)
 				.build();
 	}

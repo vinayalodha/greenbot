@@ -16,7 +16,11 @@
 package greenbot.provider.aws.service;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.cache.annotation.Cacheable;
@@ -25,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.cloud.Compute;
+import greenbot.rule.model.cloud.InstanceUpgradeInfo;
 import greenbot.rule.model.cloud.Tag;
 import lombok.AllArgsConstructor;
 import software.amazon.awssdk.services.ec2.Ec2Client;
@@ -33,9 +38,13 @@ import software.amazon.awssdk.services.ec2.model.Instance;
 import software.amazon.awssdk.services.ec2.model.Reservation;
 import software.amazon.awssdk.services.ec2.paginators.DescribeInstancesIterable;
 
+/**
+ * @author Vinay Lodha
+ */
 @Service
 @AllArgsConstructor
 public class AwsComputeService implements ComputeService {
+	private static final Map<String, String> INSTANCE_UPGRADE_MAP = buildInstanceUpgradeMap();
 
 	private RegionService regionService;
 	private ConversionService conversionService;
@@ -69,7 +78,61 @@ public class AwsComputeService implements ComputeService {
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	public InstanceUpgradeInfo checkUpgradePossibility(Compute compute) {
+		Optional<InstanceUpgradeInfo> obj = INSTANCE_UPGRADE_MAP.keySet()
+				.stream()
+				.map(key -> {
+					if (compute.getInstanceType().startsWith(key) && !isAmd(compute.getInstanceType())) {
+						return InstanceUpgradeInfo.builder()
+								.currentFamily(key)
+								.compute(compute)
+								.newFamily(INSTANCE_UPGRADE_MAP.get(key))
+								.build();
+					}
+					return null;
+				})
+				.filter(Objects::nonNull)
+				.findAny();
+		return obj.orElse(null);
+	}
+
+	private boolean isAmd(String instanceType) {
+		String temp = instanceType.split("\\.")[0];
+		return temp.length() > 2 && temp.substring(2).contains("a");
+	}
+
 	private Compute convert(Instance instance) {
 		return conversionService.convert(instance, Compute.class);
+	}
+
+	private static Map<String, String> buildInstanceUpgradeMap() {
+		Map<String, String> retval = new LinkedHashMap<>();
+		retval.put("cc1", "c5");
+		retval.put("c1", "c5");
+		retval.put("c3", "c5");
+		retval.put("c4", "c5");
+
+		retval.put("m1", "t3a");
+		retval.put("t1", "t3a");
+		retval.put("t2", "t3a");
+		retval.put("t3", "t3a");
+
+		retval.put("m3", "m5a");
+		retval.put("m4", "m5a");
+		retval.put("m5", "m5a");
+
+		retval.put("cr1", "r5a");
+		retval.put("m2", "r5a");
+		retval.put("r3", "r5a");
+		retval.put("r4", "r5a");
+		retval.put("r5", "r5a");
+
+		retval.put("g2", "g4");
+		retval.put("g3", "g4");
+
+		retval.put("hs1", "d2");
+
+		return retval;
 	}
 }

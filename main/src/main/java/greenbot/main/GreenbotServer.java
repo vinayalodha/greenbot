@@ -24,6 +24,10 @@ import org.springframework.context.annotation.ComponentScan;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 @Slf4j
 @EnableCaching
 @SpringBootApplication

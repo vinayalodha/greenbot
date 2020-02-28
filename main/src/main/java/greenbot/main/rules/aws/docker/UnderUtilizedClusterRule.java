@@ -22,6 +22,9 @@ import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 
+/**
+ * @author Vinay Lodha
+ */
 public class UnderUtilizedClusterRule extends AbstractGreenbotRule {
 
 	@Override

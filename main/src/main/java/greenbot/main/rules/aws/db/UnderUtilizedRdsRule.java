@@ -24,6 +24,9 @@ import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 
+/**
+ * @author Vinay Lodha
+ */
 public class UnderUtilizedRdsRule extends AbstractGreenbotRule {
 
 	@Override

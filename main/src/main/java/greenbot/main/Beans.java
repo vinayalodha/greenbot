@@ -20,6 +20,10 @@ import org.springframework.context.annotation.Configuration;
 
 import greenbot.rule.model.utils.RuleResponseReducer;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 @Configuration
 public class Beans {
 

@@ -22,6 +22,9 @@ import java.lang.annotation.Target;
 
 import org.junit.jupiter.api.Tag;
 
+/**
+ * @author Vinay Lodha
+ */
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Tag("terraform_test")

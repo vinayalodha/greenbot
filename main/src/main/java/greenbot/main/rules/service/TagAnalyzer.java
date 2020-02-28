@@ -25,6 +25,9 @@ import org.springframework.stereotype.Component;
 
 import greenbot.rule.model.cloud.Tag;
 
+/**
+ * @author Vinay Lodha
+ */
 @Component
 public class TagAnalyzer {
 	private static final String[] POSSIBLE_DEV_TAG_VALUES = { "dev", "development", "staging", "test", "testing" };

@@ -20,6 +20,9 @@ import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 
+/**
+ * @author Vinay Lodha
+ */
 public class OverProvisionedDynamoDbRule extends AbstractGreenbotRule {
 
 	@Override

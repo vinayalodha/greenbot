@@ -15,32 +15,70 @@
  */
 package greenbot.main.rules.aws.ec2;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Component;
+
+import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
+import greenbot.rule.model.cloud.Compute;
+import greenbot.rule.model.cloud.InstanceUpgradeInfo;
+import lombok.AllArgsConstructor;
 
+/**
+ * https://aws.amazon.com/ec2/previous-generation/
+ * 
+ * @author Vinay Lodha
+ */
+@Component
+@AllArgsConstructor
 public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbotRule {
 
-	private static final Map<String, String> INSTANCE_REPLACE_MAP = buildInstanceReplaceMap();
-	private static final String RULE_DESC = "%s EC2 instance can be replaced with newer generation EC2 %s instance";
+	private static final String RULE_DESC = "\"%s\" ec2 family can be replaced with \"%s\" ec2 family";
+
+	private ComputeService computeService;
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
+		List<Compute> computes = computeService.list(ruleRequest.getIncludedTag(), ruleRequest.getExcludedTag());
+		if (CollectionUtils.isEmpty(computes))
+			return null;
+
+		Map<String, List<InstanceUpgradeInfo>> upgradeMap = computes.stream()
+				.map(c -> computeService.checkUpgradePossibility(c))
+				.filter(Objects::nonNull)
+				.collect(groupingBy(InstanceUpgradeInfo::getCurrentFamily));
+
+		List<RuleResponseItem> ruleResponseItems = upgradeMap.keySet()
+				.stream()
+				.map(currentInstanceFamily -> {
+					List<InstanceUpgradeInfo> upgrades = upgradeMap.get(currentInstanceFamily);
+					List<String> ids = upgrades.stream()
+							.map(instanceUpgradeInfo -> instanceUpgradeInfo.getCompute().getId())
+							.collect(toList());
+					return RuleResponseItem.builder()
+							.resourceIds(ids)
+							.confidence(AnalysisConfidence.HIGH)
+							.message(
+									String.format(RULE_DESC, currentInstanceFamily, upgrades.get(0).getNewFamily()))
+							.ruleId(buildRuleId())
+							.build();
+				})
+				.collect(toList());
+
 		return RuleResponse.builder()
-				.infoMessage("Info Message 1")
-				.errorMessage("Error Message 1")
-				.warningMessage("Warning Message 1")
-				.item(RuleResponseItem.builder()
-						.resourceId("resourceId")
-						.approxCostSaving("30")
-						.message("Use T3 instead of T2")
-						.confidence(AnalysisConfidence.HIGH).build())
+				.items(ruleResponseItems)
 				.build();
 	}
 
@@ -48,25 +86,9 @@ public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbot
 	public RuleInfo ruleInfo() {
 		return RuleInfo.builder()
 				.id(buildRuleId())
-				.description("Is older generation of instances are used")
-				.permissions(Arrays.asList("ReadEc2State", "ReadCloudWatch"))
+				.description("Are older generation of EC2 instances being used?")
+				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
 				.build();
-	}
-
-	private static Map<String, String> buildInstanceReplaceMap() {
-		Map<String, String> retval = new HashMap<>();
-		retval.put("t3", "t3a");
-		retval.put("t2", "t3a");
-		retval.put("m4", "m5a");
-		retval.put("m5", "m5a");
-		retval.put("c4", "c5");
-		retval.put("r4", "r5a");
-		retval.put("r5", "r5a");
-
-		// TODO
-		// Memory Optimized
-		// Accelerated Computing
-		return retval;
 	}
 
 }

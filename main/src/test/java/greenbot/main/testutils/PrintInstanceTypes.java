@@ -13,28 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main.rules.service;
+package greenbot.main.testutils;
 
+import static java.util.stream.Collectors.toCollection;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.TreeSet;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.api.Test;
 
-import greenbot.rule.model.cloud.Tag;
+import software.amazon.awssdk.services.ec2.model.InstanceType;
 
 /**
  * @author Vinay Lodha
  */
-public class DevTagAnalyzerTest {
+public class PrintInstanceTypes {
 
-	private final TagAnalyzer devTagAnalyzer = new TagAnalyzer();
+	// https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instance-types.html
+	@Test
+	public void sanity() {
 
-	@ParameterizedTest
-	@CsvFileSource(resources = "/dev-tags.csv")
-	void withCsvSource(String key, String value, Boolean outcome) {
-		Tag tag = Tag.builder().key(key).value(value).build();
-		assertEquals(outcome, devTagAnalyzer.isDevTagPresent(Arrays.asList(tag)));
+		Collection<String> set = InstanceType.knownValues()
+				.stream()
+				.map(InstanceType::toString)
+				.collect(toCollection(TreeSet::new));
+
+		set.forEach(a -> {
+			// System.err.println(a);
+		});
+
+		assertEquals(271, set.size());
 	}
 }

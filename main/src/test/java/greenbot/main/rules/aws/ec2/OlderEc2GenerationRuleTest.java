@@ -15,14 +15,41 @@
  */
 package greenbot.main.rules.aws.ec2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import greenbot.main.TerraformTest;
+import greenbot.main.dataprovider.RuleRequestDataProvider;
+import greenbot.main.terraform.TerraformUtils;
+import greenbot.rule.model.RuleResponse;
+
+/**
+ * 
+ * @author Vinay Lodha
+ */
 @SpringBootTest
 public class OlderEc2GenerationRuleTest {
 
+	@Autowired
+	private OlderEc2GenerationRule olderEc2GenerationRule;
+
 	@Test
+	@TerraformTest
 	public void sanity() {
+
+		String path = "./src/test/resources/terraform/OlderEc2GenerationRule";
+		try {
+			TerraformUtils.apply(path);
+			RuleResponse response = olderEc2GenerationRule.doWork(RuleRequestDataProvider.simple());
+			assertEquals(2, response.getItems().size());
+			assertEquals(3, response.getItems().get(0).getResourceIds().size()
+					+ response.getItems().get(1).getResourceIds().size());
+		} finally {
+			TerraformUtils.destroy(path);
+		}
 
 	}
 }

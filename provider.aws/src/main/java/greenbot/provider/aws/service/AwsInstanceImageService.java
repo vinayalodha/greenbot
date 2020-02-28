@@ -32,9 +32,12 @@ import software.amazon.awssdk.services.ec2.model.DescribeImagesResponse;
 import software.amazon.awssdk.services.ec2.model.Filter;
 import software.amazon.awssdk.services.ec2.model.Image;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 @Service
 @AllArgsConstructor
-
 public class AwsInstanceImageService implements InstanceImageService {
 
 	private RegionService regionService;
