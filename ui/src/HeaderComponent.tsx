@@ -28,7 +28,7 @@ export class HeaderComponent extends Component<{}> {
 						<div className="navbar-start">
 							<a className="" href="/"> 
 								<strong className="green-color">Greenbot</strong> 
-								<img src="favicon.svg" alt="image"/>  
+								<img src="favicon.svg"/>  
 							</a> 
 						</div>
 						<div className="navbar-end">
