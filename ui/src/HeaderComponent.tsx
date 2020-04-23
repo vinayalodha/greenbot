@@ -28,7 +28,7 @@ export class HeaderComponent extends Component<{}> {
 						<div className="navbar-start">
 							<a className="" href="/"> 
 								<strong className="green-color">Greenbot</strong> 
-								<img src="favicon.svg"/>  
+								<img src="favicon.svg" alt="GreenBot"/>  
 							</a> 
 						</div>
 						<div className="navbar-end">
@@ -36,7 +36,7 @@ export class HeaderComponent extends Component<{}> {
 							<div className="field is-grouped is-grouped-multiline">
 							<p className="control">
             					<a className="button" rel="noopener noreferrer" target='_blank' href="https://github.com/vinay-lodha/greenbot">
-              						<strong>Github <span>⭐</span></strong>
+              						<strong>Github <span role="img" aria-label="GreenBot">⭐</span></strong>
             					</a>
           					</p>
 							<p className="control">
