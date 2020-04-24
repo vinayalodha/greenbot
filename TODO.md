@@ -1,0 +1,10 @@
+OverProvisionedDynamoDbRule
+UnderUtilizedRdsRule
+UnderUtilizedClusterRule
+UnderUtilizedFargateRule
+Ec2NoNetworkActivityRule
+Ec2ReservationNotAvailableRule
+* UnderUtilizedEc2InstanceRule
+EcrLifecycleMissingRule
+UnnecessaryElbRule
+UnusedElasticIpRule

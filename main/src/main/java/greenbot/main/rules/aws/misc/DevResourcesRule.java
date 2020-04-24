@@ -42,8 +42,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class DevResourcesRule extends AbstractGreenbotRule {
 
-	private TagAnalyzer devTagAnalyzer;
-	private ComputeService computeService;
+	private final TagAnalyzer devTagAnalyzer;
+	private final ComputeService computeService;
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {

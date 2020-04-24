@@ -17,6 +17,11 @@ package greenbot.rule.model.cloud;
 
 import lombok.experimental.SuperBuilder;
 
+/**
+ * InstanceStoage == EBS for AWS
+ * 
+ * @author Vinay Lodha
+ */
 @SuperBuilder
 public class InstanceStorage extends Resource {
 

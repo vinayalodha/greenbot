@@ -43,7 +43,11 @@ public class DeleteOrphanInstanceStorageRuleTest {
 		try {
 			TerraformUtils.apply(path);
 			RuleResponse response = deleteOrphanInstanceStorageRule.doWork(RuleRequestDataProvider.simple());
+
+			// No of rule voilations == 1
 			assertEquals(1, response.getItems().size());
+
+			// unattached EBS volume resource Id == 1
 			assertEquals(1, response.getItems().get(0).getResourceIds().size());
 		} finally {
 			TerraformUtils.destroy(path);

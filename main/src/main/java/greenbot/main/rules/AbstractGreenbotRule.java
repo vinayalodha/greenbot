@@ -19,6 +19,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import greenbot.rule.model.GreenbotRule;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 public abstract class AbstractGreenbotRule implements GreenbotRule {
 
 	protected String buildRuleId() {

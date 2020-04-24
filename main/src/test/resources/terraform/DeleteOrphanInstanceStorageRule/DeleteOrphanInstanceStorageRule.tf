@@ -17,6 +17,7 @@
   region = "us-east-2"
 }
 
+// Create unattached EBS volume
 resource "aws_ebs_volume" "unattached" {
   size              = 1
   availability_zone = "us-east-2a"
@@ -27,6 +28,7 @@ resource "aws_ebs_volume" "unattached" {
   }
 }
 
+// Create attached EBS volume
 resource "aws_ebs_volume" "attached" {
   size              = 1
   availability_zone = "us-east-2a"
@@ -37,7 +39,7 @@ resource "aws_ebs_volume" "attached" {
   }
 }
 
-
+// Create ec2
 resource "aws_instance" "web" {
   ami               = "${data.aws_ami.ubuntu.id}"
   instance_type     = "t3.micro"
@@ -49,6 +51,7 @@ resource "aws_instance" "web" {
   }
 }
 
+// attach volume to ec2
 resource "aws_volume_attachment" "ebs_att" {
   device_name = "/dev/sdh"
   volume_id   = "${aws_ebs_volume.attached.id}"
