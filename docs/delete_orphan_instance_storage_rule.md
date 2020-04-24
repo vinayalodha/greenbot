@@ -1,3 +1,1 @@
-** delete_orphan_instance_storage_rule **  
-
-Check for EBS drives which are not attached to any EC2 instance 
+Orphan EBS drives are usually unused, this rule check if there are orphan EBS drives which is not attached to any EC2.

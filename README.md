@@ -1,4 +1,1 @@
-# greenbot1
-
-Work in progress test1 
-
+[Documentation](https://vinay-lodha.gitbook.io/greenbot/)
