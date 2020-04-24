@@ -1,7 +1,8 @@
 # Getting Started
 
 * Make sure you have JDK installed  
-* Configure AWS cli using `aws configure`, [AWS cli guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
+* Configure AWS cli using `aws configure`
+  * [AWS cli guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
 * Download latest [GreenBot release](https://github.com/vinay-lodha/greenbot/releases) 
 * TODO
 
