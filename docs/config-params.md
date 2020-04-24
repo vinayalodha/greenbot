@@ -1,6 +1,6 @@
 # Config Params
 
-Config params are represent by JSON on home page 
+Config parameters are represent by JSON on home page when you launch [localhost:5000](http://localhost:5000)
 
 ```text
 [
