@@ -1,6 +1,6 @@
 # dev\_resources\_rule
 
-Usually development, QA, staging resources can be stopped outside office hours. 
+Development, QA, staging resources can be stopped outside office hours. 
 
 This rule analyze tags on resources to find development, QA, staging resources.
 
