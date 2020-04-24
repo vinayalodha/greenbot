@@ -1,9 +1,9 @@
-# GreenBot
+# Introduction
 
-This project aims to analyze AWS infrastructure and find ways to reduce cost. 
+This project aims to analyze AWS infrastructure and find ways to reduce cost.
 
-- [Github Repo](https://github.com/vinay-lodha/greenbot)
-- [Issue Tracker](https://github.com/vinay-lodha/greenbot/issues) 
+* [Github Repo](https://github.com/vinay-lodha/greenbot)
+* [Issue Tracker](https://github.com/vinay-lodha/greenbot/issues) 
 
 It is implemented as set of rules, with each rule looking for specific problem.
 

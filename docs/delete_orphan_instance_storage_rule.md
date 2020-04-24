@@ -1,1 +1,0 @@
-Orphan EBS drives are usually unused, this rule check if there are orphan EBS drives which is not attached to any EC2.
