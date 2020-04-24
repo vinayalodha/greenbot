@@ -13,7 +13,7 @@
         "axios": "^0.19.2",
         "bulma": "^0.8.2",
         "react": "^16.13.1",
-        "react-dom": "^16.13.0",
+        "react-dom": "^16.13.1",
         "react-scripts": "3.4.1",
         "typescript": "~3.8.3"
     },
