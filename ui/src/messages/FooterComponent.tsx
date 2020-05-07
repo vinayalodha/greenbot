@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ export class FooterComponent extends Component<{}> {
                 <div className="content has-text-centered">
                     <p>
                         <strong>
-                            Maintained by <a href="https://www.linkedin.com/in/vinaylodha/" target='_blank' rel="noopener noreferrer">Vinay Lodha</a>
+                        Copyright © 2020 <a href="https://www.linkedin.com/in/vinaylodha/" target='_blank' rel="noopener noreferrer">Vinay Lodha</a> | <a href="https://github.com/vinay-lodha/greenbot/blob/master/LICENSE" target='_blank' rel="noopener noreferrer">Apache License 2.0</a>
                             <br/>
                             <a href="mailto:vinay.a.lodha@gmail.com">Feedback</a> | <a target="_blank" rel="noopener noreferrer" href="https://github.com/vinay-lodha/greenbot/issues">Report Bug</a> 
                         </strong>

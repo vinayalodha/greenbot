@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -60,6 +60,11 @@ limitations under the License.
 			<version>2.13.11</version>
 		</dependency>
 
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>cloudwatch</artifactId>
+			<version>2.13.8</version>
+		</dependency>
 
 		<!-- Apache stuff -->
 		<dependency>

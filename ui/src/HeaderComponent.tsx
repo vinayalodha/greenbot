@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,13 +35,18 @@ export class HeaderComponent extends Component<{}> {
 							<div className="navbar-item">
 							<div className="field is-grouped is-grouped-multiline">
 							<p className="control">
+            					<a className="button" rel="noopener noreferrer" target='_blank' href="https://vinay-lodha.gitbook.io/greenbot/">
+              						<strong>Docs</strong>
+            					</a>
+          					</p>
+							<p className="control">
             					<a className="button" rel="noopener noreferrer" target='_blank' href="https://github.com/vinay-lodha/greenbot">
               						<strong>Github <span role="img" aria-label="GreenBot">⭐</span></strong>
             					</a>
           					</p>
 							<p className="control">
             					<a className="button is-primary" rel="noopener noreferrer" target='_blank' href="mailto:vinay.a.lodha@gmail.com">
-              						<strong>Cloud consulting</strong>
+              						<strong>Consulting</strong>
             					</a>
           					</p>
 							</div>

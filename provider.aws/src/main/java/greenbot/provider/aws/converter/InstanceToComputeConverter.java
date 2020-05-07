@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,19 @@
  */
 package greenbot.provider.aws.converter;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+import static org.apache.commons.lang3.StringUtils.split;
 
-import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import greenbot.rule.model.cloud.Compute;
+import greenbot.rule.model.cloud.InstanceType;
 import greenbot.rule.model.cloud.Tag;
+import greenbot.rule.utils.TagUtils;
 import lombok.AllArgsConstructor;
 import software.amazon.awssdk.services.ec2.model.Instance;
 
@@ -35,19 +39,25 @@ import software.amazon.awssdk.services.ec2.model.Instance;
 @AllArgsConstructor
 public class InstanceToComputeConverter implements Converter<Instance, Compute> {
 
-	private Ec2TagToTagConverter ec2TagToTagConverter;
+	private final Ec2TagToTagConverter ec2TagToTagConverter;
 
 	@Override
 	public Compute convert(Instance instance) {
-		List<Tag> tags = instance.tags()
+		Map<String, Tag> tags = instance.tags()
 				.stream()
 				.map(ec2TagToTagConverter::convert)
-				.collect(toList());
+				.collect(toMap(Tag::getKey, Function.identity()));
+		String[] tokens = split(instance.instanceTypeAsString(), '.');
+		InstanceType instanceType = InstanceType.builder()
+				.family(tokens[0])
+				.size(tokens[1])
+				.build();
 
 		return Compute.builder()
 				.id(instance.instanceId())
-				.instanceType(instance.instanceTypeAsString())
+				.instanceType(instanceType)
 				.tags(tags)
+				.name(TagUtils.getValue(tags.get("Name")))
 				.build();
 	}
 }

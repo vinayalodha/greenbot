@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 package greenbot.main.rules;
 
-import org.apache.commons.lang3.StringUtils;
+import static org.apache.commons.lang3.StringUtils.join;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
+import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase;
 
 import greenbot.rule.model.GreenbotRule;
 
@@ -26,10 +28,8 @@ import greenbot.rule.model.GreenbotRule;
 public abstract class AbstractGreenbotRule implements GreenbotRule {
 
 	protected String buildRuleId() {
-		char separator = '_';
-		String[] tokens = StringUtils.splitByCharacterTypeCamelCase(getClass().getSimpleName());
-		String name = StringUtils.join(tokens, separator);
-		return StringUtils.lowerCase(name);
+		String[] tokens = splitByCharacterTypeCamelCase(getClass().getSimpleName());
+		return lowerCase(join(tokens, '_'));
 	}
 
 }

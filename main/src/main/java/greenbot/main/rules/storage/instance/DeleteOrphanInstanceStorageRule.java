@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main.rules.aws.ebs;
+package greenbot.main.rules.storage.instance;
 
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import greenbot.main.rules.AbstractGreenbotRule;
@@ -40,13 +40,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class DeleteOrphanInstanceStorageRule extends AbstractGreenbotRule {
 
-	private InstanceStorageService instanceStorageService;
+	private final InstanceStorageService instanceStorageService;
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
 		List<InstanceStorage> orphans = instanceStorageService.orphans(ruleRequest.getIncludedTag(),
 				ruleRequest.getExcludedTag());
-		if (CollectionUtils.isEmpty(orphans))
+		if (isEmpty(orphans))
 			return null;
 
 		RuleResponseItem item = RuleResponseItem.builder()

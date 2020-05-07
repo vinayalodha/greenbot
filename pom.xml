@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,6 +22,16 @@ limitations under the License.
 	<artifactId>parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	<name>GreenBot</name>
+	<url>https://vinay-lodha.gitbook.io/greenbot/</url>
+	<issueManagement>
+		<url>https://github.com/vinay-lodha/greenbot/issues</url>
+	</issueManagement>
+	<scm>
+		<url>https://github.com/vinay-lodha/greenbot</url>
+	</scm>
+	<inceptionYear>2019</inceptionYear>
+	<description>GitHub: https://github.com/vinay-lodha/greenbot</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -29,7 +39,7 @@ limitations under the License.
 		<version>2.2.6.RELEASE</version>
 		<relativePath />
 	</parent>
-	
+
 	<properties>
 		<maven.compiler.source>8</maven.compiler.source>
 		<maven.compiler.target>8</maven.compiler.target>
@@ -50,6 +60,7 @@ limitations under the License.
 		<module>provider</module>
 		<module>provider.aws</module>
 	</modules>
+
 
 
 </project>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main.rules.aws.misc;
+package greenbot.main.rules.misc;
 
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.main.rules.service.TagAnalyzer;
+import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.RuleInfo;
@@ -47,14 +49,19 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
-		// TODO also check for RDS
-		List<Compute> computes = computeService.list(ruleRequest.getIncludedTag(), ruleRequest.getExcludedTag());
+		// TODO also check for RDS, Fargate
+		TagPredicate predicate = TagPredicate.builder()
+				.includedTag(ruleRequest.getIncludedTag())
+				.excludedTag(ruleRequest.getExcludedTag())
+				.build();
+
+		List<Compute> computes = computeService.list(Collections.singletonList(predicate));
 		List<String> filteredComputes = computes.stream()
-				.filter(compute -> devTagAnalyzer.isDevTagPresent(compute.getTags()))
+				.filter(compute -> devTagAnalyzer.isDevTagPresent(compute.getTags().values()))
 				.map(Compute::getId)
 				.collect(toList());
 
-		if (CollectionUtils.isEmpty(filteredComputes))
+		if (isEmpty(filteredComputes))
 			return null;
 
 		RuleResponseItem ruleResponseItem = RuleResponseItem.builder()

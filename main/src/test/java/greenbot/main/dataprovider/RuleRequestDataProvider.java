@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,15 @@
  */
 package greenbot.main.dataprovider;
 
+import greenbot.rule.model.Provider;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.cloud.Tag;
 import lombok.experimental.UtilityClass;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 @UtilityClass
 public class RuleRequestDataProvider {
 
@@ -26,7 +31,9 @@ public class RuleRequestDataProvider {
 		return RuleRequest.builder()
 				.includedTag(Tag.builder().key("owner").value("greenbot").build())
 				.amiThreshold(0)
+				.cloudwatchTimeframeDuration(5)
+				.provider(Provider.AWS)
+				.underUtilizaedCpuPercentageThreshold(20)
 				.build();
 	}
-
 }

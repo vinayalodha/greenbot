@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,12 @@
  */
 package greenbot.provider.aws.service;
 
+import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
+
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
@@ -33,12 +34,16 @@ import software.amazon.awssdk.services.ec2.model.DescribeVolumesResponse;
 import software.amazon.awssdk.services.ec2.model.Volume;
 import software.amazon.awssdk.services.ec2.paginators.DescribeVolumesIterable;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 @Service
 @AllArgsConstructor
 public class AwsInstanceStorageService implements InstanceStorageService {
 
-	private RegionService regionService;
-	private ConversionService conversionService;
+	private final RegionService regionService;
+	private final ConversionService conversionService;
 
 	@Override
 	@Cacheable("AwsInstanceStorageService")
@@ -51,15 +56,15 @@ public class AwsInstanceStorageService implements InstanceStorageService {
 				.flatMap(DescribeVolumesIterable::stream)
 				.map(DescribeVolumesResponse::volumes)
 				.flatMap(Collection::stream)
-				.filter(volume -> StringUtils.equalsAnyIgnoreCase("available", volume.stateAsString()))
+				.filter(volume -> equalsAnyIgnoreCase("available", volume.stateAsString()))
 				.map(this::convert)
 				.filter(compute -> {
-					return includedTag == null || compute.getTags().contains(includedTag);
+					return includedTag == null || compute.getTags().containsValue(includedTag);
 				})
 				.filter(compute -> {
-					return excludedTag == null || !compute.getTags().contains(excludedTag);
+					return excludedTag == null || !compute.getTags().containsValue(excludedTag);
 				})
-				.collect(Collectors.toList());
+				.collect(toList());
 	}
 
 	private InstanceStorage convert(Volume volume) {

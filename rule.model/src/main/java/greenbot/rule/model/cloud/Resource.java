@@ -15,8 +15,7 @@
  */
 package greenbot.rule.model.cloud;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +27,11 @@ public class Resource {
 
 	private String id;
 
+	private String name;
+
+	private String region;
+
 	@Builder.Default
-	private List<Tag> tags = new ArrayList<Tag>();
+	private Map<String, Tag> tags = new HashMap<String, Tag>();
 
 }

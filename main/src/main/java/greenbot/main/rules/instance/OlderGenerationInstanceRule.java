@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main.rules.aws.ec2;
+package greenbot.main.rules.instance;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;
 
+import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.RuleInfo;
@@ -43,25 +44,25 @@ import lombok.AllArgsConstructor;
  */
 @Component
 @AllArgsConstructor
-public class OlderEc2GenerationRule extends greenbot.main.rules.AbstractGreenbotRule {
+public class OlderGenerationInstanceRule extends greenbot.main.rules.AbstractGreenbotRule {
 
-	private ComputeService computeService;
+	private final ComputeService computeService;
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
-		List<Compute> computes = computeService.list(ruleRequest.getIncludedTag(), ruleRequest.getExcludedTag());
-		if (CollectionUtils.isEmpty(computes))
-			return null;
-
+		TagPredicate predicate = TagPredicate.builder()
+				.includedTag(ruleRequest.getIncludedTag())
+				.excludedTag(ruleRequest.getExcludedTag())
+				.build();
+		List<Compute> computes = computeService.list(Collections.singletonList(predicate));
 		Map<String, List<InstanceUpgradeInfo>> upgradeMap = computes.stream()
-				.map(c -> computeService.checkUpgradePossibility(c))
+				.map(computeService::checkUpgradePossibility)
 				.filter(Objects::nonNull)
 				.collect(groupingBy(InstanceUpgradeInfo::getCurrentFamily));
 
-		List<RuleResponseItem> ruleResponseItems = upgradeMap.keySet()
+		List<RuleResponseItem> ruleResponseItems = upgradeMap.values()
 				.stream()
-				.map(currentInstanceFamily -> {
-					List<InstanceUpgradeInfo> upgrades = upgradeMap.get(currentInstanceFamily);
+				.map(upgrades -> {
 					List<String> ids = upgrades.stream()
 							.map(instanceUpgradeInfo -> instanceUpgradeInfo.getCompute().getId())
 							.collect(toList());

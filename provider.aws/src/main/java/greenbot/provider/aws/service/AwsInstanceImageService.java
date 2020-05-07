@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ import software.amazon.awssdk.services.ec2.model.Image;
 @AllArgsConstructor
 public class AwsInstanceImageService implements InstanceImageService {
 
-	private RegionService regionService;
+	private final RegionService regionService;
 
 	@Override
 	@Cacheable("AwsInstanceImageService")
@@ -49,10 +49,15 @@ public class AwsInstanceImageService implements InstanceImageService {
 		List<Image> images = regionService.regions()
 				.stream()
 				.map(region -> Ec2Client.builder().region(region).build())
-				.map(client -> {
-					return query(includedTag, client);
-				})
+				.map(client -> query(includedTag, client))
 				.flatMap(Collection::stream)
+				.filter(image -> {
+					return !image.tags().stream()
+							.anyMatch(tag -> {
+								return tag.key().contentEquals(excludedTag.getKey())
+										&& tag.value().contentEquals(excludedTag.getValue());
+							});
+				})
 				.limit(threshold + 1)
 				.collect(Collectors.toList());
 
