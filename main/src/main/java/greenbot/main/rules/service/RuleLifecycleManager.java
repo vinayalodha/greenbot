@@ -49,12 +49,19 @@ public class RuleLifecycleManager {
 
 	public RuleResponse execute(RuleRequest request) {
 		List<String> errorMessages = new ArrayList<>();
+		log.info("Rule execution started");
 		RuleResponse response = rules.stream()
 				.map(rule -> {
+					String ruleId = rule.ruleInfo().getId();
 					try {
-						return rule.doWork(request);
+						log.info(String.format("Execution of rule:%s started", ruleId));
+						RuleResponse retval = rule.doWork(request);
+						log.info(String.format("Execution of rule:%s done", ruleId));
+						return retval;
 					} catch (Exception e) {
-						log.error("", e);
+						log.error(String.format(
+								"Exception occoured while executing rule:%s Please raise bug report if issue persist",
+								ruleId), e);
 						errorMessages.add(StringUtils.abbreviate(ExceptionUtils.getRootCauseMessage(e), 400));
 					}
 					return null;
@@ -63,6 +70,7 @@ public class RuleLifecycleManager {
 				.filter(ruleResponse -> CollectionUtils.isNotEmpty(ruleResponse.getItems()))
 				.reduce(responseReducer)
 				.orElse(RuleResponse.builder().build());
+		log.info("Rule execution done");
 		return response.toBuilder().errorMessages(errorMessages).build();
 	}
 
