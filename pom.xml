@@ -20,16 +20,13 @@ limitations under the License.
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>greenbot</groupId>
 	<artifactId>parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<name>GreenBot</name>
 	<url>https://vinay-lodha.gitbook.io/greenbot/</url>
 	<issueManagement>
 		<url>https://github.com/vinay-lodha/greenbot/issues</url>
 	</issueManagement>
-	<scm>
-		<url>https://github.com/vinay-lodha/greenbot</url>
-	</scm>
 	<inceptionYear>2019</inceptionYear>
 	<description>GitHub: https://github.com/vinay-lodha/greenbot</description>
 
@@ -68,6 +65,5 @@ limitations under the License.
 			<url>https://maven.pkg.github.com/vinay-lodha/greenbot</url>
 		</repository>
 	</distributionManagement>
-
 
 </project>
