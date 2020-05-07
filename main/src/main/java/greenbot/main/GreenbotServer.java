@@ -15,6 +15,9 @@
  */
 package greenbot.main;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -40,6 +43,13 @@ public class GreenbotServer implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) {
-		log.info("Open http://localhost:5000 in browser");
+		TimerTask task = new TimerTask() {
+
+			@Override
+			public void run() {
+				log.info("Server is running on port 5000, open http://localhost:5000 in browser");
+			}
+		};
+		new Timer().schedule(task, 100);
 	}
 }

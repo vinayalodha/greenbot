@@ -88,7 +88,8 @@ public class ConfigService implements InitializingBean {
 		ConfigParam cloudwatchTimeframeDurationConfig = ConfigParam.builder()
 				.key(CLOUDWATCH_CONFIG_DURATION)
 				.value(String.valueOf(cloudwatchTimeframeDuration))
-				.description("Duration for which cloudwatch config to be analyzed (in mins)")
+				.description(
+						"Duration for which cloudwatch config to be analyzed (in mins), should be multiple of 5 with min value of 10")
 				.build();
 
 		emptyConfigParams = Arrays.asList(excludedTag,
