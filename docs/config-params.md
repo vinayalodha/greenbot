@@ -16,8 +16,18 @@ Config parameters are represent by JSON on home page when you launch [localhost:
     },
     {
         "key": "too_many_ami_threshold",
-        "value": "5000",
-        "description": "Threshold AMI count above which TooManyInstanceImagesRule will raise concern"
+        "value": "500",
+        "description": "Threshold AMI count above which too_many_instance_images_rule rule will raise a concern"
+    },
+    {
+        "key": "under_utilized_cpu_percentage",
+        "value": "30",
+        "description": "Average CPU utilization threshold for under-utilized machine"
+    },
+    {
+        "key": "cloudwatch_config_duration",
+        "value": "10080",
+        "description": "Duration for which cloudwatch config to be analyzed (in mins), should be multiple of 5 with min value of 10"
     }
 ]
 ```

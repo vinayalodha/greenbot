@@ -6,6 +6,7 @@
 
 ## Rules​
 
+* [underutilized\_instance\_cpu\_rule](rules/underutilized_instance_cpu_rule.md)
 * [older\_ec2\_generation\_rule](rules/older_ec2_generation_rule.md)
 * [delete\_orphan\_instance\_storage\_rule](rules/delete_orphan_instance_storage_rule.md)
 * [too\_many\_instance\_images\_rule](rules/too_many_instance_images_rule.md)
