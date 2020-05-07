@@ -61,6 +61,13 @@ limitations under the License.
 		<module>provider.aws</module>
 	</modules>
 
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>Greenbot Repo</name>
+			<url>https://maven.pkg.github.com/vinay-lodha/greenbot</url>
+		</repository>
+	</distributionManagement>
 
 
 </project>
