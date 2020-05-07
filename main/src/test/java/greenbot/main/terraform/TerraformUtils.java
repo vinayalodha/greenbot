@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,10 @@ import com.microsoft.terraform.TerraformClient;
 
 import lombok.SneakyThrows;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 public class TerraformUtils {
 
 	@SneakyThrows

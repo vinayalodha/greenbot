@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main.rules.aws.ebs;
+package greenbot.main.rules.storage.instance;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,7 +36,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class TooManyInstanceImagesRule extends AbstractGreenbotRule {
 
-	private InstanceImageService instanceImageService;
+	private final InstanceImageService instanceImageService;
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {

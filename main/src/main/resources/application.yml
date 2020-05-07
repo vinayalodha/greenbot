@@ -1,5 +1,5 @@
 #
-# Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+# Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,5 +21,22 @@ spring:
    cache:
       caffeine:
          spec: expireAfterWrite=180s
-threshold:
-   ami: 5000
+config:
+   threshold:
+      max_ami_count: 500
+      under_utilized_cpu_percentage: 30
+   
+   cloudwatch:
+      # in minutes, should be multiple of 5 and value >=10
+      # 1 day = 1440 minutes
+      # 1 week = 10080 minutes
+      # 2 week = 20160 minutes
+      timeframe: 10080
+      
+      
+      
+rules:
+   UnderutilizedInstanceCpuRule:
+      instancetypes_to_ignore: t2.micro,t3.micro,t3a.micro,t2.small,t3.small,t3a.small 
+       
+ 

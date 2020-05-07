@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
-import greenbot.main.config.ConfigParamUtils;
+import greenbot.main.config.ConfigService;
 import greenbot.rule.model.ConfigParam;
 import greenbot.rule.model.GreenbotRule;
 import greenbot.rule.model.RuleInfo;
@@ -44,7 +45,7 @@ public class RuleLifecycleManager {
 
 	private final List<GreenbotRule> rules;
 	private final RuleResponseReducer responseReducer;
-	private final ConfigParamUtils configParamUtils;
+	private final ConfigService configParamUtils;
 
 	public RuleResponse execute(RuleRequest request) {
 		List<String> errorMessages = new ArrayList<>();
@@ -59,13 +60,14 @@ public class RuleLifecycleManager {
 					return null;
 				})
 				.filter(Objects::nonNull)
+				.filter(ruleResponse -> CollectionUtils.isNotEmpty(ruleResponse.getItems()))
 				.reduce(responseReducer)
 				.orElse(RuleResponse.builder().build());
 		return response.toBuilder().errorMessages(errorMessages).build();
 	}
 
 	public List<ConfigParam> getConfigParams() {
-		return configParamUtils.buildEmpty();
+		return configParamUtils.getDefaultConfig();
 	}
 
 	public List<RuleInfo> getRuleInfos() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,20 @@
  */
 package greenbot.provider.aws.service;
 
+import static greenbot.provider.aws.utils.InstanceTypeUtils.isAmd;
+import static greenbot.provider.aws.utils.InstanceTypeUtils.isG2G3;
+import static greenbot.provider.aws.utils.InstanceTypeUtils.isG4;
+import static java.util.stream.Collectors.toList;
+
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.function.Predicate;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
@@ -30,10 +36,9 @@ import org.springframework.stereotype.Service;
 import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.InstanceUpgradeInfo;
-import greenbot.rule.model.cloud.Tag;
 import lombok.AllArgsConstructor;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.Ec2Client;
-import software.amazon.awssdk.services.ec2.model.DescribeInstancesResponse;
 import software.amazon.awssdk.services.ec2.model.Instance;
 import software.amazon.awssdk.services.ec2.model.Reservation;
 import software.amazon.awssdk.services.ec2.paginators.DescribeInstancesIterable;
@@ -51,36 +56,33 @@ public class AwsComputeService implements ComputeService {
 	private static final String REASON2 = "\"%s\" ec2 family can be replaced with \"inf1\" ec2 family if you performing machine learning inference or with g4";
 	private static final String REASON3 = "\"g4\" ec2 family can be replaced with \"inf1\" ec2 family if you performing machine learning inference ";
 
-	private RegionService regionService;
-	private ConversionService conversionService;
+	private final RegionService regionService;
+	private final ConversionService conversionService;
 
 	@Override
 	@Cacheable("awsComputeService")
-	public List<Compute> list(Tag includedTag, Tag excludedTag) {
+	public List<Compute> list(List<Predicate<Compute>> predicates) {
 		return regionService.regions()
 				.parallelStream()
-				.map(region -> Ec2Client.builder().region(region).build())
-				.map(Ec2Client::describeInstancesPaginator)
-				.flatMap(DescribeInstancesIterable::stream)
-				.map(DescribeInstancesResponse::reservations)
+				.map(region -> list(predicates, region))
 				.flatMap(Collection::stream)
+				.collect(toList());
+	}
+
+	private List<Compute> list(List<Predicate<Compute>> predicates, Region region) {
+		Ec2Client ec2Client = Ec2Client.builder().region(region).build();
+		DescribeInstancesIterable describeInstancesResponses = ec2Client.describeInstancesPaginator();
+		return describeInstancesResponses.reservations()
+				.stream()
 				.map(Reservation::instances)
 				.flatMap(Collection::stream)
 				.filter(instance -> {
-					String name = instance.state().nameAsString();
-					if (name.equalsIgnoreCase("stopped") || name.equalsIgnoreCase("running")) {
-						return true;
-					}
-					return false;
+					String name = instance.state().nameAsString().toLowerCase();
+					return StringUtils.equalsAny(name, "stopped", "running");
 				})
-				.map(this::convert)
-				.filter(compute -> {
-					return includedTag == null || compute.getTags().contains(includedTag);
-				})
-				.filter(compute -> {
-					return excludedTag == null || !compute.getTags().contains(excludedTag);
-				})
-				.collect(Collectors.toList());
+				.map(instance -> convert(instance, region))
+				.filter(compute -> predicates.stream().allMatch(predicate -> predicate.test(compute)))
+				.collect(toList());
 	}
 
 	@Override
@@ -88,7 +90,9 @@ public class AwsComputeService implements ComputeService {
 		Optional<InstanceUpgradeInfo> obj = INSTANCE_UPGRADE_MAP.keySet()
 				.stream()
 				.map(key -> {
-					if (compute.getInstanceType().startsWith(key) && !isAmd(compute.getInstanceType())) {
+					// TODO simplify this
+					if (compute.getInstanceType().toString().startsWith(key)
+							&& !isAmd(compute.getInstanceType())) {
 						String reason;
 						if (isG4(compute.getInstanceType())) {
 							reason = REASON3;
@@ -111,21 +115,10 @@ public class AwsComputeService implements ComputeService {
 		return obj.orElse(null);
 	}
 
-	private boolean isG2G3(String instanceType) {
-		return instanceType.startsWith("g2") || instanceType.startsWith("g3");
-	}
-
-	private boolean isG4(String instanceType) {
-		return instanceType.startsWith("g4");
-	}
-
-	private boolean isAmd(String instanceType) {
-		String temp = instanceType.split("\\.")[0];
-		return temp.length() > 2 && temp.substring(2).contains("a");
-	}
-
-	private Compute convert(Instance instance) {
-		return conversionService.convert(instance, Compute.class);
+	private Compute convert(Instance instance, Region region) {
+		Compute compute = conversionService.convert(instance, Compute.class);
+		compute.setRegion(region.toString());
+		return compute;
 	}
 
 	private static Map<String, String> buildInstanceUpgradeMap() {

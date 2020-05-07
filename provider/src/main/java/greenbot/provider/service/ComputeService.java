@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,18 @@
 package greenbot.provider.service;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.InstanceUpgradeInfo;
-import greenbot.rule.model.cloud.Tag;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 public interface ComputeService {
-	List<Compute> list(Tag includedTag, Tag excludedTag);
+	List<Compute> list(List<Predicate<Compute>> predicates);
 
 	InstanceUpgradeInfo checkUpgradePossibility(Compute compute);
 }

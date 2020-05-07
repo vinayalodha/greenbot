@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,29 @@ package greenbot.rule.model;
 import greenbot.rule.model.cloud.Tag;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 @Data
 @Builder
 public class RuleRequest {
-	private Provider provider;
+
+	@Builder.Default
+	private Provider provider = Provider.AWS;
 
 	private Tag excludedTag;
 	private Tag includedTag;
-	private int amiThreshold;
+
+	@NonNull
+	private Integer amiThreshold;
+
+	@NonNull
+	private Integer underUtilizaedCpuPercentageThreshold;
+
+	@NonNull
+	private Integer cloudwatchTimeframeDuration;
+
 }

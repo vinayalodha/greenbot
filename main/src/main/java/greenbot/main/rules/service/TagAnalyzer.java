@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package greenbot.main.rules.service;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,7 +36,7 @@ public class TagAnalyzer {
 	private static final String[] POSSIBLE_DEV_TAG_VALUES_END = prepend(POSSIBLE_DEV_TAG_VALUES);
 	private static final Set<Tag> POSSIBLE_DEV_TAGS = buildPossibleTags(POSSIBLE_DEV_TAG_VALUES);
 
-	public boolean isDevTagPresent(List<Tag> tags) {
+	public boolean isDevTagPresent(Collection<Tag> tags) {
 		if (tags == null)
 			return false;
 		Optional<Boolean> searchResult = tags.stream().map(this::isDevTagPresent).filter(o -> o).findAny();
@@ -58,10 +58,7 @@ public class TagAnalyzer {
 		if (StringUtils.startsWithAny(value, POSSIBLE_DEV_TAG_VALUES_START)) {
 			return true;
 		}
-		if (StringUtils.endsWithAny(value, POSSIBLE_DEV_TAG_VALUES_END)) {
-			return true;
-		}
-		return false;
+		return StringUtils.endsWithAny(value, POSSIBLE_DEV_TAG_VALUES_END);
 	}
 
 	private static Set<Tag> buildPossibleTags(String[] arr) {

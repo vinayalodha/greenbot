@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2019-2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main;
+package greenbot.rule.utils;
 
-class ApplicationTests {
+import greenbot.rule.model.cloud.Tag;
 
-	void contextLoads() {
+/**
+ * @author Vinay Lodha
+ */
+public class TagUtils {
+	public static String getValue(Tag tag) {
+		if (tag == null)
+			return null;
+
+		return tag.getValue();
 	}
-
 }

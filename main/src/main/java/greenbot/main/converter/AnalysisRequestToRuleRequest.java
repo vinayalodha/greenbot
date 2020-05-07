@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (mailto:vinay.a.lodha@gmail.com)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package greenbot.main.converter;
 
-import java.util.Objects;
+import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.convert.ConversionService;
@@ -23,12 +23,17 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.stereotype.Component;
 
-import greenbot.main.config.ConfigParamUtils;
+import greenbot.main.config.ConfigService;
 import greenbot.main.model.ui.AnalysisRequest;
+import greenbot.rule.model.ConfigParam;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.cloud.Tag;
 import lombok.AllArgsConstructor;
 
+/**
+ * 
+ * @author Vinay Lodha
+ */
 @Component
 @AllArgsConstructor
 public class AnalysisRequestToRuleRequest implements Converter<AnalysisRequest, RuleRequest>, InitializingBean {
@@ -37,39 +42,44 @@ public class AnalysisRequestToRuleRequest implements Converter<AnalysisRequest, 
 	private final ConversionService conversionService;
 
 	@Override
-	public RuleRequest convert(AnalysisRequest source) {
-		Tag excludedTag = source.getConfigParams()
-				.stream()
-				.filter(cp -> cp.getKey().equals(ConfigParamUtils.EXCLUDED_TAG))
-				.map(cp -> conversionService.convert(cp.getValue(), Tag.class))
-				.filter(Objects::nonNull)
-				.findAny()
-				.orElseGet(() -> null);
+	public RuleRequest convert(AnalysisRequest analysisRequest) {
+		List<ConfigParam> configParams = analysisRequest.getConfigParams();
 
-		Tag includedTag = source.getConfigParams()
-				.stream()
-				.filter(cp -> cp.getKey().equals(ConfigParamUtils.INCLUDED_TAG))
-				.map(cp -> conversionService.convert(cp.getValue(), Tag.class))
-				.filter(Objects::nonNull)
-				.findAny()
-				.orElseGet(() -> null);
+		String str = getParamValue(configParams, ConfigService.EXCLUDED_TAG);
+		Tag excludedTag = conversionService.convert(str, Tag.class);
 
-		Integer amiThreshold = source.getConfigParams()
-				.stream()
-				.filter(cp -> cp.getKey().equals(ConfigParamUtils.TOO_MANY_AMI_THRESHOLD))
-				.map(cp -> Integer.valueOf(cp.getValue()))
-				.findAny()
-				.get();
+		str = getParamValue(configParams, ConfigService.INCLUDED_TAG);
+		Tag includedTag = conversionService.convert(str, Tag.class);
+
+		int amiThreshold = getIntParam(configParams, ConfigService.TOO_MANY_AMI_THRESHOLD);
+		int underUtilizedCpuPercentageThreshold = getIntParam(configParams,
+				ConfigService.UNDER_UTILIZED_CPU_PERCENTAGE);
+		int cloudwatchTimeFrameDuration = getIntParam(configParams, ConfigService.CLOUDWATCH_CONFIG_DURATION);
 
 		return RuleRequest.builder()
 				.includedTag(includedTag)
 				.excludedTag(excludedTag)
 				.amiThreshold(amiThreshold)
+				.underUtilizaedCpuPercentageThreshold(underUtilizedCpuPercentageThreshold)
+				.cloudwatchTimeframeDuration(cloudwatchTimeFrameDuration)
 				.build();
 	}
 
+	private int getIntParam(List<ConfigParam> params, String key) {
+		return Integer.parseInt(getParamValue(params, key));
+	}
+
+	private String getParamValue(List<ConfigParam> params, String key) {
+		return params
+				.stream()
+				.filter(cp -> cp.getKey().equals(key))
+				.findAny()
+				.get()
+				.getValue();
+	}
+
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet() {
 		converterRegistry.addConverter(this);
 	}
 }
