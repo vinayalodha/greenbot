@@ -11,4 +11,5 @@
 * [delete\_orphan\_instance\_storage\_rule](rules/delete_orphan_instance_storage_rule.md)
 * [too\_many\_instance\_images\_rule](rules/too_many_instance_images_rule.md)
 * [dev\_resources\_rule](rules/dev_resources_rule.md)
+* [database\_upgrade\_rule](rules/database_upgrade_rule.md)
 
