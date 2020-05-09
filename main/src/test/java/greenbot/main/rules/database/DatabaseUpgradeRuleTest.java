@@ -30,22 +30,22 @@ import greenbot.rule.model.RuleResponse;
  * @author Vinay Lodha
  */
 @SpringBootTest
-public class DatabseUpgradeRuleTest {
+public class DatabaseUpgradeRuleTest {
 
 	@Autowired
-	private DatabseUpgradeRule rule;
+	private DatabaseUpgradeRule rule;
 
 	@Test
 	@TerraformTest
 	public void sanity() {
 
-		String path = "./src/test/resources/terraform/DatabseUpgradeRule";
+		String path = "./src/test/resources/terraform/DatabaseUpgradeRule";
 		try {
-			 TerraformUtils.apply(path);
+			TerraformUtils.apply(path);
 			RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
 			assertEquals(1, response.getItems().size());
 		} finally {
-			 TerraformUtils.destroy(path);
+			TerraformUtils.destroy(path);
 		}
 
 	}

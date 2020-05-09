@@ -40,7 +40,7 @@ import greenbot.rule.model.cloud.PossibleUpgradeInfo;
  * @author Vinay Lodha
  */
 @Component
-public class DatabseUpgradeRule extends AbstractGreenbotRule {
+public class DatabaseUpgradeRule extends AbstractGreenbotRule {
 
 	@Autowired
 	private DatabaseService databaseService;
