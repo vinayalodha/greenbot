@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
+ * Copyright 2019-2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,9 @@
  */
 package greenbot.rule.model.cloud;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
-
 /**
  * @author Vinay Lodha
  */
-@Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@SuperBuilder
-public class Compute extends Resource {
-	private InstanceType instanceType;
-	private String region;
+public class DatabseUpgradeInfo {
+
 }

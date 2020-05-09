@@ -97,7 +97,7 @@ public class UnderutilizedInstanceCpuRule extends AbstractGreenbotRule implement
 					}
 					Compute compute = entry.getKey();
 					return RuleResponseItem.builder()
-							.resourceIds(Collections.singleton(compute.getId()))
+							.resourceId(compute.getId())
 							.confidence(AnalysisConfidence.MEDIUM)
 							.message(String.format("%s CPU is underutilized, average CPU usage is %.2f",
 									compute.getId(), entry.getValue()))
@@ -107,9 +107,7 @@ public class UnderutilizedInstanceCpuRule extends AbstractGreenbotRule implement
 				.filter(Objects::nonNull)
 				.collect(toList());
 
-		return RuleResponse.builder()
-				.items(ruleResponseItems)
-				.build();
+		return RuleResponse.build(ruleResponseItems);
 	}
 
 	@Override

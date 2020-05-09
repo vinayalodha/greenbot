@@ -16,7 +16,6 @@
 package greenbot.main.rules.storage.instance;
 
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +29,6 @@ import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
-import greenbot.rule.model.cloud.InstanceStorage;
 import lombok.AllArgsConstructor;
 
 /**
@@ -44,21 +42,19 @@ public class DeleteOrphanInstanceStorageRule extends AbstractGreenbotRule {
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
-		List<InstanceStorage> orphans = instanceStorageService.orphans(ruleRequest.getIncludedTag(),
-				ruleRequest.getExcludedTag());
-		if (isEmpty(orphans))
-			return null;
+		List<RuleResponseItem> items = instanceStorageService.orphans(ruleRequest.getIncludedTag(),
+				ruleRequest.getExcludedTag()).stream()
+				.map(storage -> {
+					return RuleResponseItem.builder()
+							.resourceId(storage.getId())
+							.confidence(AnalysisConfidence.MEDIUM)
+							.message("EBS storage is not attached to EC2, are they used?")
+							.ruleId(buildRuleId())
+							.build();
+				})
+				.collect(toList());
 
-		RuleResponseItem item = RuleResponseItem.builder()
-				.resourceIds(orphans.stream().map(InstanceStorage::getId).collect(toList()))
-				.confidence(AnalysisConfidence.MEDIUM)
-				.message("EBS storage is not attached to EC2, are they used?")
-				.ruleId(buildRuleId())
-				.build();
-
-		return RuleResponse.builder()
-				.item(item)
-				.build();
+		return RuleResponse.build(items);
 
 	}
 

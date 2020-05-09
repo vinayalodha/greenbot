@@ -53,4 +53,11 @@ public class RuleResponse {
 	public static RuleResponse empty() {
 		return RuleResponse.builder().build();
 	}
+
+	public static RuleResponse build(List<RuleResponseItem> items) {
+		return RuleResponse.builder()
+				.items(items)
+				.build();
+	}
+
 }

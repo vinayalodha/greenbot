@@ -15,11 +15,8 @@
  */
 package greenbot.rule.model;
 
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Data;
-import lombok.Singular;
 
 /**
  * 
@@ -29,8 +26,7 @@ import lombok.Singular;
 @Builder
 public class RuleResponseItem {
 
-	@Singular
-	private List<String> resourceIds;
+	private String resourceId;
 
 	private String ruleId;
 

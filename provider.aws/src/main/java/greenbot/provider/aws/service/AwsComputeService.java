@@ -21,6 +21,7 @@ import static greenbot.provider.aws.utils.InstanceTypeUtils.isG4;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ import org.springframework.stereotype.Service;
 
 import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.cloud.Compute;
-import greenbot.rule.model.cloud.InstanceUpgradeInfo;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import lombok.AllArgsConstructor;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.Ec2Client;
@@ -86,8 +87,18 @@ public class AwsComputeService implements ComputeService {
 	}
 
 	@Override
-	public InstanceUpgradeInfo checkUpgradePossibility(Compute compute) {
-		Optional<InstanceUpgradeInfo> obj = INSTANCE_UPGRADE_MAP.keySet()
+	public Map<Compute, PossibleUpgradeInfo> checkUpgradePossibility(List<Compute> computes) {
+		Map<Compute, PossibleUpgradeInfo> retval = new HashMap<Compute, PossibleUpgradeInfo>();
+		computes.forEach(compute -> {
+			Optional<PossibleUpgradeInfo> checkUpgradePossibility = checkUpgradePossibility(compute);
+			checkUpgradePossibility.ifPresent(a -> retval.put(compute, a));
+		});
+		return retval;
+	}
+
+	@Override
+	public Optional<PossibleUpgradeInfo> checkUpgradePossibility(Compute compute) {
+		return INSTANCE_UPGRADE_MAP.keySet()
 				.stream()
 				.map(key -> {
 					// TODO simplify this
@@ -101,18 +112,14 @@ public class AwsComputeService implements ComputeService {
 						} else {
 							reason = String.format(REASON1, key, INSTANCE_UPGRADE_MAP.get(key));
 						}
-						return InstanceUpgradeInfo.builder()
-								.currentFamily(key)
-								.compute(compute)
+						return PossibleUpgradeInfo.builder()
 								.reason(reason)
-								.newFamily(INSTANCE_UPGRADE_MAP.get(key))
 								.build();
 					}
 					return null;
 				})
 				.filter(Objects::nonNull)
 				.findAny();
-		return obj.orElse(null);
 	}
 
 	private Compute convert(Instance instance, Region region) {

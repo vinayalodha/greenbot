@@ -15,14 +15,12 @@
  */
 package greenbot.main.rules.instance;
 
-import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
@@ -34,7 +32,7 @@ import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Compute;
-import greenbot.rule.model.cloud.InstanceUpgradeInfo;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import lombok.AllArgsConstructor;
 
 /**
@@ -55,21 +53,16 @@ public class OlderGenerationInstanceRule extends greenbot.main.rules.AbstractGre
 				.excludedTag(ruleRequest.getExcludedTag())
 				.build();
 		List<Compute> computes = computeService.list(Collections.singletonList(predicate));
-		Map<String, List<InstanceUpgradeInfo>> upgradeMap = computes.stream()
-				.map(computeService::checkUpgradePossibility)
-				.filter(Objects::nonNull)
-				.collect(groupingBy(InstanceUpgradeInfo::getCurrentFamily));
+		Map<Compute, PossibleUpgradeInfo> possibleUpgradeInfos = computeService.checkUpgradePossibility(computes);
 
-		List<RuleResponseItem> ruleResponseItems = upgradeMap.values()
+		List<RuleResponseItem> ruleResponseItems = possibleUpgradeInfos
+				.entrySet()
 				.stream()
-				.map(upgrades -> {
-					List<String> ids = upgrades.stream()
-							.map(instanceUpgradeInfo -> instanceUpgradeInfo.getCompute().getId())
-							.collect(toList());
+				.map(entry -> {
 					return RuleResponseItem.builder()
-							.resourceIds(ids)
+							.resourceId(entry.getKey().getId())
 							.confidence(AnalysisConfidence.HIGH)
-							.message(upgrades.get(0).getReason())
+							.message(entry.getValue().getReason())
 							.ruleId(buildRuleId())
 							.build();
 				})

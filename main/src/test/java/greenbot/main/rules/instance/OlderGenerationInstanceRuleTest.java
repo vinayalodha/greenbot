@@ -34,7 +34,7 @@ import greenbot.rule.model.RuleResponse;
 public class OlderGenerationInstanceRuleTest {
 
 	@Autowired
-	private OlderGenerationInstanceRule olderEc2GenerationRule;
+	private OlderGenerationInstanceRule rule;
 
 	@Test
 	@TerraformTest
@@ -43,10 +43,8 @@ public class OlderGenerationInstanceRuleTest {
 		String path = "./src/test/resources/terraform/OlderGenerationInstanceRule";
 		try {
 			TerraformUtils.apply(path);
-			RuleResponse response = olderEc2GenerationRule.doWork(RuleRequestDataProvider.simple());
-			assertEquals(2, response.getItems().size());
-			assertEquals(3, response.getItems().get(0).getResourceIds().size()
-					+ response.getItems().get(1).getResourceIds().size());
+			RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
+			assertEquals(3, response.getItems().size());
 		} finally {
 			TerraformUtils.destroy(path);
 		}

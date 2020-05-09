@@ -13,19 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.rule.model.cloud;
+package greenbot.provider.service;
 
-import lombok.Builder;
-import lombok.Data;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+
+import greenbot.rule.model.cloud.Database;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 
 /**
+ * 
+ * 
  * @author Vinay Lodha
  */
-@Data
-@Builder
-public class InstanceUpgradeInfo {
-	private String currentFamily;
-	private Compute compute;
-	private String newFamily;
-	private String reason;
+public interface DatabaseService {
+	List<Database> list(List<Predicate<Database>> predicates);
+
+	List<PossibleUpgradeInfo> checkUpgradePossibility(Database database);
+
+	Map<Database, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Database> databases);
+
 }

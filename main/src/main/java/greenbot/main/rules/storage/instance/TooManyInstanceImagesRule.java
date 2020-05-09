@@ -16,7 +16,6 @@
 package greenbot.main.rules.storage.instance;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.springframework.stereotype.Component;
 
@@ -47,7 +46,6 @@ public class TooManyInstanceImagesRule extends AbstractGreenbotRule {
 			return null;
 
 		RuleResponseItem item = RuleResponseItem.builder()
-				.resourceIds(Collections.emptyList())
 				.confidence(AnalysisConfidence.MEDIUM)
 				.message("AMI count exceeds " + ruleRequest.getAmiThreshold()
 						+ " (refer too_many_ami_threshold config param)")

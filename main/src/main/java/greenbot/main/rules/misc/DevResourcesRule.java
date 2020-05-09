@@ -56,25 +56,20 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 				.build();
 
 		List<Compute> computes = computeService.list(Collections.singletonList(predicate));
-		List<String> filteredComputes = computes.stream()
+		List<RuleResponseItem> responseItems = computes.stream()
 				.filter(compute -> devTagAnalyzer.isDevTagPresent(compute.getTags().values()))
-				.map(Compute::getId)
+				.map(compute -> {
+					return RuleResponseItem.builder()
+							.resourceId(compute.getId())
+							.confidence(AnalysisConfidence.LOW)
+							.message(
+									"Usually dev/staging/test resources don't need to run for 24 hours. Consider adding mechanism to stop them for part of day/weekend when it is unused.")
+							.ruleId(buildRuleId())
+							.build();
+				})
 				.collect(toList());
 
-		if (isEmpty(filteredComputes))
-			return null;
-
-		RuleResponseItem ruleResponseItem = RuleResponseItem.builder()
-				.resourceIds(filteredComputes)
-				.confidence(AnalysisConfidence.LOW)
-				.message(
-						"Usually dev/staging/test resources don't need to run for 24 hours. Consider adding mechanism to stop them for part of day/weekend when it is unused.")
-				.ruleId(buildRuleId())
-				.build();
-
-		return RuleResponse.builder()
-				.item(ruleResponseItem)
-				.build();
+		return RuleResponse.build(responseItems);
 	}
 
 	@Override
