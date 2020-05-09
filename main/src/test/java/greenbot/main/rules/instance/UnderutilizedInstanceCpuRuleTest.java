@@ -46,7 +46,6 @@ public class UnderutilizedInstanceCpuRuleTest {
 			Thread.sleep(10 * 60 * 1000);
 			RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
 			assertEquals(1, response.getItems().size());
-			assertEquals(1, response.getItems().get(0).getResourceIds().size());
 		} finally {
 			TerraformUtils.destroy(path);
 		}

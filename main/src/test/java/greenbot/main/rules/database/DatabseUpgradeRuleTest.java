@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
+ * Copyright 2019-2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main.rules.misc;
+package greenbot.main.rules.database;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,25 +27,26 @@ import greenbot.main.terraform.TerraformUtils;
 import greenbot.rule.model.RuleResponse;
 
 /**
- * 
  * @author Vinay Lodha
  */
 @SpringBootTest
-public class DevResourcesRuleTest {
+public class DatabseUpgradeRuleTest {
 
 	@Autowired
-	private DevResourcesRule devResourcesRule;
+	private DatabseUpgradeRule rule;
 
 	@Test
 	@TerraformTest
-	public void sanity() throws Exception {
-		String path = "./src/test/resources/terraform/DevResourcesRule";
+	public void sanity() {
+
+		String path = "./src/test/resources/terraform/DatabseUpgradeRule";
 		try {
-			TerraformUtils.apply(path);
-			RuleResponse response = devResourcesRule.doWork(RuleRequestDataProvider.simple());
+			 TerraformUtils.apply(path);
+			RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
 			assertEquals(1, response.getItems().size());
 		} finally {
-			TerraformUtils.destroy(path);
+			 TerraformUtils.destroy(path);
 		}
+
 	}
 }

@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, {Component} from 'react';
+package greenbot.rule.model.cloud;
 
-export class AwsCliMessageComponent extends Component<{}> {
+import lombok.Builder;
+import lombok.Data;
 
-    render() {
-        return (
-            <div className="message">
-                <div className="message-body">
-                    Do make sure <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html" target="_blank" rel="noopener noreferrer">aws cli</a> is configured with correct IAM roles and you are using <a href='https://github.com/vinay-lodha/greenbot/releases'>most recent version</a> of Greenbot.
-                </div>
-            </div>
-        );
-    }
+/**
+ * @author Vinay Lodha
+ */
+@Data
+@Builder
+public class PossibleUpgradeInfo {
+	private String reason;
 }

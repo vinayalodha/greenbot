@@ -16,11 +16,12 @@
 package greenbot.provider.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import greenbot.rule.model.cloud.Compute;
-import greenbot.rule.model.cloud.InstanceUpgradeInfo;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 
 /**
  * 
@@ -29,5 +30,7 @@ import greenbot.rule.model.cloud.InstanceUpgradeInfo;
 public interface ComputeService {
 	List<Compute> list(List<Predicate<Compute>> predicates);
 
-	InstanceUpgradeInfo checkUpgradePossibility(Compute compute);
+	Optional<PossibleUpgradeInfo> checkUpgradePossibility(Compute compute);
+
+	Map<Compute, PossibleUpgradeInfo> checkUpgradePossibility(List<Compute> computes);
 }

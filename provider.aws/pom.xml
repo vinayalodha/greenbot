@@ -63,7 +63,13 @@ limitations under the License.
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>cloudwatch</artifactId>
-			<version>2.13.8</version>
+			<version>2.13.11</version>
+		</dependency>
+
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>rds</artifactId>
+			<version>2.13.11</version>
 		</dependency>
 
 		<!-- Apache stuff -->

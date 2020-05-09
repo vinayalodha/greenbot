@@ -19,17 +19,20 @@ import java.util.*;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Resource {
 
+	@EqualsAndHashCode.Include
+	@NonNull
 	private String id;
 
 	private String name;
-
-	private String region;
 
 	@Builder.Default
 	private Map<String, Tag> tags = new HashMap<String, Tag>();

@@ -13,17 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, {Component} from 'react';
-
-export class AwsCliMessageComponent extends Component<{}> {
-
-    render() {
-        return (
-            <div className="message">
-                <div className="message-body">
-                    Do make sure <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html" target="_blank" rel="noopener noreferrer">aws cli</a> is configured with correct IAM roles and you are using <a href='https://github.com/vinay-lodha/greenbot/releases'>most recent version</a> of Greenbot.
-                </div>
-            </div>
-        );
-    }
+ provider "aws" {
+  region = "us-east-2"
 }
+
+// Create unattached EBS volume
+resource "aws_db_instance" "default" {
+  allocated_storage    = 20
+  storage_type         = "gp2"
+  engine               = "mysql"
+  engine_version       = "5.7"
+  instance_class       = "db.t2.micro"
+  name                 = "greenbot_db_name"
+  username             = "foo"
+  password             = "foobarbaz"
+  parameter_group_name = "default.mysql5.7"
+  skip_final_snapshot  = true
+
+  tags = {
+    Name  = "greenbot_db_name"
+    owner = "greenbot"
+  }
+}
+
+
