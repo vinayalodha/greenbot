@@ -17,5 +17,9 @@ Below are the aggregated permissions IAM user need for execution all rules.
 * [cloudwatch:GetMetricStatistics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html)
 * [rds:DescribeDBInstances](https://docs.aws.amazon.com/cli/latest/reference/rds/describe-db-instances.html)
 
+### Screenshot
+
+![](.gitbook/assets/screenshot_1.png)
+
 
 
