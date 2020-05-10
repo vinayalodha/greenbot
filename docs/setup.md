@@ -4,7 +4,7 @@
 * Configure AWS cli using `aws configure`
   * [AWS cli guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
 * Download ****jar from [GreenBot release](https://github.com/vinay-lodha/greenbot/releases)
-* Open terminal and execute `java -jar main-1.0.0.jar`, application should now be up on [`http://localhost:5000`](http://localhost:5000)\`\`
+* Open terminal and execute `java -jar main-<version>.jar`, application should now be up on [`http://localhost:5000`](http://localhost:5000)\`\`
 
 ### Permissions
 
