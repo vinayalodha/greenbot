@@ -6,7 +6,7 @@ export class AnalysisResponse {
 }
 
 class RuleResponseItem {
-	resourceIds: String[] = [];
+	resourceId: String = "";
 	ruleId: String = "";
 	confidence: String = "";
 	message: string = "";

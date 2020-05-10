@@ -26,6 +26,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import greenbot.main.config.ConfigService;
+import greenbot.provider.aws.service.RegionService;
 import greenbot.rule.model.ConfigParam;
 import greenbot.rule.model.GreenbotRule;
 import greenbot.rule.model.RuleInfo;
@@ -46,9 +47,14 @@ public class RuleLifecycleManager {
 	private final List<GreenbotRule> rules;
 	private final RuleResponseReducer responseReducer;
 	private final ConfigService configParamUtils;
+	private final RegionService regionService;
 
 	public RuleResponse execute(RuleRequest request) {
 		List<String> errorMessages = new ArrayList<>();
+
+		if (!checkIfAWSCliConfigured()) {
+			return RuleResponse.builder().errorMessage("AWS cli is not configured").build();
+		}
 		log.info("Rule execution started");
 		RuleResponse response = rules.stream()
 				.map(rule -> {
@@ -72,6 +78,15 @@ public class RuleLifecycleManager {
 				.orElse(RuleResponse.builder().build());
 		log.info("Rule execution done");
 		return response.toBuilder().errorMessages(errorMessages).build();
+	}
+
+	private boolean checkIfAWSCliConfigured() {
+		try {
+			regionService.regions();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	public List<ConfigParam> getConfigParams() {

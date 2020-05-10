@@ -31,7 +31,7 @@ export class ResultComponent extends Component<ResultProps, {}> {
 		for (const item of this.props.result.items) {
 			items.push(
 				<tr>
-					<td>{item.resourceIds.toString()}</td>
+					<td>{item.resourceId.toString()}</td>
 					<td>{item.ruleId}</td>
 					<td>{item.confidence}</td>
 					<td>{item.message}</td>
