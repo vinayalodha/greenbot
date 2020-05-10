@@ -1,4 +1,5 @@
-# Introduction
+# Introduction  ![Build Status](https://github.com/vinay-lodha/greenbot/workflows/Build/badge.svg)
+
 
 This project aims to analyze AWS infrastructure and find ways to reduce cost.
 
