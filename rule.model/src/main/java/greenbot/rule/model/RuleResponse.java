@@ -34,6 +34,8 @@ import lombok.Singular;
 @NoArgsConstructor
 public class RuleResponse {
 
+	private int id;
+
 	@Singular
 	@NonNull
 	private List<String> infoMessages;

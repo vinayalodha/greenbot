@@ -18,6 +18,7 @@ package greenbot.main.rules.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -53,7 +54,10 @@ public class RuleLifecycleManager {
 		List<String> errorMessages = new ArrayList<>();
 
 		if (!checkIfAWSCliConfigured()) {
-			return RuleResponse.builder().errorMessage("AWS cli is not configured").build();
+			return RuleResponse.builder()
+					.id(Math.abs(new Random().nextInt()))
+					.errorMessage("AWS cli is not configured")
+					.build();
 		}
 		log.info("Rule execution started");
 		RuleResponse response = rules.stream()
@@ -77,7 +81,10 @@ public class RuleLifecycleManager {
 				.reduce(responseReducer)
 				.orElse(RuleResponse.builder().build());
 		log.info("Rule execution done");
-		return response.toBuilder().errorMessages(errorMessages).build();
+		return response.toBuilder()
+				.errorMessages(errorMessages)
+				.id(Math.abs(new Random().nextInt()))
+				.build();
 	}
 
 	private boolean checkIfAWSCliConfigured() {
