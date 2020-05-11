@@ -1,7 +1,7 @@
 # Introduction  [![Build Status](https://github.com/vinay-lodha/greenbot/workflows/Build/badge.svg)](https://github.com/vinay-lodha/greenbot/actions?query=workflow%3ABuild)
 
 
-This project aims to analyze AWS infrastructure and find ways to reduce cost.
+GreenBot is an opinionated tool that analyzes AWS infrastructure and finds ways to reduce costs.
 
 * [Documentation](https://vinay-lodha.gitbook.io/greenbot/)
 

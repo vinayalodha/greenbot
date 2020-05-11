@@ -98,8 +98,9 @@ public class UnderutilizedInstanceCpuRule extends AbstractGreenbotRule implement
 					return RuleResponseItem.builder()
 							.resourceId(compute.getId())
 							.confidence(AnalysisConfidence.MEDIUM)
-							.message(String.format("%s CPU is underutilized, average CPU usage is %.2f",
-									compute.getId(), entry.getValue()))
+							.message(String.format(
+									"CPU is underutilized, average CPU usage is %.2f. Consider using smaller instance size",
+									entry.getValue()))
 							.ruleId(buildRuleId())
 							.build();
 				})
