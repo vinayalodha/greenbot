@@ -30,7 +30,7 @@ import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 public interface ComputeService {
 	List<Compute> list(List<Predicate<Compute>> predicates);
 
-	Optional<PossibleUpgradeInfo> checkUpgradePossibility(Compute compute);
+	List<PossibleUpgradeInfo> checkUpgradePossibility(Compute compute);
 
-	Map<Compute, PossibleUpgradeInfo> checkUpgradePossibility(List<Compute> computes);
+	Map<Compute, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Compute> computes);
 }

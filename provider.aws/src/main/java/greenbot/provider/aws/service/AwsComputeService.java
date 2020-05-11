@@ -15,17 +15,15 @@
  */
 package greenbot.provider.aws.service;
 
-import static greenbot.provider.aws.utils.InstanceTypeUtils.isAmd;
-import static greenbot.provider.aws.utils.InstanceTypeUtils.isG2G3;
-import static greenbot.provider.aws.utils.InstanceTypeUtils.isG4;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.startsWithAny;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -35,6 +33,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import greenbot.provider.service.ComputeService;
+import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import lombok.AllArgsConstructor;
@@ -52,10 +51,6 @@ import software.amazon.awssdk.services.ec2.paginators.DescribeInstancesIterable;
 public class AwsComputeService implements ComputeService {
 
 	private static final Map<String, String> INSTANCE_UPGRADE_MAP = buildInstanceUpgradeMap();
-
-	private static final String REASON1 = "\"%s\" ec2 family can be replaced with \"%s\" ec2 family";
-	private static final String REASON2 = "\"%s\" ec2 family can be replaced with \"inf1\" ec2 family if you performing machine learning inference or with g4";
-	private static final String REASON3 = "\"g4\" ec2 family can be replaced with \"inf1\" ec2 family if you performing machine learning inference ";
 
 	private final RegionService regionService;
 	private final ConversionService conversionService;
@@ -87,39 +82,79 @@ public class AwsComputeService implements ComputeService {
 	}
 
 	@Override
-	public Map<Compute, PossibleUpgradeInfo> checkUpgradePossibility(List<Compute> computes) {
-		Map<Compute, PossibleUpgradeInfo> retval = new HashMap<Compute, PossibleUpgradeInfo>();
+	public Map<Compute, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Compute> computes) {
+		Map<Compute, List<PossibleUpgradeInfo>> retval = new HashMap<>();
 		computes.forEach(compute -> {
-			Optional<PossibleUpgradeInfo> checkUpgradePossibility = checkUpgradePossibility(compute);
-			checkUpgradePossibility.ifPresent(a -> retval.put(compute, a));
+			List<PossibleUpgradeInfo> checkUpgradePossibility = checkUpgradePossibility(compute);
+			if (!checkUpgradePossibility.isEmpty()) {
+				retval.put(compute, checkUpgradePossibility);
+			}
 		});
 		return retval;
 	}
 
 	@Override
-	public Optional<PossibleUpgradeInfo> checkUpgradePossibility(Compute compute) {
-		return INSTANCE_UPGRADE_MAP.keySet()
-				.stream()
-				.map(key -> {
-					// TODO simplify this
-					if (compute.getInstanceType().toString().startsWith(key)
-							&& !isAmd(compute.getInstanceType())) {
-						String reason;
-						if (isG4(compute.getInstanceType())) {
-							reason = REASON3;
-						} else if (isG2G3(compute.getInstanceType())) {
-							reason = String.format(REASON2, key);
-						} else {
-							reason = String.format(REASON1, key, INSTANCE_UPGRADE_MAP.get(key));
-						}
-						return PossibleUpgradeInfo.builder()
-								.reason(reason)
-								.build();
-					}
-					return null;
-				})
-				.filter(Objects::nonNull)
-				.findAny();
+	public List<PossibleUpgradeInfo> checkUpgradePossibility(Compute compute) {
+		Optional<PossibleUpgradeInfo> a = isFamilyCanBeUpgraded(compute);
+		Optional<PossibleUpgradeInfo> b = armRecommendation(compute);
+		Optional<PossibleUpgradeInfo> c = infChips(compute);
+		return buildList(a, b, c);
+	}
+
+	private List<PossibleUpgradeInfo> buildList(Optional<PossibleUpgradeInfo> a, Optional<PossibleUpgradeInfo> b,
+			Optional<PossibleUpgradeInfo> c) {
+		List<PossibleUpgradeInfo> retval = new ArrayList<PossibleUpgradeInfo>(3);
+		a.ifPresent(retval::add);
+		b.ifPresent(retval::add);
+		c.ifPresent(retval::add);
+		return retval;
+	}
+
+	private Optional<PossibleUpgradeInfo> infChips(Compute compute) {
+		String family = compute.getInstanceType().getFamily();
+		if (startsWithAny(family, "g3", "g2", "p3", "p2")) {
+			PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.builder()
+					.reason("Consider using inf1 instances if you performing machine learning inference")
+					.confidence(AnalysisConfidence.MEDIUM)
+					.build();
+			return Optional.of(possibleUpgradeInfo);
+		}
+		return Optional.empty();
+	}
+
+	private Optional<PossibleUpgradeInfo> armRecommendation(Compute compute) {
+		String family = compute.getInstanceType().getFamily();
+
+		String message = null;
+		if (startsWithAny(family, "t1", "t2", "t3")) {
+			message = "Consider switching to a1 instances if your application workload support ARM";
+		} else if (startsWithAny(family, "m1", "m2", "m3", "m4", "m5")) {
+			message = "Consider switching to m6g instances if your application workload support ARM";
+		}
+
+		if (message == null) {
+			return Optional.empty();
+		}
+
+		PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.builder()
+				.reason(message)
+				.confidence(AnalysisConfidence.LOW)
+				.build();
+		return Optional.of(possibleUpgradeInfo);
+	}
+
+	private Optional<PossibleUpgradeInfo> isFamilyCanBeUpgraded(Compute compute) {
+		String family = compute.getInstanceType().getFamily();
+		String upgradableFamily = INSTANCE_UPGRADE_MAP.get(family);
+		if (upgradableFamily == null)
+			return Optional.empty();
+
+		PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.builder()
+				.reason(String.format("Consider upgrading to newer instance family from %s to %s", family,
+						upgradableFamily))
+				.confidence(AnalysisConfidence.HIGH)
+				.build();
+		return Optional.of(possibleUpgradeInfo);
 	}
 
 	private Compute convert(Instance instance, Region region) {
@@ -129,31 +164,37 @@ public class AwsComputeService implements ComputeService {
 	}
 
 	private static Map<String, String> buildInstanceUpgradeMap() {
+
 		Map<String, String> retval = new LinkedHashMap<>();
-		retval.put("cc1", "c5");
+
 		retval.put("c1", "c5");
 		retval.put("c3", "c5");
 		retval.put("c4", "c5");
+		retval.put("cc1", "c5");
+		retval.put("cc2", "c5");
 
-		retval.put("m1", "t3a");
-		retval.put("t1", "t3a");
-		retval.put("t2", "t3a");
-		retval.put("t3", "t3a");
+		retval.put("g2", "g4dn");
+		retval.put("g3", "g4dn");
+		retval.put("g3s", "g4dn");
 
+		retval.put("i2", "i3");
+
+		retval.put("m1", "m5a");
 		retval.put("m3", "m5a");
 		retval.put("m4", "m5a");
 		retval.put("m5", "m5a");
+		retval.put("m5d", "m5ad");
 
-		retval.put("cr1", "r5a");
-		retval.put("m2", "r5a");
+		retval.put("p2", "p3");
+
 		retval.put("r3", "r5a");
 		retval.put("r4", "r5a");
 		retval.put("r5", "r5a");
+		retval.put("r5d", "r5ad");
 
-		retval.put("g2", "g4");
-		retval.put("g3", "g4");
-
-		retval.put("hs1", "d2");
+		retval.put("t1", "t3a");
+		retval.put("t2", "t3a");
+		retval.put("t3", "t3a");
 
 		return retval;
 	}
