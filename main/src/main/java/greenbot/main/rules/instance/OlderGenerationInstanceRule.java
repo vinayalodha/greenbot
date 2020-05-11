@@ -18,6 +18,7 @@ package greenbot.main.rules.instance;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,6 @@ import org.springframework.stereotype.Component;
 
 import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.ComputeService;
-import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
@@ -53,19 +53,25 @@ public class OlderGenerationInstanceRule extends greenbot.main.rules.AbstractGre
 				.excludedTag(ruleRequest.getExcludedTag())
 				.build();
 		List<Compute> computes = computeService.list(Collections.singletonList(predicate));
-		Map<Compute, PossibleUpgradeInfo> possibleUpgradeInfos = computeService.checkUpgradePossibility(computes);
+		Map<Compute, List<PossibleUpgradeInfo>> possibleUpgradeInfos = computeService.checkUpgradePossibility(computes);
 
 		List<RuleResponseItem> ruleResponseItems = possibleUpgradeInfos
 				.entrySet()
 				.stream()
 				.map(entry -> {
-					return RuleResponseItem.builder()
-							.resourceId(entry.getKey().getId())
-							.confidence(AnalysisConfidence.HIGH)
-							.message(entry.getValue().getReason())
-							.ruleId(buildRuleId())
-							.build();
+					return entry.getValue().stream()
+							.map(info -> {
+								return RuleResponseItem.builder()
+										.resourceId(entry.getKey().getId())
+										.confidence(info.getConfidence())
+										.message(info.getReason())
+										.ruleId(buildRuleId())
+										.build();
+							})
+							.collect(toList());
+
 				})
+				.flatMap(Collection::stream)
 				.collect(toList());
 
 		return RuleResponse.builder()

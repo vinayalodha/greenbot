@@ -15,6 +15,7 @@
  */
 package greenbot.rule.model.cloud;
 
+import greenbot.rule.model.AnalysisConfidence;
 import lombok.Builder;
 import lombok.Data;
 
@@ -25,4 +26,5 @@ import lombok.Data;
 @Builder
 public class PossibleUpgradeInfo {
 	private String reason;
+	private AnalysisConfidence confidence;
 }

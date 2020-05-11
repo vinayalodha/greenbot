@@ -42,29 +42,19 @@ resource "aws_instance" "one" {
   }
 }
 
+
 resource "aws_instance" "two" {
   ami           = "${data.aws_ami.ubuntu.id}"
-  instance_type = "t3.micro"
+  instance_type = "t3a.micro"
 
   tags = {
     owner = "greenbot"
   }
 }
-
 
 resource "aws_instance" "three" {
   ami           = "${data.aws_ami.ubuntu.id}"
-  instance_type = "t3.micro"
-
-  tags = {
-    owner = "greenbot"
-  }
-}
-
-
-resource "aws_instance" "four" {
-  ami           = "${data.aws_ami.ubuntu.id}"
-  instance_type = "t3a.micro"
+  instance_type = "m5.large"
 
   tags = {
     owner = "greenbot"
