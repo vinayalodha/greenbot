@@ -1,6 +1,6 @@
 # Introduction
 
-This project aims to analyze AWS infrastructure and find ways to reduce cost.
+GreenBot is an opinionated tool that analyzes AWS infrastructure and finds ways to reduce costs.
 
 * [Github Repository](https://github.com/vinay-lodha/greenbot)
 * [Issue Tracker](https://github.com/vinay-lodha/greenbot/issues) 
