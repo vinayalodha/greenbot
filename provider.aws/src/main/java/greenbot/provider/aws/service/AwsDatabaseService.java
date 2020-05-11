@@ -15,23 +15,30 @@
  */
 package greenbot.provider.aws.service;
 
+import static java.lang.String.format;
+import static java.util.Optional.*;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import greenbot.provider.service.DatabaseService;
+import greenbot.provider.utils.OptionalUtils;
+import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.cloud.Database;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import software.amazon.awssdk.regions.Region;
@@ -49,6 +56,18 @@ import software.amazon.awssdk.services.rds.paginators.DescribeDBInstancesIterabl
 @Service
 public class AwsDatabaseService implements DatabaseService {
 
+	private static Map<String, String> INSTANCE_UPGRADE_MAP = buildMap();
+
+	private static Map<String, String> buildMap() {
+		Map<String, String> retVal = new HashMap<String, String>();
+		retVal.put("db.t2", "db.t3");
+		retVal.put("db.m3", "db.m5");
+		retVal.put("db.m4", "db.m5");
+		retVal.put("db.r3", "db.r5");
+		retVal.put("db.r4", "db.r5");
+		return retVal;
+	}
+
 	@Autowired
 	private RegionService regionService;
 
@@ -57,17 +76,9 @@ public class AwsDatabaseService implements DatabaseService {
 
 	@Override
 	public List<PossibleUpgradeInfo> checkUpgradePossibility(Database database) {
-		String template = "Consider upgrading RDS engine from %s to %s. If offers better price to performance ratio";
-		String message = null;
-		if (equalsAnyIgnoreCase(database.getEngine(), "mariadb", "mysql")) {
-			message = String.format(template, database.getEngine(), "aurora-mysql");
-		} else if (equalsAnyIgnoreCase(database.getEngine(), "postgres")) {
-			message = String.format(template, database.getEngine(), "aurora-postgresql");
-		}
-		if (message != null)
-			return Collections.singletonList(PossibleUpgradeInfo.builder().reason(message).build());
-
-		return Collections.emptyList();
+		Optional<PossibleUpgradeInfo> a = migrationToAurora(database);
+		Optional<PossibleUpgradeInfo> b = olderGenFamily(database);
+		return OptionalUtils.<PossibleUpgradeInfo>buildList(Arrays.asList(a, b));
 	}
 
 	@Override
@@ -98,9 +109,38 @@ public class AwsDatabaseService implements DatabaseService {
 		DescribeDBInstancesIterable responseIterable = client.describeDBInstancesPaginator(request);
 		return responseIterable.dbInstances()
 				.stream()
+				.filter(instance -> equalsAnyIgnoreCase(instance.dbInstanceStatus(), "available"))
 				.map(dbInstance -> conversionService.convert(dbInstance, Database.class))
 				.filter(Objects::nonNull)
 				.collect(toList());
 	}
 
+	private Optional<PossibleUpgradeInfo> migrationToAurora(Database database) {
+		String template = "Consider upgrading RDS engine from %s to %s. If offers better price to performance ratio";
+		String message = null;
+		if (equalsAnyIgnoreCase(database.getEngine(), "mariadb", "mysql")) {
+			message = format(template, database.getEngine(), "aurora-mysql");
+		} else if (equalsAnyIgnoreCase(database.getEngine(), "postgres")) {
+			message = format(template, database.getEngine(), "aurora-postgresql");
+		}
+		if (message != null) {
+			return of(PossibleUpgradeInfo.builder().reason(message).confidence(AnalysisConfidence.LOW).build());
+		}
+		return empty();
+	}
+
+	private Optional<PossibleUpgradeInfo> olderGenFamily(Database database) {
+		String instanceClass = database.getInstanceClass();
+		if (isEmpty(instanceClass)) {
+			return Optional.empty();
+		}
+		String key = StringUtils.substringBeforeLast(instanceClass, ".");
+		String value = INSTANCE_UPGRADE_MAP.get(key);
+		if (isEmpty(value)) {
+			return empty();
+		}
+
+		String message = format("Consider upgrading instance class from %s to %s", key, value);
+		return of(PossibleUpgradeInfo.builder().reason(message).confidence(AnalysisConfidence.HIGH).build());
+	}
 }

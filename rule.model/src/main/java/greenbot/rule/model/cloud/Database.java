@@ -30,4 +30,5 @@ import lombok.experimental.SuperBuilder;
 public class Database extends Resource {
 	private String region;
 	private String engine;
+	private String instanceClass;
 }

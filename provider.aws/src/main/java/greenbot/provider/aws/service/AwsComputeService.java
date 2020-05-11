@@ -16,9 +16,10 @@
 package greenbot.provider.aws.service;
 
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithAny;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -27,12 +28,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import greenbot.provider.service.ComputeService;
+import greenbot.provider.utils.OptionalUtils;
 import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
@@ -73,8 +74,8 @@ public class AwsComputeService implements ComputeService {
 				.map(Reservation::instances)
 				.flatMap(Collection::stream)
 				.filter(instance -> {
-					String name = instance.state().nameAsString().toLowerCase();
-					return StringUtils.equalsAny(name, "stopped", "running");
+					String name = instance.state().nameAsString();
+					return equalsAnyIgnoreCase(name, "stopped", "running");
 				})
 				.map(instance -> convert(instance, region))
 				.filter(compute -> predicates.stream().allMatch(predicate -> predicate.test(compute)))
@@ -98,16 +99,7 @@ public class AwsComputeService implements ComputeService {
 		Optional<PossibleUpgradeInfo> a = isFamilyCanBeUpgraded(compute);
 		Optional<PossibleUpgradeInfo> b = armRecommendation(compute);
 		Optional<PossibleUpgradeInfo> c = infChips(compute);
-		return buildList(a, b, c);
-	}
-
-	private List<PossibleUpgradeInfo> buildList(Optional<PossibleUpgradeInfo> a, Optional<PossibleUpgradeInfo> b,
-			Optional<PossibleUpgradeInfo> c) {
-		List<PossibleUpgradeInfo> retval = new ArrayList<PossibleUpgradeInfo>(3);
-		a.ifPresent(retval::add);
-		b.ifPresent(retval::add);
-		c.ifPresent(retval::add);
-		return retval;
+		return OptionalUtils.<PossibleUpgradeInfo>buildList(Arrays.asList(a, b, c));
 	}
 
 	private Optional<PossibleUpgradeInfo> infChips(Compute compute) {

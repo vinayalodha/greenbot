@@ -43,7 +43,7 @@ public class DatabaseUpgradeRuleTest {
 		try {
 			TerraformUtils.apply(path);
 			RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
-			assertEquals(1, response.getItems().size());
+			assertEquals(2, response.getItems().size());
 		} finally {
 			TerraformUtils.destroy(path);
 		}
