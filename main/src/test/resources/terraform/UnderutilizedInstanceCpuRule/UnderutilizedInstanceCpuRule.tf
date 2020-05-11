@@ -64,3 +64,32 @@ resource "aws_instance" "owner_greenbot_under_utilized_large" {
     Name = "owner_greenbot_under_utilized_large"
   }
 }
+
+resource "aws_elastic_beanstalk_application" "under_utilized_beanstalk_application" {
+  name        = "under_utilized_beanstalk_application"
+  description = "under_utilized_beanstalk_application"
+  tags = {
+    owner = "greenbot"
+  }
+}
+
+resource "aws_elastic_beanstalk_environment" "under_utilized_beanstalk_application_env" {
+  name                = "tf-test-name"
+  application         = "${aws_elastic_beanstalk_application.under_utilized_beanstalk_application.name}"
+  solution_stack_name = "64bit Amazon Linux 2 v3.0.1 running Corretto 11"
+
+  setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name = "InstanceType"
+    value = "t3a.medium"
+  }
+  setting {
+      namespace = "aws:autoscaling:launchconfiguration"
+      name = "IamInstanceProfile"
+      value = "aws-elasticbeanstalk-ec2-role"
+  }
+
+  tags = {
+    owner = "greenbot"
+  }
+}

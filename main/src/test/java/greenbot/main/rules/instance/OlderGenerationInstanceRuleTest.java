@@ -42,9 +42,9 @@ public class OlderGenerationInstanceRuleTest {
 
 		String path = "./src/test/resources/terraform/OlderGenerationInstanceRule";
 		try {
-			// TerraformUtils.apply(path);
+			TerraformUtils.apply(path);
 			RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
-			assertEquals(5, response.getItems().size());
+			assertEquals(7, response.getItems().size());
 		} finally {
 			TerraformUtils.destroy(path);
 		}

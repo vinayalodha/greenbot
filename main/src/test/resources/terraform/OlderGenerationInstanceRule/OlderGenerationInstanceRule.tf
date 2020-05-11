@@ -60,3 +60,33 @@ resource "aws_instance" "three" {
     owner = "greenbot"
   }
 }
+
+resource "aws_elastic_beanstalk_application" "older_gen_instance_beanstalk_application" {
+  name        = "older_gen_instance_beanstalk_application"
+  description = "older_gen_instance_beanstalk_application"
+  tags = {
+    owner = "greenbot"
+  }
+}
+
+resource "aws_elastic_beanstalk_environment" "older_gen_instance_beanstalk_application_env" {
+  name                = "env-older-gen"
+  application         = "${aws_elastic_beanstalk_application.older_gen_instance_beanstalk_application.name}"
+  solution_stack_name = "64bit Amazon Linux 2 v3.0.1 running Corretto 11"
+
+  setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name = "InstanceType"
+    value = "t3.micro"
+  }
+  setting {
+      namespace = "aws:autoscaling:launchconfiguration"
+      name = "IamInstanceProfile"
+      value = "aws-elasticbeanstalk-ec2-role"
+  }
+
+  tags = {
+    owner = "greenbot"
+  }
+}
+
