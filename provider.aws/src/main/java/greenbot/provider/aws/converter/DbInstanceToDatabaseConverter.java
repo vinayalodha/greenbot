@@ -27,9 +27,11 @@ import software.amazon.awssdk.services.rds.model.DBInstance;
 @Component
 public class DbInstanceToDatabaseConverter implements Converter<DBInstance, Database> {
 	public Database convert(DBInstance instance) {
+		// Optional[db.t2.micro]
 		return Database.builder()
 				.id(instance.dbInstanceIdentifier())
 				.name(instance.dbName())
+				.instanceClass(instance.dbInstanceClass())
 				.engine(instance.engine())
 				.build();
 	}

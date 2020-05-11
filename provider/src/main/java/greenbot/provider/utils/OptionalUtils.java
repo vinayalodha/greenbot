@@ -13,11 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.rule.model.cloud;
+package greenbot.provider.utils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Vinay Lodha
  */
-public class DatabseUpgradeInfo {
-
+public class OptionalUtils {
+	public static <T> List<T> buildList(List<Optional<T>> optionals) {
+		List<T> retval = new ArrayList<T>();
+		for (Optional<T> obj : optionals) {
+			obj.ifPresent(retval::add);
+		}
+		return retval;
+	}
 }
