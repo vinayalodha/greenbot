@@ -1,4 +1,5 @@
 export class AnalysisResponse {
+	id: String = "";
 	infoMessages: String[] = [];
 	warningMessages: String[] = [];
 	errorMessages: String[] = [];

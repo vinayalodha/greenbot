@@ -50,6 +50,6 @@ public class GreenbotServer implements ApplicationRunner {
 				log.info("Server is running on port 5000, open http://localhost:5000 in browser");
 			}
 		};
-		new Timer().schedule(task, 100);
+		new Timer().schedule(task, 200);
 	}
 }

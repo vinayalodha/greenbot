@@ -28,6 +28,7 @@ export class ResultComponent extends Component<ResultProps, {}> {
 			return null;
 		}
 		const items = []
+
 		for (const item of this.props.result.items) {
 			items.push(
 				<tr>
@@ -38,12 +39,14 @@ export class ResultComponent extends Component<ResultProps, {}> {
 				</tr>
 			)
 		}
+		var url = "/report/" + this.props.result.id;
 		return (
 			<div>
+				<a href={url} className="is-pulled-right">Download Report as CSV</a>
 				<table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
 					<thead>
 						<tr>
-							<th>Resource Ids</th>
+							<th>Resource Id</th>
 							<th>Rule Id</th>
 							<th>Confidence</th>
 							<th>Message</th>
