@@ -42,7 +42,7 @@ public class DevResourcesRuleTest {
 		String path = "./src/test/resources/terraform/DevResourcesRule";
 
 		try {
-			// TerraformUtils.apply(path);
+			TerraformUtils.apply(path);
 			RuleResponse response = devResourcesRule.doWork(RuleRequestDataProvider.simple());
 			assertEquals(1, response.getItems().size());
 		} finally {
