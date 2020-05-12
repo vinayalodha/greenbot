@@ -23,7 +23,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import greenbot.main.TerraformTest;
 import greenbot.main.dataprovider.RuleRequestDataProvider;
-import greenbot.main.rules.storage.instance.DeleteOrphanInstanceStorageRule;
 import greenbot.main.terraform.TerraformUtils;
 import greenbot.rule.model.RuleResponse;
 
@@ -44,9 +43,7 @@ public class DeleteOrphanInstanceStorageRuleTest {
 		try {
 			TerraformUtils.apply(path);
 			RuleResponse response = deleteOrphanInstanceStorageRule.doWork(RuleRequestDataProvider.simple());
-
-			// No of rule voilations == 1
-			assertEquals(3, response.getItems().size());
+			assertEquals(1, response.getItems().size());
 		} finally {
 			TerraformUtils.destroy(path);
 		}

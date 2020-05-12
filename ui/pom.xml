@@ -51,6 +51,7 @@ limitations under the License.
 						<goals>
 							<goal>yarn</goal>
 						</goals>
+						<!--suppress MavenModelInspection -->
 						<configuration>
 							<arguments>install
 								--dist-url="${maven-frontend.nodeDownloadRoot}"</arguments>

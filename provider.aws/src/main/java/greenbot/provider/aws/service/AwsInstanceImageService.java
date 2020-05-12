@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.InstanceImageService;
 import greenbot.rule.model.cloud.Tag;
 import lombok.AllArgsConstructor;
@@ -52,6 +53,8 @@ public class AwsInstanceImageService implements InstanceImageService {
 				.map(client -> query(includedTag, client))
 				.flatMap(Collection::stream)
 				.filter(image -> {
+					if (excludedTag == null)
+						return true;
 					return !image.tags().stream()
 							.anyMatch(tag -> {
 								return tag.key().contentEquals(excludedTag.getKey())

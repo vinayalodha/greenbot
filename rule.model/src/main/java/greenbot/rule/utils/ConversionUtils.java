@@ -13,27 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.provider.predicates;
+package greenbot.rule.utils;
 
-import java.util.function.Predicate;
-
-import greenbot.rule.model.cloud.Resource;
-import greenbot.rule.model.cloud.Tag;
-import lombok.Builder;
-import lombok.Data;
+import greenbot.rule.model.RuleResponseItem;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 
 /**
  * @author Vinay Lodha
  */
-@Data
-@Builder
-public class TagPredicate implements Predicate<Resource> {
-	private final Tag includedTag;
-	private final Tag excludedTag;
-
-	@Override
-	public boolean test(Resource compute) {
-		return (includedTag == null || compute.getTags().values().contains(includedTag))
-				&& (excludedTag == null || !compute.getTags().values().contains(excludedTag));
+public class ConversionUtils {
+	private ConversionUtils() {
 	}
+
+	public static RuleResponseItem toRuleResponseItem(PossibleUpgradeInfo possibleUpgradeInfo, String ruleId) {
+		return RuleResponseItem.builder()
+				.resourceId(possibleUpgradeInfo.getResourceId())
+				.service(possibleUpgradeInfo.getService())
+				.confidence(possibleUpgradeInfo.getConfidence())
+				.message(possibleUpgradeInfo.getReason())
+				.ruleId(ruleId)
+				.build();
+	}
+
 }

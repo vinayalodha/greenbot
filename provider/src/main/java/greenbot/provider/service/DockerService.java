@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main;
+package greenbot.provider.service;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import java.util.List;
+import java.util.Map;
 
-import greenbot.rule.utils.RuleResponseReducer;
+import greenbot.rule.model.cloud.Compute;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 
 /**
  * 
  * @author Vinay Lodha
  */
-@Configuration
-public class Beans {
+public interface DockerService {
 
-	@Bean
-	public RuleResponseReducer getRuleResponseReducer() {
-		return new RuleResponseReducer();
-	}
-
+	Map<Compute, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Compute> computes);
 }

@@ -20,14 +20,13 @@ import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import greenbot.provider.service.InstanceStorageService;
 import greenbot.rule.model.cloud.InstanceStorage;
-import greenbot.rule.model.cloud.Tag;
 import lombok.AllArgsConstructor;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.DescribeVolumesResponse;
@@ -46,7 +45,7 @@ public class AwsInstanceStorageService implements InstanceStorageService {
 	private final ConversionService conversionService;
 
 	@Override
-	public List<InstanceStorage> orphans(Tag includedTag, Tag excludedTag) {
+	public List<InstanceStorage> orphans(List<Predicate<InstanceStorage>> predicates) {
 
 		return regionService.regions()
 				.parallelStream()
@@ -57,12 +56,7 @@ public class AwsInstanceStorageService implements InstanceStorageService {
 				.flatMap(Collection::stream)
 				.filter(volume -> equalsAnyIgnoreCase("available", volume.stateAsString()))
 				.map(this::convert)
-				.filter(compute -> {
-					return includedTag == null || compute.getTags().containsValue(includedTag);
-				})
-				.filter(compute -> {
-					return excludedTag == null || !compute.getTags().containsValue(excludedTag);
-				})
+				.filter(storage -> predicates.stream().allMatch(predicate -> predicate.test(storage)))
 				.collect(toList());
 	}
 

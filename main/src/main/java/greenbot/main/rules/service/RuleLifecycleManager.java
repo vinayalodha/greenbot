@@ -33,7 +33,7 @@ import greenbot.rule.model.GreenbotRule;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
-import greenbot.rule.model.utils.RuleResponseReducer;
+import greenbot.rule.utils.RuleResponseReducer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -75,8 +75,7 @@ public class RuleLifecycleManager {
 						log.error(String.format(
 								"Exception occoured while executing rule:%s Please raise bug report if issue persist",
 								ruleId), e);
-						errorMessages.add("rule:" + ruleId + " - "
-								+ StringUtils.abbreviate(ExceptionUtils.getRootCauseMessage(e), 400));
+						errorMessages.add("rule:" + ruleId + " - " + exceptionToString(e));
 					}
 					return null;
 				})
@@ -97,8 +96,13 @@ public class RuleLifecycleManager {
 			return null;
 		} catch (Exception e) {
 			log.error("", e);
-			return StringUtils.abbreviate(ExceptionUtils.getRootCauseMessage(e), 400);
+			return exceptionToString(e);
 		}
+	}
+
+	private String exceptionToString(Exception e) {
+		return StringUtils
+				.abbreviate(ExceptionUtils.getRootCauseMessage(e) + ExceptionUtils.getRootCauseStackTrace(e), 400);
 	}
 
 	public List<ConfigParam> getConfigParams() {

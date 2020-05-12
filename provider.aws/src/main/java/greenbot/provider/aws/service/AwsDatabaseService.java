@@ -16,7 +16,8 @@
 package greenbot.provider.aws.service;
 
 import static java.lang.String.format;
-import static java.util.Optional.*;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -56,7 +57,7 @@ import software.amazon.awssdk.services.rds.paginators.DescribeDBInstancesIterabl
 @Service
 public class AwsDatabaseService implements DatabaseService {
 
-	private static Map<String, String> INSTANCE_UPGRADE_MAP = buildMap();
+	private static final Map<String, String> INSTANCE_UPGRADE_MAP = buildMap();
 
 	private static Map<String, String> buildMap() {
 		Map<String, String> retVal = new HashMap<String, String>();
@@ -74,8 +75,7 @@ public class AwsDatabaseService implements DatabaseService {
 	@Autowired
 	private ConversionService conversionService;
 
-	@Override
-	public List<PossibleUpgradeInfo> checkUpgradePossibility(Database database) {
+	private List<PossibleUpgradeInfo> checkUpgradePossibility(Database database) {
 		Optional<PossibleUpgradeInfo> a = migrationToAurora(database);
 		Optional<PossibleUpgradeInfo> b = olderGenFamily(database);
 		return OptionalUtils.<PossibleUpgradeInfo>buildList(Arrays.asList(a, b));
@@ -124,7 +124,12 @@ public class AwsDatabaseService implements DatabaseService {
 			message = format(template, database.getEngine(), "aurora-postgresql");
 		}
 		if (message != null) {
-			return of(PossibleUpgradeInfo.builder().reason(message).confidence(AnalysisConfidence.LOW).build());
+			return of(PossibleUpgradeInfo.builder()
+					.resourceId(database.getId())
+					.service("RDS")
+					.reason(message)
+					.confidence(AnalysisConfidence.LOW)
+					.build());
 		}
 		return empty();
 	}
@@ -141,6 +146,11 @@ public class AwsDatabaseService implements DatabaseService {
 		}
 
 		String message = format("Consider upgrading instance class from %s to %s", key, value);
-		return of(PossibleUpgradeInfo.builder().reason(message).confidence(AnalysisConfidence.HIGH).build());
+		return of(PossibleUpgradeInfo.builder()
+				.resourceId(database.getId())
+				.service("RDS")
+				.reason(message)
+				.confidence(AnalysisConfidence.HIGH)
+				.build());
 	}
 }

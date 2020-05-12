@@ -47,6 +47,7 @@ public class TooManyInstanceImagesRule extends AbstractGreenbotRule {
 
 		RuleResponseItem item = RuleResponseItem.builder()
 				.confidence(AnalysisConfidence.MEDIUM)
+				.resourceId("NA")
 				.service("AMI")
 				.message("AMI count exceeds " + ruleRequest.getAmiThreshold()
 						+ " (refer too_many_ami_threshold config param)")

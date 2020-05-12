@@ -32,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
 import greenbot.main.config.ConfigService;
@@ -54,7 +55,7 @@ import greenbot.rule.model.cloud.Compute;
 @Component
 public class UnderutilizedInstanceCpuRule extends AbstractGreenbotRule implements InitializingBean {
 
-	private static Collection<String> GP_CPU_FAMILIES = Stream.of(
+	private static final Collection<String> GP_CPU_FAMILIES = Stream.of(
 			GENERAL_PURPOSE_FAMILY_LIST, CPU_INTENSIVE_CPU_FAMILY_LIST)
 			.flatMap(Collection::stream)
 			.collect(toList());
@@ -69,19 +70,18 @@ public class UnderutilizedInstanceCpuRule extends AbstractGreenbotRule implement
 
 	@Autowired
 	private ComputeService computeService;
+	@Autowired
+	private ConversionService conversionService;
 
 	private InstanceFamilyPredicate instanceFamilyPredicate;
 	private InstanceTypePredicate instanceTypePredicate;
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
-		TagPredicate tagPredicate = TagPredicate.builder()
-				.includedTag(ruleRequest.getIncludedTag())
-				.excludedTag(ruleRequest.getExcludedTag())
-				.build();
+		TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
 
 		List<Compute> computes = computeService
-				.list(Arrays.asList(tagPredicate, instanceFamilyPredicate, instanceTypePredicate));
+				.list(Arrays.asList(predicate::test, instanceFamilyPredicate, instanceTypePredicate));
 		if (CollectionUtils.isEmpty(computes))
 			return null;
 
@@ -126,7 +126,7 @@ public class UnderutilizedInstanceCpuRule extends AbstractGreenbotRule implement
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet() {
 		instanceFamilyPredicate = InstanceFamilyPredicate.builder()
 				.allowededFamilies(GP_CPU_FAMILIES)
 				.build();

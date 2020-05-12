@@ -30,4 +30,5 @@ import lombok.experimental.SuperBuilder;
 public class Compute extends Resource {
 	private InstanceType instanceType;
 	private String region;
+
 }
