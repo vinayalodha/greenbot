@@ -33,10 +33,11 @@ public class RuleResponseToString implements Converter<RuleResponse, String> {
 	@Override
 	public String convert(RuleResponse ruleResponse) {
 
-		String header = "ResourceId;Rule Id;Confidence;message\r\n";
+		String header = "ResourceId;Service;Rule Id;Confidence;message\r\n";
 		Optional<String> result = ruleResponse.getItems().stream()
 				.map(i -> {
-					return String.format("%s;%s;%s;%s", i.getResourceId(), i.getRuleId(), i.getConfidence(),
+					return String.format("%s;%s;%s;%s;%s", i.getResourceId(), i.getService(), i.getRuleId(),
+							i.getConfidence(),
 							i.getMessage());
 				})
 				.reduce((a, b) -> {

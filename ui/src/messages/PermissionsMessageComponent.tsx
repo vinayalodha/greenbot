@@ -46,7 +46,7 @@ export class PermissionsMessageComponent extends Component<{}, PermissionsMessag
         return (
             <div className="message">
                 <div className="message-body">
-                    Below is the list permissions needed for each rule.
+                    List of permissions for each rule
                 <pre>
 					<code className="language-json" data-lang="json">{this.state.ruleInfo}</code>
 				</pre>

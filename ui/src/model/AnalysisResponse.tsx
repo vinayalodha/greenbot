@@ -8,6 +8,7 @@ export class AnalysisResponse {
 
 class RuleResponseItem {
 	resourceId: String = "";
+	service: String = "";
 	ruleId: String = "";
 	confidence: String = "";
 	message: string = "";

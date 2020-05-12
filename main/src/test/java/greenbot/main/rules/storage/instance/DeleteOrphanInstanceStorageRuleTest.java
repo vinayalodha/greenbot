@@ -46,7 +46,7 @@ public class DeleteOrphanInstanceStorageRuleTest {
 			RuleResponse response = deleteOrphanInstanceStorageRule.doWork(RuleRequestDataProvider.simple());
 
 			// No of rule voilations == 1
-			assertEquals(1, response.getItems().size());
+			assertEquals(3, response.getItems().size());
 		} finally {
 			TerraformUtils.destroy(path);
 		}

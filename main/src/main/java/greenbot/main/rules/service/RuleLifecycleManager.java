@@ -53,10 +53,13 @@ public class RuleLifecycleManager {
 	public RuleResponse execute(RuleRequest request) {
 		List<String> errorMessages = new ArrayList<>();
 
-		if (!checkIfAWSCliConfigured()) {
+		String message = checkIfAWSCliConfigured();
+		if (message != null) {
 			return RuleResponse.builder()
 					.id(Math.abs(new Random().nextInt()))
-					.errorMessage("AWS cli is not configured")
+					.errorMessage(
+							"Unable to load AWS regions, most likely AWS cli is not configured or network connectivity with AWS API unavailable stacktrace : "
+									+ message)
 					.build();
 		}
 		log.info("Rule execution started");
@@ -72,7 +75,8 @@ public class RuleLifecycleManager {
 						log.error(String.format(
 								"Exception occoured while executing rule:%s Please raise bug report if issue persist",
 								ruleId), e);
-						errorMessages.add(StringUtils.abbreviate(ExceptionUtils.getRootCauseMessage(e), 400));
+						errorMessages.add("rule:" + ruleId + " - "
+								+ StringUtils.abbreviate(ExceptionUtils.getRootCauseMessage(e), 400));
 					}
 					return null;
 				})
@@ -87,12 +91,13 @@ public class RuleLifecycleManager {
 				.build();
 	}
 
-	private boolean checkIfAWSCliConfigured() {
+	private String checkIfAWSCliConfigured() {
 		try {
 			regionService.regions();
-			return true;
+			return null;
 		} catch (Exception e) {
-			return false;
+			log.error("", e);
+			return StringUtils.abbreviate(ExceptionUtils.getRootCauseMessage(e), 400);
 		}
 	}
 

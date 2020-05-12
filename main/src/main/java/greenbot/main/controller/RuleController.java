@@ -65,7 +65,6 @@ public class RuleController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-type", "text/csv");
 		headers.add("Content-disposition", "attachment;filename=report.csv");
-
 		return new ResponseEntity<String>(retVal, headers, HttpStatus.OK);
 	}
 

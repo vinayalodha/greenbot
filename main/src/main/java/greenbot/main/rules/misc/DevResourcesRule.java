@@ -61,9 +61,10 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 				.map(compute -> {
 					return RuleResponseItem.builder()
 							.resourceId(compute.getId())
+							.service("EC2")
 							.confidence(AnalysisConfidence.LOW)
 							.message(
-									"Usually dev/staging/test resources don't need to run for 24 hours. Consider adding mechanism to stop them for part of day/weekend when it is unused.")
+									"Usually dev/staging/test resources don't need to run for 24 hours. Consider adding mechanism to stop them for part of day/weekend when it is unused")
 							.ruleId(buildRuleId())
 							.build();
 				})

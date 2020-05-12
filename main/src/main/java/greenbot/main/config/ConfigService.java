@@ -16,6 +16,7 @@
 package greenbot.main.config;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -49,7 +50,7 @@ public class ConfigService implements InitializingBean {
 	@Value("${config.cloudwatch.timeframe}")
 	private int cloudwatchTimeframeDuration;
 
-	private List<ConfigParam> emptyConfigParams;
+	private List<ConfigParam> emptyConfigParams = Collections.emptyList();
 
 	public List<ConfigParam> getDefaultConfig() {
 		return emptyConfigParams;
@@ -58,7 +59,7 @@ public class ConfigService implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() {
 		if (cloudwatchTimeframeDuration % 5 != 0 || cloudwatchTimeframeDuration <= 9) {
-			throw new RuntimeException("config.cloudwatch.timeframe should be multiple of 5");
+			throw new RuntimeException("config.cloudwatch.timeframe should be multiple of 5 and greater than 9");
 		}
 
 		ConfigParam excludedTag = ConfigParam.builder()
@@ -89,7 +90,7 @@ public class ConfigService implements InitializingBean {
 				.key(CLOUDWATCH_CONFIG_DURATION)
 				.value(String.valueOf(cloudwatchTimeframeDuration))
 				.description(
-						"Duration for which cloudwatch config to be analyzed (in mins), should be multiple of 5 with min value of 10")
+						"Duration for which cloudwatch data to be analyzed(in mins), should be multiple of 5 with min value of 10")
 				.build();
 
 		emptyConfigParams = Arrays.asList(excludedTag,
