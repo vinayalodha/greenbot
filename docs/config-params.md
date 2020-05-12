@@ -27,7 +27,12 @@ Config parameters are represent by JSON on home page when you launch [localhost:
     {
         "key": "cloudwatch_config_duration",
         "value": "10080",
-        "description": "Duration for which cloudwatch config to be analyzed (in mins), should be multiple of 5 with min value of 10"
+        "description": "Duration for which cloudwatch data to be analyzed(in mins), should be multiple of 5 with min value of 10"
+    },
+    {
+        "key": "rules_to_ignore",
+        "value": "",
+        "description": "Comma seprated rule ids to ignore for example too_many_instance_images_rule,delete_orphan_instance_storage_rule"
     }
 ]
 ```
