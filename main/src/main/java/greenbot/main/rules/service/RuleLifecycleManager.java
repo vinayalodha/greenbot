@@ -58,7 +58,7 @@ public class RuleLifecycleManager {
 			return RuleResponse.builder()
 					.id(Math.abs(new Random().nextInt()))
 					.errorMessage(
-							"Unable to load AWS regions, most likely AWS cli is not configured or network connectivity with AWS API unavailable stacktrace : "
+							"Unable to load AWS regions. most likely AWS CLI is not configured or network connectivity with AWS API is unavailable. Exception Stacktrace : "
 									+ message)
 					.build();
 		}

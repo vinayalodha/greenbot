@@ -24,9 +24,13 @@ limitations under the License.
 	<parent>
 		<groupId>greenbot</groupId>
 		<artifactId>parent</artifactId>
-		<version>2.0.3</version>
+		<version>2.0.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
+	
+	<properties>
+		<aws.version>2.13.14</aws.version>
+	</properties>
 
 	<dependencies>
 		<!-- Internal projects -->
@@ -57,19 +61,19 @@ limitations under the License.
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>ec2</artifactId>
-			<version>2.13.14</version>
+			<version>${aws.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>cloudwatch</artifactId>
-			<version>2.13.14</version>
+			<version>${aws.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>rds</artifactId>
-			<version>2.13.14</version>
+			<version>${aws.version}</version>
 		</dependency>
 
 		<!-- Apache stuff -->
