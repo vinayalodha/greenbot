@@ -2,7 +2,7 @@
 
 * Make sure you have JDK 8 installed \(AWS SDK is incompatible with JDK 9 and above\)
   * Oracle JDK 8 download [link](https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html)
-  * AWS corretto jdk 8 download [link](https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/downloads-list.html)
+  * AWS corretto JDK 8 download [link](https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/downloads-list.html)
 * Configure AWS cli using `aws configure`
   * [AWS cli guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
 * Download ****jar from [GreenBot release](https://github.com/vinay-lodha/greenbot/releases)
