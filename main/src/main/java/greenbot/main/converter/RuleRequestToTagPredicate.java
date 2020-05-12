@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
+ * Copyright 2019-2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main;
+package greenbot.main.converter;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
-import greenbot.rule.utils.RuleResponseReducer;
+import greenbot.provider.predicates.TagPredicate;
+import greenbot.rule.model.RuleRequest;
 
 /**
- * 
  * @author Vinay Lodha
  */
-@Configuration
-public class Beans {
-
-	@Bean
-	public RuleResponseReducer getRuleResponseReducer() {
-		return new RuleResponseReducer();
+@Component
+public class RuleRequestToTagPredicate implements Converter<RuleRequest, TagPredicate> {
+	@Override
+	public TagPredicate convert(RuleRequest source) {
+		return TagPredicate.builder()
+				.includedTag(source.getIncludedTag())
+				.excludedTag(source.getExcludedTag())
+				.build();
 	}
 
 }

@@ -28,13 +28,13 @@ import org.springframework.stereotype.Component;
 
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.provider.service.DatabaseService;
-import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Database;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
+import greenbot.rule.utils.ConversionUtils;
 
 /**
  * @author Vinay Lodha
@@ -50,22 +50,10 @@ public class DatabaseUpgradeRule extends AbstractGreenbotRule {
 		List<Database> databases = databaseService.list(Collections.emptyList());
 		Map<Database, List<PossibleUpgradeInfo>> upgrades = databaseService.checkUpgradePossibility(databases);
 
-		List<RuleResponseItem> items = upgrades.entrySet()
+		List<RuleResponseItem> items = upgrades.values()
 				.stream()
-				.map(entry -> {
-					return entry.getValue().stream()
-							.map(info -> {
-								return RuleResponseItem.builder()
-										.resourceId(entry.getKey().getId())
-										.service("RDS")
-										.confidence(info.getConfidence())
-										.message(info.getReason())
-										.ruleId(buildRuleId())
-										.build();
-							})
-							.collect(toList());
-				})
 				.flatMap(Collection::stream)
+				.map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
 				.collect(toList());
 
 		return RuleResponse.build(items);

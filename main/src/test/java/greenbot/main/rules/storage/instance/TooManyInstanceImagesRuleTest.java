@@ -38,7 +38,7 @@ public class TooManyInstanceImagesRuleTest {
 	public void sanity() throws Exception {
 		String path = "./src/test/resources/terraform/TooManyInstanceImagesRule";
 		try {
-			TerraformUtils.apply(path);
+			// TerraformUtils.apply(path);
 			RuleResponse response = tooManyInstanceImagesRule.doWork(RuleRequestDataProvider.simple());
 			assertEquals(1, response.getItems().size());
 		} finally {

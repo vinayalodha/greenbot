@@ -27,4 +27,6 @@ import lombok.Data;
 public class PossibleUpgradeInfo {
 	private String reason;
 	private AnalysisConfidence confidence;
+	private String service;
+	private String resourceId;
 }

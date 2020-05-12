@@ -16,15 +16,14 @@
 package greenbot.provider.service;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import greenbot.rule.model.cloud.InstanceStorage;
-import greenbot.rule.model.cloud.Tag;
 
 /**
  * 
  * @author Vinay Lodha
  */
 public interface InstanceStorageService {
-	// TODO use predicates
-	List<InstanceStorage> orphans(Tag includedTag, Tag excludedTag);
+	List<InstanceStorage> orphans(List<Predicate<InstanceStorage>> predicates);
 }

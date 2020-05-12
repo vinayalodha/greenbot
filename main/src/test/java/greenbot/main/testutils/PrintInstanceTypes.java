@@ -41,6 +41,6 @@ public class PrintInstanceTypes {
 
 		// set.forEach(System.err::println);
 
-		assertEquals(271, set.size());
+		assertEquals(280, set.size());
 	}
 }

@@ -18,8 +18,6 @@ package greenbot.main;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -43,7 +41,7 @@ public class GreenbotServer implements CommandLineRunner {
 	}
 
 	@Override
-	public void run(String... args) throws Exception {
+	public void run(String... args) {
 
 		TimerTask task = new TimerTask() {
 

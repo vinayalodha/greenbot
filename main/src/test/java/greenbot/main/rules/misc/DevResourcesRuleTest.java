@@ -40,8 +40,9 @@ public class DevResourcesRuleTest {
 	@TerraformTest
 	public void sanity() throws Exception {
 		String path = "./src/test/resources/terraform/DevResourcesRule";
+
 		try {
-			TerraformUtils.apply(path);
+			// TerraformUtils.apply(path);
 			RuleResponse response = devResourcesRule.doWork(RuleRequestDataProvider.simple());
 			assertEquals(1, response.getItems().size());
 		} finally {

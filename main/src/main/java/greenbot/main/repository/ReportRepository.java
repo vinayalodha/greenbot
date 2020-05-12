@@ -31,7 +31,8 @@ import greenbot.rule.model.RuleResponse;
 @Repository
 public class ReportRepository {
 
-	private @NonNull Cache<Integer, RuleResponse> cache = Caffeine.newBuilder()
+	private @NonNull
+	final Cache<Integer, RuleResponse> cache = Caffeine.newBuilder()
 			.expireAfterWrite(365, TimeUnit.DAYS)
 			.maximumSize(100)
 			.build();

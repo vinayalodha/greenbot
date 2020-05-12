@@ -45,10 +45,14 @@ public class TagAnalyzer {
 	}
 
 	private boolean isDevTagPresent(Tag tag) {
-		if (POSSIBLE_DEV_TAGS.contains(tag))
+		Tag lowercasetag = Tag.builder()
+				.key(tag.getKey().toLowerCase())
+				.value(tag.getValue().toLowerCase())
+				.build();
+		if (POSSIBLE_DEV_TAGS.contains(lowercasetag))
 			return true;
 
-		String value = tag.getValue().toLowerCase();
+		String value = lowercasetag.getValue();
 		if (StringUtils.containsAny(value, POSSIBLE_DEV_TAG_VALUES_SUBSTRING)) {
 			return true;
 		}

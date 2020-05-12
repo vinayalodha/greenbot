@@ -18,11 +18,14 @@ package greenbot.main.rules.storage.instance;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
 import greenbot.main.rules.AbstractGreenbotRule;
+import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.InstanceStorageService;
 import greenbot.rule.model.AnalysisConfidence;
 import greenbot.rule.model.RuleInfo;
@@ -39,11 +42,13 @@ import lombok.AllArgsConstructor;
 public class DeleteOrphanInstanceStorageRule extends AbstractGreenbotRule {
 
 	private final InstanceStorageService instanceStorageService;
+	private final ConversionService conversionService;
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
-		List<RuleResponseItem> items = instanceStorageService.orphans(ruleRequest.getIncludedTag(),
-				ruleRequest.getExcludedTag()).stream()
+		TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
+		List<RuleResponseItem> items = instanceStorageService.orphans(Collections.singletonList(predicate::test))
+				.stream()
 				.map(storage -> {
 					return RuleResponseItem.builder()
 							.resourceId(storage.getId())

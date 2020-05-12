@@ -47,11 +47,8 @@ public class InstanceToComputeConverter implements Converter<Instance, Compute> 
 				.stream()
 				.map(ec2TagToTagConverter::convert)
 				.collect(toMap(Tag::getKey, Function.identity()));
-		String[] tokens = split(instance.instanceTypeAsString(), '.');
-		InstanceType instanceType = InstanceType.builder()
-				.family(tokens[0])
-				.size(tokens[1])
-				.build();
+
+		InstanceType instanceType = buildInstaceType(instance);
 
 		return Compute.builder()
 				.id(instance.instanceId())
@@ -59,5 +56,14 @@ public class InstanceToComputeConverter implements Converter<Instance, Compute> 
 				.tags(tags)
 				.name(TagUtils.getValue(tags.get("Name")))
 				.build();
+	}
+
+	private InstanceType buildInstaceType(Instance instance) {
+		String[] tokens = split(instance.instanceTypeAsString(), '.');
+		InstanceType instanceType = InstanceType.builder()
+				.family(tokens[0])
+				.size(tokens[1])
+				.build();
+		return instanceType;
 	}
 }

@@ -30,8 +30,6 @@ import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 public interface DatabaseService {
 	List<Database> list(List<Predicate<Database>> predicates);
 
-	List<PossibleUpgradeInfo> checkUpgradePossibility(Database database);
-
 	Map<Database, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Database> databases);
 
 }

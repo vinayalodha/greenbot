@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
+ * Copyright 2019-2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,61 +13,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main.rules.misc;
-
-import static java.util.stream.Collectors.toList;
+package greenbot.main.rules.docker;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import greenbot.main.rules.AbstractGreenbotRule;
-import greenbot.main.rules.service.TagAnalyzer;
 import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.ComputeService;
-import greenbot.rule.model.AnalysisConfidence;
+import greenbot.provider.service.DockerService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Compute;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
+import greenbot.rule.utils.ConversionUtils;
 import lombok.AllArgsConstructor;
 
 /**
- * 
  * @author Vinay Lodha
  */
 @Service
 @AllArgsConstructor
-public class DevResourcesRule extends AbstractGreenbotRule {
+public class MigrationToDockerRule extends AbstractGreenbotRule {
 
-	private final TagAnalyzer devTagAnalyzer;
+	private final DockerService dockerService;
 	private final ComputeService computeService;
-
 	private final ConversionService conversionService;
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
-		// TODO also check for RDS, Fargate
 		TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
-
 		List<Compute> computes = computeService.list(Collections.singletonList(predicate::test));
-		List<RuleResponseItem> items = computes.stream()
-				.filter(compute -> devTagAnalyzer.isDevTagPresent(compute.getTags().values()))
-				.map(compute -> {
-					return RuleResponseItem.builder()
-							.resourceId(compute.getId())
-							.service("EC2")
-							.confidence(AnalysisConfidence.MEDIUM)
-							.message(
-									"Usually dev/staging/test resources don't need to run for 24 hours. Consider adding mechanism to stop them for part of day/weekend when it is unused")
-							.ruleId(buildRuleId())
-							.build();
-				})
-				.collect(toList());
+		Map<Compute, List<PossibleUpgradeInfo>> upgradeMap = dockerService.checkUpgradePossibility(computes);
+
+		List<RuleResponseItem> items = upgradeMap.values().stream()
+				.flatMap(Collection::stream)
+				.map(obj -> ConversionUtils.toRuleResponseItem(obj, buildRuleId()))
+				.collect(Collectors.toList());
 
 		return RuleResponse.build(items);
 	}
@@ -76,7 +67,7 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 	public RuleInfo ruleInfo() {
 		return RuleInfo.builder()
 				.id(buildRuleId())
-				.description("Does dev/staging/test resources running 24 hours?")
+				.description("Check for workloads which can be migrated to Docker")
 				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
 				.build();
 	}

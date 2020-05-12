@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
 import greenbot.provider.predicates.TagPredicate;
@@ -33,6 +34,7 @@ import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
+import greenbot.rule.utils.ConversionUtils;
 import lombok.AllArgsConstructor;
 
 /**
@@ -45,39 +47,22 @@ import lombok.AllArgsConstructor;
 public class OlderGenerationInstanceRule extends greenbot.main.rules.AbstractGreenbotRule {
 
 	private final ComputeService computeService;
+	private final ConversionService conversionService;
 
 	@Override
 	public RuleResponse doWork(RuleRequest ruleRequest) {
-		TagPredicate predicate = TagPredicate.builder()
-				.includedTag(ruleRequest.getIncludedTag())
-				.excludedTag(ruleRequest.getExcludedTag())
-				.build();
-		List<Compute> computes = computeService.list(Collections.singletonList(predicate));
+		TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
+
+		List<Compute> computes = computeService.list(Collections.singletonList(predicate::test));
 		Map<Compute, List<PossibleUpgradeInfo>> possibleUpgradeInfos = computeService.checkUpgradePossibility(computes);
 
-		List<RuleResponseItem> ruleResponseItems = possibleUpgradeInfos
-				.entrySet()
+		List<RuleResponseItem> items = possibleUpgradeInfos.values()
 				.stream()
-				.map(entry -> {
-					return entry.getValue().stream()
-							.map(info -> {
-								return RuleResponseItem.builder()
-										.resourceId(entry.getKey().getId())
-										.service("EC2")
-										.confidence(info.getConfidence())
-										.message(info.getReason())
-										.ruleId(buildRuleId())
-										.build();
-							})
-							.collect(toList());
-
-				})
 				.flatMap(Collection::stream)
+				.map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
 				.collect(toList());
 
-		return RuleResponse.builder()
-				.items(ruleResponseItems)
-				.build();
+		return RuleResponse.build(items);
 	}
 
 	@Override

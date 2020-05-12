@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main.rules.storage.instance;
+package greenbot.main.rules.docker;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,21 +31,23 @@ import greenbot.rule.model.RuleResponse;
  * @author Vinay Lodha
  */
 @SpringBootTest
-public class DeleteOrphanInstanceStorageRuleTest {
+public class MigrationToDockerRuleTest {
 
 	@Autowired
-	private DeleteOrphanInstanceStorageRule deleteOrphanInstanceStorageRule;
+	private MigrationToDockerRule rule;
 
 	@Test
 	@TerraformTest
-	public void sanity() throws Exception {
-		String path = "./src/test/resources/terraform/DeleteOrphanInstanceStorageRule";
+	public void sanity() {
+
+		String path = "./src/test/resources/terraform/MigrationToDockerRule";
 		try {
 			TerraformUtils.apply(path);
-			RuleResponse response = deleteOrphanInstanceStorageRule.doWork(RuleRequestDataProvider.simple());
+			RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
 			assertEquals(1, response.getItems().size());
 		} finally {
 			TerraformUtils.destroy(path);
 		}
+
 	}
 }

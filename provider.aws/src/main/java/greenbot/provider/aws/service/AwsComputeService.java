@@ -94,12 +94,21 @@ public class AwsComputeService implements ComputeService {
 		return retval;
 	}
 
-	@Override
-	public List<PossibleUpgradeInfo> checkUpgradePossibility(Compute compute) {
+	private List<PossibleUpgradeInfo> checkUpgradePossibility(Compute compute) {
 		Optional<PossibleUpgradeInfo> a = isFamilyCanBeUpgraded(compute);
 		Optional<PossibleUpgradeInfo> b = armRecommendation(compute);
 		Optional<PossibleUpgradeInfo> c = infChips(compute);
+		addServiceAndResourceId(a, compute.getId());
+		addServiceAndResourceId(b, compute.getId());
+		addServiceAndResourceId(c, compute.getId());
 		return OptionalUtils.<PossibleUpgradeInfo>buildList(Arrays.asList(a, b, c));
+	}
+
+	private void addServiceAndResourceId(Optional<PossibleUpgradeInfo> a, String resourceId) {
+		a.ifPresent(b -> {
+			b.setService("EC2");
+			b.setResourceId(resourceId);
+		});
 	}
 
 	private Optional<PossibleUpgradeInfo> infChips(Compute compute) {
@@ -151,6 +160,8 @@ public class AwsComputeService implements ComputeService {
 
 	private Compute convert(Instance instance, Region region) {
 		Compute compute = conversionService.convert(instance, Compute.class);
+		if (compute == null)
+			return null;
 		compute.setRegion(region.toString());
 		return compute;
 	}
