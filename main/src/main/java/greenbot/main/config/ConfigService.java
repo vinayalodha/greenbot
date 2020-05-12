@@ -40,6 +40,7 @@ public class ConfigService implements InitializingBean {
 	public static final String UNDER_UTILIZED_CPU_PERCENTAGE = "under_utilized_cpu_percentage";
 
 	public static final String CLOUDWATCH_CONFIG_DURATION = "cloudwatch_config_duration";
+	public static final String RULES_TO_IGNORE = "rules_to_ignore";
 
 	@Value("${config.threshold.max_ami_count}")
 	private int amiThreshold;
@@ -93,11 +94,19 @@ public class ConfigService implements InitializingBean {
 						"Duration for which cloudwatch data to be analyzed(in mins), should be multiple of 5 with min value of 10")
 				.build();
 
+		ConfigParam rulesToIgnore = ConfigParam.builder()
+				.key(RULES_TO_IGNORE)
+				.value("")
+				.description(
+						"Comma seprated rule ids to ignore for example too_many_instance_images_rule,delete_orphan_instance_storage_rule")
+				.build();
+
 		emptyConfigParams = Arrays.asList(excludedTag,
 				includedTag,
 				tooManyAmiTag,
 				underUtilizaedCpuPercentage,
-				cloudwatchTimeframeDurationConfig);
+				cloudwatchTimeframeDurationConfig,
+				rulesToIgnore);
 	}
 
 }

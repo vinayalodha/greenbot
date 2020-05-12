@@ -15,6 +15,7 @@
  */
 package greenbot.main.model.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import greenbot.rule.model.ConfigParam;
@@ -33,6 +34,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AnalysisRequest {
 
-	private List<ConfigParam> configParams;
+	@Builder.Default
+	private List<ConfigParam> configParams = new ArrayList<ConfigParam>();
 
 }
