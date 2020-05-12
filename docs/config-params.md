@@ -37,5 +37,5 @@ Config parameters are represent by JSON on home page when you launch [localhost:
 ]
 ```
 
-These config parameters are used to tweak behavior of rules.
+These config parameters are used to tweak the behavior of rules.
 
