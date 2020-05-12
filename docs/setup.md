@@ -2,13 +2,12 @@
 
 * Make sure you have JDK 8 installed \(AWS SDK is incompatible with JDK 9 and above\)
   * Oracle JDK 8 download [link](https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html)
-  * AWS corretto JDK 8 download [link](https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/downloads-list.html)
-* Configure AWS cli using `aws configure`
-  * [AWS cli guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
-* Download ****jar from [GreenBot release](https://github.com/vinay-lodha/greenbot/releases)
-* Open terminal and execute `java -jar main-<version>.jar`, application should now be up on [`http://localhost:5000`](http://localhost:5000)\`\`
+  * AWS corretto JDK 8 download [link](https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/downloads-list.html), installation [guide](https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/windows-7-install.html)
+* Install and configure[ AWS CLI ](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)using `aws configure`
+* Download jar from [GreenBot release](https://github.com/vinay-lodha/greenbot/releases)
+* Open terminal and execute `java -jar main-<version>.jar`, application should now be up on [`http://localhost:5000`](http://localhost:5000)
 
-### Permissions
+## Permissions
 
 Below are the aggregated permissions IAM user need for execution all rules.
 
@@ -19,9 +18,7 @@ Below are the aggregated permissions IAM user need for execution all rules.
 * [cloudwatch:GetMetricStatistics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html)
 * [rds:DescribeDBInstances](https://docs.aws.amazon.com/cli/latest/reference/rds/describe-db-instances.html)
 
-### Screenshot
+## Screenshot
 
-![](.gitbook/assets/screenshot_1.png)
-
-
+![](.gitbook/assets/screenshot_1%20%281%29.png)
 

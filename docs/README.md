@@ -7,7 +7,7 @@ Dead simple, opinionated, Awesome tool that analyzes AWS infrastructure and find
 * [Issue Tracker](https://github.com/vinay-lodha/greenbot/issues) 
 * [Releases](https://github.com/vinay-lodha/greenbot/releases)
 
-It is implemented as set of rules, with each rule looking for specific problem.
+It is implemented as set of rules, with each rule looking for specific problem
 
 #### License
 
