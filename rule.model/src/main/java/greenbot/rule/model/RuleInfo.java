@@ -15,6 +15,7 @@
  */
 package greenbot.rule.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Builder;
@@ -29,5 +30,6 @@ import lombok.Value;
 public class RuleInfo {
 	private final String id;
 	private final String description;
-	private final List<String> permissions;
+	@Builder.Default
+	private final List<String> permissions = new ArrayList<String>();
 }
