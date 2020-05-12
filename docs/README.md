@@ -2,7 +2,7 @@
 
 Dead simple, opinionated, Awesome tool that analyzes AWS infrastructure and finds ways to reduce cost
 
-* [Getting Started ](https://app.gitbook.com/@vinay-lodha/s/greenbot/setup)
+* [Getting Started ](https://vinay-lodha.gitbook.io/greenbot/setup)
 * [Github Repository](https://github.com/vinay-lodha/greenbot)
 * [Issue Tracker](https://github.com/vinay-lodha/greenbot/issues) 
 * [Releases](https://github.com/vinay-lodha/greenbot/releases)
