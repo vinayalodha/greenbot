@@ -66,6 +66,10 @@ public class RuleLifecycleManager {
 		RuleResponse response = rules.stream()
 				.map(rule -> {
 					String ruleId = rule.ruleInfo().getId();
+					if (request.getRulesToIgnore().contains(ruleId)) {
+						log.info("skipping rule:" + ruleId);
+						return null;
+					}
 					try {
 						log.info(String.format("Execution of rule:%s started", ruleId));
 						RuleResponse retval = rule.doWork(request);

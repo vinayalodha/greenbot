@@ -15,6 +15,8 @@
  */
 package greenbot.rule.model;
 
+import java.util.List;
+
 import greenbot.rule.model.cloud.Tag;
 import lombok.Builder;
 import lombok.Data;
@@ -42,5 +44,7 @@ public class RuleRequest {
 
 	@NonNull
 	private Integer cloudwatchTimeframeDuration;
+
+	private List<String> rulesToIgnore;
 
 }

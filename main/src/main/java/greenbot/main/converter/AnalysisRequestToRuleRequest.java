@@ -15,8 +15,12 @@
  */
 package greenbot.main.converter;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
@@ -56,12 +60,15 @@ public class AnalysisRequestToRuleRequest implements Converter<AnalysisRequest, 
 				ConfigService.UNDER_UTILIZED_CPU_PERCENTAGE);
 		int cloudwatchTimeFrameDuration = getIntParam(configParams, ConfigService.CLOUDWATCH_CONFIG_DURATION);
 
+		str = getParamValue(configParams, ConfigService.RULES_TO_IGNORE);
+		List<String> rules = Arrays.stream(StringUtils.split(str, ",")).collect(toList());
 		return RuleRequest.builder()
 				.includedTag(includedTag)
 				.excludedTag(excludedTag)
 				.amiThreshold(amiThreshold)
 				.underUtilizaedCpuPercentageThreshold(underUtilizedCpuPercentageThreshold)
 				.cloudwatchTimeframeDuration(cloudwatchTimeFrameDuration)
+				.rulesToIgnore(rules)
 				.build();
 	}
 
