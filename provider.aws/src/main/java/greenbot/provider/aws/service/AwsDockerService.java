@@ -56,7 +56,7 @@ public class AwsDockerService implements DockerService {
 			String appName = compute.getTags().get(APP_NAME_TAG).getValue();
 			PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.builder()
 					.confidence(AnalysisConfidence.MEDIUM)
-					.reason(String.format("Consider migrating beanstalk application to Amazon ECS/Fargate",
+					.reason(String.format("Consider migrating beanstalk application to Amazon ECS",
 							appName))
 					.resourceId(appName)
 					.service("Elastic Beanstalk")
