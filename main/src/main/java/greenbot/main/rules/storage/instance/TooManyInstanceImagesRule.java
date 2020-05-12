@@ -47,6 +47,7 @@ public class TooManyInstanceImagesRule extends AbstractGreenbotRule {
 
 		RuleResponseItem item = RuleResponseItem.builder()
 				.confidence(AnalysisConfidence.MEDIUM)
+				.service("AMI")
 				.message("AMI count exceeds " + ruleRequest.getAmiThreshold()
 						+ " (refer too_many_ami_threshold config param)")
 				.ruleId(buildRuleId())
@@ -61,7 +62,7 @@ public class TooManyInstanceImagesRule extends AbstractGreenbotRule {
 	public RuleInfo ruleInfo() {
 		return RuleInfo.builder()
 				.id(buildRuleId())
-				.description("Too may AMI exists, Is cleanup policy exits?")
+				.description("Too may AMI, do cleanup policy exits?")
 				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeImages"))
 				.build();
 	}

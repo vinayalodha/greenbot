@@ -27,12 +27,9 @@ import lombok.Data;
 public class RuleResponseItem {
 
 	private String resourceId;
-
 	private String ruleId;
-
 	private AnalysisConfidence confidence;
-
 	private String message;
-
 	private String approxCostSaving;
+	private String service;
 }

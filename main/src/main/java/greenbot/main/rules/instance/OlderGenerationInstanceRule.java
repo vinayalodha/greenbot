@@ -63,6 +63,7 @@ public class OlderGenerationInstanceRule extends greenbot.main.rules.AbstractGre
 							.map(info -> {
 								return RuleResponseItem.builder()
 										.resourceId(entry.getKey().getId())
+										.service("EC2")
 										.confidence(info.getConfidence())
 										.message(info.getReason())
 										.ruleId(buildRuleId())
@@ -83,7 +84,7 @@ public class OlderGenerationInstanceRule extends greenbot.main.rules.AbstractGre
 	public RuleInfo ruleInfo() {
 		return RuleInfo.builder()
 				.id(buildRuleId())
-				.description("Are older generation of EC2 instance family being used?")
+				.description("Check if Compute instances can be optimized")
 				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
 				.build();
 	}

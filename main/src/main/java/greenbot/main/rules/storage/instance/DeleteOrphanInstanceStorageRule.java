@@ -47,6 +47,7 @@ public class DeleteOrphanInstanceStorageRule extends AbstractGreenbotRule {
 				.map(storage -> {
 					return RuleResponseItem.builder()
 							.resourceId(storage.getId())
+							.service("EBS")
 							.confidence(AnalysisConfidence.MEDIUM)
 							.message("EBS storage is not attached to EC2, are they used?")
 							.ruleId(buildRuleId())
@@ -62,7 +63,7 @@ public class DeleteOrphanInstanceStorageRule extends AbstractGreenbotRule {
 	public RuleInfo ruleInfo() {
 		return RuleInfo.builder()
 				.id(buildRuleId())
-				.description("Is orphan EBS drives present?")
+				.description("Check for orphan EBS drives")
 				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeVolumes"))
 				.build();
 	}
