@@ -46,7 +46,6 @@ public class AwsInstanceStorageService implements InstanceStorageService {
 	private final ConversionService conversionService;
 
 	@Override
-	@Cacheable("AwsInstanceStorageService")
 	public List<InstanceStorage> orphans(Tag includedTag, Tag excludedTag) {
 
 		return regionService.regions()

@@ -21,7 +21,7 @@ export class AboutComponent extends Component<{}> {
         return (
             <div className="message">
                 <div className="message-body">
-                    Greenbot analyze AWS infrastructure and find ways to reduce costs. 
+                GreenBot is an opinionated tool that analyzes AWS infrastructure and finds ways to reduce costs
                 </div>
             </div>
         );

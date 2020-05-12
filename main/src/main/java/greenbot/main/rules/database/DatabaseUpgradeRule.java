@@ -57,6 +57,7 @@ public class DatabaseUpgradeRule extends AbstractGreenbotRule {
 							.map(info -> {
 								return RuleResponseItem.builder()
 										.resourceId(entry.getKey().getId())
+										.service("RDS")
 										.confidence(info.getConfidence())
 										.message(info.getReason())
 										.ruleId(buildRuleId())
