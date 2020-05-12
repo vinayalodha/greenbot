@@ -15,6 +15,7 @@
  */
 package greenbot.rule.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import greenbot.rule.model.cloud.Tag;
@@ -45,6 +46,7 @@ public class RuleRequest {
 	@NonNull
 	private Integer cloudwatchTimeframeDuration;
 
-	private List<String> rulesToIgnore;
+	@Builder.Default
+	private List<String> rulesToIgnore = new ArrayList<String>();
 
 }
