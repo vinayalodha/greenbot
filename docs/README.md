@@ -1,6 +1,6 @@
 # Introduction
 
-Dead simple, opinionated, Awesome tool that analyzes AWS infrastructure and finds ways to reduce cost
+Awesome, dead simple, opinionated tool that analyzes AWS infrastructure and finds ways to reduce cost
 
 * [Getting Started ](https://vinay-lodha.gitbook.io/greenbot/setup)
 * [Github Repository](https://github.com/vinay-lodha/greenbot)
