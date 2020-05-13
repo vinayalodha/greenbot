@@ -9,8 +9,10 @@ Awesome, dead simple, opinionated tool that analyzes AWS infrastructure and find
 
 It is implemented as set of rules, with each rule looking for specific problem
 
+#### 
+
 #### License
 
-Copyright 2020 [Vinay Lodha](http://github.com/vinay-lodha/) Released under the [Apache License 2.0](https://github.com/vinay-lodha/greenbot/blob/master/LICENSE)  
+Released under the [Apache License 2.0](https://github.com/vinay-lodha/greenbot/blob/master/LICENSE)  
 
 
