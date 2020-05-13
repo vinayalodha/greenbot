@@ -11,9 +11,9 @@ To help organizations reduce carbon footprint.
 
 ## **Is it safe to use GreenBot**
 
-* It will **never** modify any AWS resource in your account
+* GreenBot will **never** modify any AWS resource in your account
 * Permission for all rules are listed explicitly 
-* It's open-source!
+* Open-source!
 
 
 
