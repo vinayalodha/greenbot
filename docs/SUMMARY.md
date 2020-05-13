@@ -3,6 +3,7 @@
 * [Introduction](README.md)
 * [Getting Started](setup.md)
 * [Config Params](config-params.md)
+* [FAQ](faq.md)
 
 ## Rules​
 
