@@ -11,8 +11,6 @@ To help organizations reduce carbon footprint.
 
 ## **Is it safe to use GreenBot**
 
-It's safe because
-
 * It will **never** modify any AWS resource in your account
 * Permission for all rules are listed explicitly 
 * It's open-source!
