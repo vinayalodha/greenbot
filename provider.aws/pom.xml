@@ -29,7 +29,7 @@ limitations under the License.
 	</parent>
 	
 	<properties>
-		<aws.version>2.13.15</aws.version>
+		<aws.version>2.13.16</aws.version>
 	</properties>
 
 	<dependencies>
