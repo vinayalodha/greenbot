@@ -52,10 +52,10 @@ limitations under the License.
 
 	<modules>
 		<module>ui</module>
-		<module>rule.model</module>
+		<module>rule-model</module>
 		<module>main</module>
 		<module>provider</module>
-		<module>provider.aws</module>
+		<module>provider-aws</module>
 	</modules>
 
 	<distributionManagement>
