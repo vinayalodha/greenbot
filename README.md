@@ -4,7 +4,7 @@
 
 AWS infrastructure can grow pretty fast and sometimes it leads to underutilized resources and bad design choices. This tool aims to tackle those.
 
-GreenBot tries to solve that problem. Its **dead simple, opinionated tool** that analyzes AWS infrastructure and finds ways to reduce cost
+Its **dead simple, opinionated tool** that analyzes AWS infrastructure and finds ways to reduce cost
 
 
 * [Documentation](https://vinay-lodha.gitbook.io/greenbot/)
