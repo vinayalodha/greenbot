@@ -71,7 +71,7 @@ public class RuleLifecycleManager {
                         return retval;
                     } catch (Exception e) {
                         log.error(String.format(
-                                "Exception occoured while executing rule:%s Please raise bug report if issue persist",
+                                "Exception occurred while executing rule:%s Please raise bug report if issue persist",
                                 ruleId), e);
                         errorMessages.add("rule:" + ruleId + " - " + exceptionToString(e));
                     }
