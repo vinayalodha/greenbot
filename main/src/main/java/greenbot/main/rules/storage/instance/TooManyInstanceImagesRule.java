@@ -15,18 +15,13 @@
  */
 package greenbot.main.rules.storage.instance;
 
-import java.util.Arrays;
-
-import org.springframework.stereotype.Component;
-
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.provider.service.InstanceImageService;
-import greenbot.rule.model.AnalysisConfidence;
-import greenbot.rule.model.RuleInfo;
-import greenbot.rule.model.RuleRequest;
-import greenbot.rule.model.RuleResponse;
-import greenbot.rule.model.RuleResponseItem;
+import greenbot.rule.model.*;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 /**
  * @author Vinay Lodha
@@ -35,36 +30,36 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class TooManyInstanceImagesRule extends AbstractGreenbotRule {
 
-	private final InstanceImageService instanceImageService;
+    private final InstanceImageService instanceImageService;
 
-	@Override
-	public RuleResponse doWork(RuleRequest ruleRequest) {
-		boolean result = instanceImageService.isGreaterThanThreshold(ruleRequest.getAmiThreshold(),
-				ruleRequest.getIncludedTag(),
-				ruleRequest.getExcludedTag());
-		if (!result)
-			return null;
+    @Override
+    public RuleResponse doWork(RuleRequest ruleRequest) {
+        boolean result = instanceImageService.isGreaterThanThreshold(ruleRequest.getAmiThreshold(),
+                ruleRequest.getIncludedTag(),
+                ruleRequest.getExcludedTag());
+        if (!result)
+            return null;
 
-		RuleResponseItem item = RuleResponseItem.builder()
-				.confidence(AnalysisConfidence.MEDIUM)
-				.resourceId("NA")
-				.service("AMI")
-				.message("AMI count exceeds " + ruleRequest.getAmiThreshold()
-						+ " (refer too_many_ami_threshold config param)")
-				.ruleId(buildRuleId())
-				.build();
+        RuleResponseItem item = RuleResponseItem.builder()
+                .confidence(AnalysisConfidence.MEDIUM)
+                .resourceId("NA")
+                .service("AMI")
+                .message("AMI count exceeds " + ruleRequest.getAmiThreshold()
+                        + " (refer too_many_ami_threshold config param)")
+                .ruleId(buildRuleId())
+                .build();
 
-		return RuleResponse.builder()
-				.item(item)
-				.build();
-	}
+        return RuleResponse.builder()
+                .item(item)
+                .build();
+    }
 
-	@Override
-	public RuleInfo ruleInfo() {
-		return RuleInfo.builder()
-				.id(buildRuleId())
-				.description("Too may AMI, do cleanup policy exits?")
-				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeImages"))
-				.build();
-	}
+    @Override
+    public RuleInfo ruleInfo() {
+        return RuleInfo.builder()
+                .id(buildRuleId())
+                .description("Too may AMI, do cleanup policy exits?")
+                .permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeImages"))
+                .build();
+    }
 }

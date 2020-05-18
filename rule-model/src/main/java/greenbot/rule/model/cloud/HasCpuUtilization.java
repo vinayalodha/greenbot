@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
+ * Copyright 2019-2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,13 @@
  */
 package greenbot.rule.model.cloud;
 
-import java.util.Collections;
 import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 
 /**
  * @author Vinay Lodha
  */
-@Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@SuperBuilder
-public class Database extends Resource implements HasCpuUtilization {
-	private String region;
-	private String engine;
-	private String instanceClass;
+public interface HasCpuUtilization {
+	String NAMESPACE = "namespace";
 
-	@Override
-	public Map<String, String> metadata() {
-		return Collections.singletonMap(HasCpuUtilization.NAMESPACE, "AWS/RDS");
-	}
+	public Map<String, String> metadata();
 }

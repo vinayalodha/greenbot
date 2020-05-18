@@ -30,10 +30,10 @@ import lombok.Data;
 @Builder
 public class InstanceFamilyPredicate implements Predicate<Compute> {
 
-	private final Collection<String> allowededFamilies;
+	private final Collection<String> allowedFamilies;
 
 	public boolean test(Compute compute) {
-		return allowededFamilies.contains(compute.getInstanceType().getFamily());
+		return allowedFamilies.contains(compute.getInstanceType().getFamily());
 	}
 
 }

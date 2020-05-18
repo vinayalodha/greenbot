@@ -31,7 +31,7 @@ public class RuleRequestDataProvider {
 		return RuleRequest.builder()
 				.includedTag(Tag.builder().key("owner").value("greenbot").build())
 				.amiThreshold(0)
-				.cloudwatchTimeframeDuration(5)
+				.cloudwatchTimeframeDuration(120)
 				.provider(Provider.AWS)
 				.underUtilizaedCpuPercentageThreshold(20)
 				.build();

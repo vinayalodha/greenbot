@@ -15,23 +15,22 @@
  */
 package greenbot.main.converter;
 
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
-
 import greenbot.provider.predicates.TagPredicate;
 import greenbot.rule.model.RuleRequest;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Vinay Lodha
  */
 @Component
 public class RuleRequestToTagPredicate implements Converter<RuleRequest, TagPredicate> {
-	@Override
-	public TagPredicate convert(RuleRequest source) {
-		return TagPredicate.builder()
-				.includedTag(source.getIncludedTag())
-				.excludedTag(source.getExcludedTag())
-				.build();
-	}
+    @Override
+    public TagPredicate convert(RuleRequest source) {
+        return TagPredicate.builder()
+                .includedTag(source.getIncludedTag())
+                .excludedTag(source.getExcludedTag())
+                .build();
+    }
 
 }

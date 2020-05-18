@@ -31,23 +31,23 @@ import lombok.SneakyThrows;
  * @author Vinay Lodha
  */
 @SpringBootTest
-public class UnderutilizedInstanceCpuRuleTest {
+public class UnderUtilizedInstanceCpuRuleTest {
 
 	@Autowired
-	private UnderutilizedInstanceCpuRule rule;
+	private UnderUtilizedInstanceCpuRule rule;
 
 	@Test
 	@TerraformTest
 	@SneakyThrows
 	public void sanity() {
-		String path = "./src/test/resources/terraform/UnderutilizedInstanceCpuRule";
+		String path = "./src/test/resources/terraform/UnderUtilizedInstanceCpuRule";
 		try {
 			TerraformUtils.apply(path);
-			Thread.sleep(10 * 60 * 1000);
+			Thread.sleep(11 * 60 * 1000);
 			RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
 			assertEquals(2, response.getItems().size());
 		} finally {
-			TerraformUtils.destroy(path);
+				TerraformUtils.destroy(path);
 		}
 	}
 }

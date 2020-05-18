@@ -17,6 +17,7 @@ package greenbot.rule.model.cloud;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 /**
  * 
@@ -25,6 +26,8 @@ import lombok.Data;
 @Data
 @Builder
 public class Tag {
+	@NonNull
 	private String key;
+	@NonNull
 	private String value;
 }

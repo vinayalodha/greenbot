@@ -15,17 +15,6 @@
  */
 package greenbot.main.rules.instance;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Component;
-
 import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.RuleInfo;
@@ -36,42 +25,49 @@ import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import greenbot.rule.utils.ConversionUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Component;
+
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * https://aws.amazon.com/ec2/previous-generation/
- * 
+ *
  * @author Vinay Lodha
  */
 @Component
 @AllArgsConstructor
 public class OlderGenerationInstanceRule extends greenbot.main.rules.AbstractGreenbotRule {
 
-	private final ComputeService computeService;
-	private final ConversionService conversionService;
+    private final ComputeService computeService;
+    private final ConversionService conversionService;
 
-	@Override
-	public RuleResponse doWork(RuleRequest ruleRequest) {
-		TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
+    @Override
+    public RuleResponse doWork(RuleRequest ruleRequest) {
+        TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
 
-		List<Compute> computes = computeService.list(Collections.singletonList(predicate::test));
-		Map<Compute, List<PossibleUpgradeInfo>> possibleUpgradeInfos = computeService.checkUpgradePossibility(computes);
+        List<Compute> computes = computeService.list(Collections.singletonList(predicate::test));
+        Map<Compute, List<PossibleUpgradeInfo>> possibleUpgradeInfos = computeService.checkUpgradePossibility(computes);
 
-		List<RuleResponseItem> items = possibleUpgradeInfos.values()
-				.stream()
-				.flatMap(Collection::stream)
-				.map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
-				.collect(toList());
+        List<RuleResponseItem> items = possibleUpgradeInfos.values()
+                .stream()
+                .filter(Objects::nonNull)
+                .flatMap(Collection::stream)
+                .map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
+                .collect(toList());
 
-		return RuleResponse.build(items);
-	}
+        return RuleResponse.build(items);
+    }
 
-	@Override
-	public RuleInfo ruleInfo() {
-		return RuleInfo.builder()
-				.id(buildRuleId())
-				.description("Check if Compute instances can be optimized")
-				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
-				.build();
-	}
+    @Override
+    public RuleInfo ruleInfo() {
+        return RuleInfo.builder()
+                .id(buildRuleId())
+                .description("Check if Compute instances can be optimized")
+                .permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
+                .build();
+    }
 
 }

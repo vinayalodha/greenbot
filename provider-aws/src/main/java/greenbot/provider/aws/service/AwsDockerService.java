@@ -45,18 +45,18 @@ public class AwsDockerService implements DockerService {
 		computes.forEach(compute -> {
 			Tag tag = compute.getTags().get(APP_NAME_TAG);
 			if (tag != null) {
-				beanstalkComputeMap.putIfAbsent(tag.getValue(), new ArrayList<Compute>());
+				beanstalkComputeMap.putIfAbsent(tag.getValue(), new ArrayList<>());
 				beanstalkComputeMap.get(tag.getValue()).add(compute);
 			}
 		});
 
-		Map<Compute, List<PossibleUpgradeInfo>> retVal = new HashMap<Compute, List<PossibleUpgradeInfo>>();
+		Map<Compute, List<PossibleUpgradeInfo>> retVal = new HashMap<>();
 		for (String key : beanstalkComputeMap.keySet()) {
 			Compute compute = beanstalkComputeMap.get(key).get(0);
 			String appName = compute.getTags().get(APP_NAME_TAG).getValue();
 			PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.builder()
 					.confidence(AnalysisConfidence.MEDIUM)
-					.reason(String.format("Consider migrating beanstalk application to Amazon ECS",
+					.reason(String.format("Consider migrating beanstalk application %s to Amazon ECS",
 							appName))
 					.resourceId(appName)
 					.service("Elastic Beanstalk")
