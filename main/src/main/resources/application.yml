@@ -14,29 +14,31 @@
 # limitations under the License.
 #
 server:
-   port: 5000
+  port: 5000
 spring:
-   main:
-      banner-mode: off
-   cache:
-      caffeine:
-         spec: expireAfterWrite=180s
+  main:
+    banner-mode: off
+  cache:
+    caffeine:
+      spec: expireAfterWrite=180s
 config:
-   threshold:
-      max_ami_count: 500
-      under_utilized_cpu_percentage: 30
-   
-   cloudwatch:
-      # in minutes, should be multiple of 5 and value >=10
-      # 1 day = 1440 minutes
-      # 1 week = 10080 minutes
-      # 2 week = 20160 minutes
-      timeframe: 10080
-      
-      
-      
+  threshold:
+    max_ami_count: 500
+    under_utilized_cpu_percentage: 30
+    max_swap_space_percentage: 5
+
+  cloudwatch:
+    # in minutes, should be multiple of 5 and value >=10
+    # 1 day = 1440 minutes
+    # 1 week = 10080 minutes
+    # 2 week = 20160 minutes
+    timeframe: 10080
+
+
 rules:
-   UnderutilizedInstanceCpuRule:
-      instancetypes_to_ignore: t2.nano,t3.nano,t3a.nano,t2.micro,t3.micro,t3a.micro,t2.small,t3.small,t3a.small 
-       
+  UnderutilizedInstanceCpuRule:
+    # Milk
+    instance_types_to_ignore: t2.nano,t3.nano,t3a.nano,t2.micro,t3.micro,t3a.micro,t2.small,t3.small,t3a.small
+
+
  

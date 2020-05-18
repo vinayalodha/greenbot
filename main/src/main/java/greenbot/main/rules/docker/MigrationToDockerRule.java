@@ -15,16 +15,6 @@
  */
 package greenbot.main.rules.docker;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Service;
-
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.ComputeService;
@@ -37,6 +27,11 @@ import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import greenbot.rule.utils.ConversionUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Vinay Lodha
@@ -45,31 +40,31 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class MigrationToDockerRule extends AbstractGreenbotRule {
 
-	private final DockerService dockerService;
-	private final ComputeService computeService;
-	private final ConversionService conversionService;
+    private final DockerService dockerService;
+    private final ComputeService computeService;
+    private final ConversionService conversionService;
 
-	@Override
-	public RuleResponse doWork(RuleRequest ruleRequest) {
-		TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
-		List<Compute> computes = computeService.list(Collections.singletonList(predicate::test));
-		Map<Compute, List<PossibleUpgradeInfo>> upgradeMap = dockerService.checkUpgradePossibility(computes);
+    @Override
+    public RuleResponse doWork(RuleRequest ruleRequest) {
+        TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
+        List<Compute> computes = computeService.list(Collections.singletonList(predicate::test));
+        Map<Compute, List<PossibleUpgradeInfo>> upgradeMap = dockerService.checkUpgradePossibility(computes);
 
-		List<RuleResponseItem> items = upgradeMap.values().stream()
-				.flatMap(Collection::stream)
-				.map(obj -> ConversionUtils.toRuleResponseItem(obj, buildRuleId()))
-				.collect(Collectors.toList());
+        List<RuleResponseItem> items = upgradeMap.values().stream()
+                .flatMap(Collection::stream)
+                .map(obj -> ConversionUtils.toRuleResponseItem(obj, buildRuleId()))
+                .collect(Collectors.toList());
 
-		return RuleResponse.build(items);
-	}
+        return RuleResponse.build(items);
+    }
 
-	@Override
-	public RuleInfo ruleInfo() {
-		return RuleInfo.builder()
-				.id(buildRuleId())
-				.description("Check for workloads which can be migrated to Docker")
-				.permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
-				.build();
-	}
+    @Override
+    public RuleInfo ruleInfo() {
+        return RuleInfo.builder()
+                .id(buildRuleId())
+                .description("Check for workloads which can be migrated to Docker")
+                .permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
+                .build();
+    }
 
 }

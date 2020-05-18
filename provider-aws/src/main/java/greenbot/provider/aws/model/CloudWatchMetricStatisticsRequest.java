@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.provider.service;
+package greenbot.provider.aws.model;
 
-import java.util.Collection;
-import java.util.Map;
-
-import greenbot.rule.model.cloud.Compute;
+import lombok.Builder;
+import lombok.Data;
 
 /**
  * @author Vinay Lodha
  */
-public interface UtilizationService {
-	/**
-	 * 
-	 * @param timeframe in minutes
-	 * @param computes
-	 * @return
-	 */
-	Map<Compute, Double> averageCpuUtilization(int timeframe, Collection<Compute> computes);
-
+@Data
+@Builder
+public class CloudWatchMetricStatisticsRequest {
+	private String region;
+	private String namespace;
+	private String metricName;
+	private int duration;
+	private String dimensionKey;
+	private String dimensionValue;
 }

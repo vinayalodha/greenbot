@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.InstanceImageService;
 import greenbot.rule.model.cloud.Tag;
 import lombok.AllArgsConstructor;
@@ -43,6 +42,7 @@ public class AwsInstanceImageService implements InstanceImageService {
 
 	private final RegionService regionService;
 
+	@SuppressWarnings("CodeBlock2Expr")
 	@Override
 	@Cacheable("AwsInstanceImageService")
 	public boolean isGreaterThanThreshold(int threshold, Tag includedTag, Tag excludedTag) {
@@ -55,8 +55,8 @@ public class AwsInstanceImageService implements InstanceImageService {
 				.filter(image -> {
 					if (excludedTag == null)
 						return true;
-					return !image.tags().stream()
-							.anyMatch(tag -> {
+					return image.tags().stream()
+							.noneMatch(tag -> {
 								return tag.key().contentEquals(excludedTag.getKey())
 										&& tag.value().contentEquals(excludedTag.getValue());
 							});

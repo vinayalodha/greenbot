@@ -27,7 +27,10 @@ import greenbot.rule.model.cloud.PossibleUpgradeInfo;
  * @author Vinay Lodha
  */
 public interface ComputeService {
+	List<PossibleUpgradeInfo> findUnderUtilized(List<Compute> computes, int duration, int threshold);
+
 	List<Compute> list(List<Predicate<Compute>> predicates);
 
 	Map<Compute, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Compute> computes);
+
 }

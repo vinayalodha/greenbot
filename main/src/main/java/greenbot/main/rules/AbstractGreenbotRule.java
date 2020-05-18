@@ -15,21 +15,18 @@
  */
 package greenbot.main.rules;
 
-import static org.apache.commons.lang3.StringUtils.join;
-import static org.apache.commons.lang3.StringUtils.lowerCase;
-import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase;
-
 import greenbot.rule.model.GreenbotRule;
 
+import static org.apache.commons.lang3.StringUtils.*;
+
 /**
- * 
  * @author Vinay Lodha
  */
 public abstract class AbstractGreenbotRule implements GreenbotRule {
 
-	protected String buildRuleId() {
-		String[] tokens = splitByCharacterTypeCamelCase(getClass().getSimpleName());
-		return lowerCase(join(tokens, '_'));
-	}
+    protected String buildRuleId() {
+        String[] tokens = splitByCharacterTypeCamelCase(getClass().getSimpleName());
+        return lowerCase(join(tokens, '_'));
+    }
 
 }

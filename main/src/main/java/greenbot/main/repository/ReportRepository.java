@@ -15,15 +15,13 @@
  */
 package greenbot.main.repository;
 
-import java.util.concurrent.TimeUnit;
-
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import greenbot.rule.model.RuleResponse;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.stereotype.Repository;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
-
-import greenbot.rule.model.RuleResponse;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Vinay Lodha
@@ -31,18 +29,17 @@ import greenbot.rule.model.RuleResponse;
 @Repository
 public class ReportRepository {
 
-	private @NonNull
-	final Cache<Integer, RuleResponse> cache = Caffeine.newBuilder()
-			.expireAfterWrite(365, TimeUnit.DAYS)
-			.maximumSize(100)
-			.build();
+    private final Cache<Integer, RuleResponse> cache = Caffeine.newBuilder()
+            .expireAfterWrite(365, TimeUnit.DAYS)
+            .maximumSize(100)
+            .build();
 
-	public void save(RuleResponse ruleResponse) {
-		cache.put(ruleResponse.getId(), ruleResponse);
-	}
+    public void save(RuleResponse ruleResponse) {
+        cache.put(ruleResponse.getId(), ruleResponse);
+    }
 
-	public RuleResponse get(int id) {
-		return cache.getIfPresent(id);
-	}
+    public RuleResponse get(int id) {
+        return cache.getIfPresent(id);
+    }
 
 }

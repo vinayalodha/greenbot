@@ -15,27 +15,21 @@
  */
 package greenbot.main.rules.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.stereotype.Service;
-
 import greenbot.main.config.ConfigService;
 import greenbot.provider.aws.service.RegionService;
-import greenbot.rule.model.ConfigParam;
-import greenbot.rule.model.GreenbotRule;
-import greenbot.rule.model.RuleInfo;
-import greenbot.rule.model.RuleRequest;
-import greenbot.rule.model.RuleResponse;
+import greenbot.rule.model.*;
 import greenbot.rule.utils.RuleResponseReducer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.abbreviate;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseStackTrace;
 
 /**
  * @author Vinay Lodha
@@ -45,76 +39,76 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class RuleLifecycleManager {
 
-	private final List<GreenbotRule> rules;
-	private final RuleResponseReducer responseReducer;
-	private final ConfigService configParamUtils;
-	private final RegionService regionService;
+    private final List<GreenbotRule> rules;
+    private final RuleResponseReducer responseReducer;
+    private final ConfigService configParamUtils;
+    private final RegionService regionService;
 
-	public RuleResponse execute(RuleRequest request) {
-		List<String> errorMessages = new ArrayList<>();
+    public RuleResponse execute(RuleRequest request) {
+        List<String> errorMessages = new ArrayList<>();
 
-		String message = checkIfAWSCliConfigured();
-		if (message != null) {
-			return RuleResponse.builder()
-					.id(Math.abs(new Random().nextInt()))
-					.errorMessage(
-							"Unable to load AWS regions. most likely AWS CLI is not configured or network connectivity with AWS API is unavailable. Exception Stacktrace : "
-									+ message)
-					.build();
-		}
-		log.info("Rule execution started");
-		RuleResponse response = rules.stream()
-				.map(rule -> {
-					String ruleId = rule.ruleInfo().getId();
-					if (request.getRulesToIgnore().contains(ruleId)) {
-						log.info("skipping rule:" + ruleId);
-						return null;
-					}
-					try {
-						log.info(String.format("Execution of rule:%s started", ruleId));
-						RuleResponse retval = rule.doWork(request);
-						log.info(String.format("Execution of rule:%s done", ruleId));
-						return retval;
-					} catch (Exception e) {
-						log.error(String.format(
-								"Exception occoured while executing rule:%s Please raise bug report if issue persist",
-								ruleId), e);
-						errorMessages.add("rule:" + ruleId + " - " + exceptionToString(e));
-					}
-					return null;
-				})
-				.filter(Objects::nonNull)
-				.filter(ruleResponse -> CollectionUtils.isNotEmpty(ruleResponse.getItems()))
-				.reduce(responseReducer)
-				.orElse(RuleResponse.builder().build());
-		log.info("Rule execution done");
-		return response.toBuilder()
-				.errorMessages(errorMessages)
-				.id(Math.abs(new Random().nextInt()))
-				.build();
-	}
+        String message = checkIfAWSCliConfigured();
+        if (message != null) {
+            return RuleResponse.builder()
+                    .id(Math.abs(new Random().nextInt()))
+                    .errorMessage(
+                            "Unable to load AWS regions. most likely AWS CLI is not configured or network connectivity with AWS API is unavailable. Exception Stacktrace : "
+                                    + message)
+                    .build();
+        }
+        log.info("Rule execution started");
+        RuleResponse response = rules.stream()
+                .map(rule -> {
+                    String ruleId = rule.ruleInfo().getId();
+                    if (request.getRulesToIgnore().contains(ruleId)) {
+                        log.info("skipping rule:" + ruleId);
+                        return null;
+                    }
+                    try {
+                        log.info(String.format("Execution of rule:%s started", ruleId));
+                        RuleResponse retval = rule.doWork(request);
+                        log.info(String.format("Execution of rule:%s done", ruleId));
+                        return retval;
+                    } catch (Exception e) {
+                        log.error(String.format(
+                                "Exception occoured while executing rule:%s Please raise bug report if issue persist",
+                                ruleId), e);
+                        errorMessages.add("rule:" + ruleId + " - " + exceptionToString(e));
+                    }
+                    return null;
+                })
+                .filter(Objects::nonNull)
+                .filter(ruleResponse -> CollectionUtils.isNotEmpty(ruleResponse.getItems()))
+                .reduce(responseReducer)
+                .orElse(RuleResponse.builder().build());
+        log.info("Rule execution done");
+        return response.toBuilder()
+                .errorMessages(errorMessages)
+                .id(Math.abs(new Random().nextInt()))
+                .build();
+    }
 
-	private String checkIfAWSCliConfigured() {
-		try {
-			regionService.regions();
-			return null;
-		} catch (Exception e) {
-			log.error("", e);
-			return exceptionToString(e);
-		}
-	}
+    private String checkIfAWSCliConfigured() {
+        try {
+            regionService.regions();
+            return null;
+        } catch (Exception e) {
+            log.error("", e);
+            return exceptionToString(e);
+        }
+    }
 
-	private String exceptionToString(Exception e) {
-		return StringUtils
-				.abbreviate(ExceptionUtils.getRootCauseMessage(e) + ExceptionUtils.getRootCauseStackTrace(e), 400);
-	}
+    private String exceptionToString(Exception e) {
+        return abbreviate(
+                getRootCauseMessage(e) + Arrays.toString(getRootCauseStackTrace(e)), 400);
+    }
 
-	public List<ConfigParam> getConfigParams() {
-		return configParamUtils.getDefaultConfig();
-	}
+    public List<ConfigParam> getConfigParams() {
+        return configParamUtils.getDefaultConfig();
+    }
 
-	public List<RuleInfo> getRuleInfos() {
-		return rules.stream().map(GreenbotRule::ruleInfo).collect(Collectors.toList());
-	}
+    public List<RuleInfo> getRuleInfos() {
+        return rules.stream().map(GreenbotRule::ruleInfo).collect(Collectors.toList());
+    }
 
 }

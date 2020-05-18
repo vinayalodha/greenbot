@@ -15,21 +15,19 @@
  */
 package greenbot.main;
 
+import greenbot.rule.utils.RuleResponseReducer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import greenbot.rule.utils.RuleResponseReducer;
-
 /**
- * 
  * @author Vinay Lodha
  */
 @Configuration
 public class Beans {
 
-	@Bean
-	public RuleResponseReducer getRuleResponseReducer() {
-		return new RuleResponseReducer();
-	}
+    @Bean
+    public RuleResponseReducer getRuleResponseReducer() {
+        return new RuleResponseReducer();
+    }
 
 }

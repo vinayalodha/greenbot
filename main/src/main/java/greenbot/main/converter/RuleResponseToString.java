@@ -15,34 +15,33 @@
  */
 package greenbot.main.converter;
 
-import java.util.Optional;
-
+import greenbot.rule.model.RuleResponse;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import greenbot.rule.model.RuleResponse;
+import java.util.Optional;
 
 /**
  * Convert it to csv
- * 
+ *
  * @author Vinay Lodha
  */
 @Component
 public class RuleResponseToString implements Converter<RuleResponse, String> {
 
-	@Override
-	public String convert(RuleResponse ruleResponse) {
+    @Override
+    public String convert(RuleResponse ruleResponse) {
 
-		String header = "ResourceId;Service;Rule Id;Confidence;message\r\n";
-		Optional<String> result = ruleResponse.getItems().stream()
-				.map(i -> {
-					return String.format("%s;%s;%s;%s;%s", i.getResourceId(), i.getService(), i.getRuleId(),
-							i.getConfidence(),
-							i.getMessage());
-				})
-				.reduce((a, b) -> {
-					return a + "\r\n" + b;
-				});
-		return header + result.orElse("");
-	}
+        String header = "ResourceId;Service;Rule Id;Confidence;message\r\n";
+        Optional<String> result = ruleResponse.getItems().stream()
+                .map(i -> {
+                    return String.format("%s;%s;%s;%s;%s", i.getResourceId(), i.getService(), i.getRuleId(),
+                            i.getConfidence(),
+                            i.getMessage());
+                })
+                .reduce((a, b) -> {
+                    return a + "\r\n" + b;
+                });
+        return header + result.orElse("");
+    }
 }

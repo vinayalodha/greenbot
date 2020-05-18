@@ -20,45 +20,34 @@ import greenbot.provider.service.DatabaseService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
-import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Database;
-import greenbot.rule.model.cloud.PossibleUpgradeInfo;
-import greenbot.rule.utils.ConversionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-
-import static java.util.stream.Collectors.toList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Vinay Lodha
  */
 @Component
-public class DatabaseUpgradeRule extends AbstractGreenbotRule {
+@AllArgsConstructor
+public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule {
 
-    @Autowired
-    private DatabaseService databaseService;
+    private final DatabaseService databaseService;
 
     @Override
     public RuleResponse doWork(RuleRequest ruleRequest) {
         List<Database> databases = databaseService.list(Collections.emptyList());
-        Map<Database, List<PossibleUpgradeInfo>> upgrades = databaseService.checkUpgradePossibility(databases);
-
-        List<RuleResponseItem> items = upgrades.values()
-                .stream()
-                .flatMap(Collection::stream)
-                .map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
-                .collect(toList());
-
-        return RuleResponse.build(items);
+        return RuleResponse.build(null);
     }
 
     @Override
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
                 .id(buildRuleId())
-                .description("Check if RDS instances can be optimized")
+                .description("Check if RDS instances are under-utilized")
                 .permissions(Arrays.asList("ec2:DescribeRegions", "rds:DescribeDBInstances"))
                 .build();
     }

@@ -45,6 +45,8 @@ import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.rds.RdsClient;
 import software.amazon.awssdk.services.rds.model.DescribeDbInstancesRequest;
+import software.amazon.awssdk.services.rds.model.ListTagsForResourceRequest;
+import software.amazon.awssdk.services.rds.model.ListTagsForResourceResponse;
 import software.amazon.awssdk.services.rds.paginators.DescribeDBInstancesIterable;
 
 /**
@@ -60,7 +62,8 @@ public class AwsDatabaseService implements DatabaseService {
 	private static final Map<String, String> INSTANCE_UPGRADE_MAP = buildMap();
 
 	private static Map<String, String> buildMap() {
-		Map<String, String> retVal = new HashMap<String, String>();
+		Map<String, String> retVal = new HashMap<>();
+		// Milk
 		retVal.put("db.t2", "db.t3");
 		retVal.put("db.m3", "db.m5");
 		retVal.put("db.m4", "db.m5");
@@ -78,7 +81,7 @@ public class AwsDatabaseService implements DatabaseService {
 	private List<PossibleUpgradeInfo> checkUpgradePossibility(Database database) {
 		Optional<PossibleUpgradeInfo> a = migrationToAurora(database);
 		Optional<PossibleUpgradeInfo> b = olderGenFamily(database);
-		return OptionalUtils.<PossibleUpgradeInfo>buildList(Arrays.asList(a, b));
+		return OptionalUtils.buildList(Arrays.asList(a, b));
 	}
 
 	@Override
@@ -105,10 +108,13 @@ public class AwsDatabaseService implements DatabaseService {
 	public List<Database> list(Region region) {
 		RdsClient client = RdsClient.builder().region(region).build();
 		DescribeDbInstancesRequest request = DescribeDbInstancesRequest.builder().build();
-
+		ListTagsForResourceResponse listTagsForResourceResponse = client
+				.listTagsForResource(ListTagsForResourceRequest.builder().build());
+		// TODO attach tags
 		DescribeDBInstancesIterable responseIterable = client.describeDBInstancesPaginator(request);
 		return responseIterable.dbInstances()
 				.stream()
+				// TODO filter serveless
 				.filter(instance -> equalsAnyIgnoreCase(instance.dbInstanceStatus(), "available"))
 				.map(dbInstance -> conversionService.convert(dbInstance, Database.class))
 				.filter(Objects::nonNull)
