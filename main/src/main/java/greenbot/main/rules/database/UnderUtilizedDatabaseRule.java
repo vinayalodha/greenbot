@@ -40,7 +40,7 @@ public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule {
     @Override
     public RuleResponse doWork(RuleRequest ruleRequest) {
         List<Database> databases = databaseService.list(Collections.emptyList());
-        return RuleResponse.build(null);
+        return null;
     }
 
     @Override
