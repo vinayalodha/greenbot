@@ -108,9 +108,9 @@ public class AwsDatabaseService implements DatabaseService {
 	public List<Database> list(Region region) {
 		RdsClient client = RdsClient.builder().region(region).build();
 		DescribeDbInstancesRequest request = DescribeDbInstancesRequest.builder().build();
-		ListTagsForResourceResponse listTagsForResourceResponse = client
+/*		ListTagsForResourceResponse listTagsForResourceResponse = client
 				.listTagsForResource(ListTagsForResourceRequest.builder().build());
-		// TODO attach tags
+		*/// TODO attach tags
 		DescribeDBInstancesIterable responseIterable = client.describeDBInstancesPaginator(request);
 		return responseIterable.dbInstances()
 				.stream()
