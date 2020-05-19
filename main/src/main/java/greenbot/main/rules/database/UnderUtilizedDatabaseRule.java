@@ -16,31 +16,61 @@
 package greenbot.main.rules.database;
 
 import greenbot.main.rules.AbstractGreenbotRule;
+import greenbot.provider.predicates.RdsInstanceClassPredicate;
+import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.DatabaseService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
+import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Database;
-import lombok.AllArgsConstructor;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
+import greenbot.rule.utils.ConversionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Vinay Lodha
  */
 @Component
-@AllArgsConstructor
-public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule {
+public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule implements InitializingBean {
+    @Autowired
+    private DatabaseService databaseService;
+    @Autowired
+    private ConversionService conversionService;
 
-    private final DatabaseService databaseService;
+    @Value("${rules.UnderUtilizedDatabaseRule.instance_types_to_ignore}")
+    private String instanceTypesToIgnore;
+
+    private RdsInstanceClassPredicate rdsInstanceClassPredicate;
 
     @Override
     public RuleResponse doWork(RuleRequest ruleRequest) {
-        List<Database> databases = databaseService.list(Collections.emptyList());
-        return null;
+        TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
+
+        List<Database> databases = databaseService.list(Arrays.asList(predicate::test, rdsInstanceClassPredicate));
+        List<PossibleUpgradeInfo> underUtilized = databaseService.findUnderUtilized(databases,
+                ruleRequest.getCloudwatchTimeframeDuration(),
+                // TODO
+                10d,
+                // TODO aws cloudwatch get-metric-statistics --namespace "AWS/RDS" --metric-name SwapUsage --start-time 2020-05-18T05:24:12.555Z --end-time 2020-05-19T09:25:12.555Z --period 3600 --statistics Average --unit Percent
+                ruleRequest.getSwapSwapPercentage());
+
+        List<RuleResponseItem> items = underUtilized
+                .stream()
+                .map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
+                .collect(toList());
+
+        return RuleResponse.build(items);
     }
 
     @Override
@@ -48,7 +78,15 @@ public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule {
         return RuleInfo.builder()
                 .id(buildRuleId())
                 .description("Check if RDS instances are under-utilized")
-                .permissions(Arrays.asList("ec2:DescribeRegions", "rds:DescribeDBInstances"))
+                .permissions(Arrays.asList("ec2:DescribeRegions", "rds:DescribeDBInstances", "cloudwatch:GetMetricStatistics"))
+                .build();
+    }
+
+    public void afterPropertiesSet() {
+        String[] split = StringUtils.split(instanceTypesToIgnore, ",");
+        List<String> instanceTypesToIgnoreList = Arrays.asList(split);
+        rdsInstanceClassPredicate = RdsInstanceClassPredicate.builder()
+                .instanceTypesToIgnore(instanceTypesToIgnoreList)
                 .build();
     }
 

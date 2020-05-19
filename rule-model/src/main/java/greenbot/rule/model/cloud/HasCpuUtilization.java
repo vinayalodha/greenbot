@@ -21,7 +21,7 @@ import java.util.Map;
  * @author Vinay Lodha
  */
 public interface HasCpuUtilization {
-	String NAMESPACE = "namespace";
+    String NAMESPACE = "namespace";
 
-	public Map<String, String> metadata();
+    public Map<String, String> metadata();
 }

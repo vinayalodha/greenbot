@@ -15,14 +15,13 @@
  */
 package greenbot.provider.aws.service;
 
-import java.util.List;
-
 import software.amazon.awssdk.regions.Region;
 
+import java.util.List;
+
 /**
- * 
  * @author Vinay Lodha
  */
 public interface RegionService {
-	List<Region> regions();
+    List<Region> regions();
 }

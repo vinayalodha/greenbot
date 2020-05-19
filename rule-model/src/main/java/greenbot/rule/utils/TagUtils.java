@@ -21,10 +21,10 @@ import greenbot.rule.model.cloud.Tag;
  * @author Vinay Lodha
  */
 public class TagUtils {
-	public static String getValue(Tag tag) {
-		if (tag == null)
-			return null;
+    public static String getValue(Tag tag) {
+        if (tag == null)
+            return null;
 
-		return tag.getValue();
-	}
+        return tag.getValue();
+    }
 }

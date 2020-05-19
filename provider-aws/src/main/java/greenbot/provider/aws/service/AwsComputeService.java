@@ -51,8 +51,45 @@ public class AwsComputeService implements ComputeService {
     private final ConversionService conversionService;
     private final CloudWatchService cloudWatchService;
 
+    private static Map<String, String> buildInstanceUpgradeMap() {
+
+        Map<String, String> retval = new LinkedHashMap<>();
+
+        // Milk
+        retval.put("c1", "c5");
+        retval.put("c3", "c5");
+        retval.put("c4", "c5");
+        retval.put("cc1", "c5");
+        retval.put("cc2", "c5");
+
+        retval.put("g2", "g4dn");
+        retval.put("g3", "g4dn");
+        retval.put("g3s", "g4dn");
+
+        retval.put("i2", "i3");
+
+        retval.put("m1", "m5a");
+        retval.put("m3", "m5a");
+        retval.put("m4", "m5a");
+        retval.put("m5", "m5a");
+        retval.put("m5d", "m5ad");
+
+        retval.put("p2", "p3");
+
+        retval.put("r3", "r5a");
+        retval.put("r4", "r5a");
+        retval.put("r5", "r5a");
+        retval.put("r5d", "r5ad");
+
+        retval.put("t1", "t3a");
+        retval.put("t2", "t3a");
+        retval.put("t3", "t3a");
+
+        return retval;
+    }
+
     @Override
-    public List<PossibleUpgradeInfo> findUnderUtilized(List<Compute> computes, int duration, int threshold) {
+    public List<PossibleUpgradeInfo> findUnderUtilized(List<Compute> computes, int duration, double threshold) {
         return computes.stream()
                 .map(compute -> {
                     CloudWatchMetricStatisticsRequest request = CloudWatchMetricStatisticsRequest.builder()
@@ -193,42 +230,5 @@ public class AwsComputeService implements ComputeService {
             return null;
         compute.setRegion(region.toString());
         return compute;
-    }
-
-    private static Map<String, String> buildInstanceUpgradeMap() {
-
-        Map<String, String> retval = new LinkedHashMap<>();
-
-        // Milk
-        retval.put("c1", "c5");
-        retval.put("c3", "c5");
-        retval.put("c4", "c5");
-        retval.put("cc1", "c5");
-        retval.put("cc2", "c5");
-
-        retval.put("g2", "g4dn");
-        retval.put("g3", "g4dn");
-        retval.put("g3s", "g4dn");
-
-        retval.put("i2", "i3");
-
-        retval.put("m1", "m5a");
-        retval.put("m3", "m5a");
-        retval.put("m4", "m5a");
-        retval.put("m5", "m5a");
-        retval.put("m5d", "m5ad");
-
-        retval.put("p2", "p3");
-
-        retval.put("r3", "r5a");
-        retval.put("r4", "r5a");
-        retval.put("r5", "r5a");
-        retval.put("r5d", "r5ad");
-
-        retval.put("t1", "t3a");
-        retval.put("t2", "t3a");
-        retval.put("t3", "t3a");
-
-        return retval;
     }
 }

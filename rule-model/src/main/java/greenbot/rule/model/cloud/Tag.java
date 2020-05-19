@@ -20,14 +20,13 @@ import lombok.Data;
 import lombok.NonNull;
 
 /**
- * 
  * @author Vinay Lodha
  */
 @Data
 @Builder
 public class Tag {
-	@NonNull
-	private String key;
-	@NonNull
-	private String value;
+    @NonNull
+    private String key;
+    @NonNull
+    private String value;
 }

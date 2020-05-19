@@ -16,12 +16,11 @@
 package greenbot.rule.model;
 
 /**
- * 
  * @author Vinay Lodha
  */
 public interface GreenbotRule {
 
-	RuleResponse doWork(RuleRequest ruleRequest);
+    RuleResponse doWork(RuleRequest ruleRequest);
 
-	RuleInfo ruleInfo();
+    RuleInfo ruleInfo();
 }

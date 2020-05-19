@@ -26,6 +26,7 @@ import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Compute;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import greenbot.rule.utils.ConversionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -76,8 +77,8 @@ public class UnderUtilizedInstanceCpuRule extends AbstractGreenbotRule implement
         List<Predicate<Compute>> predicates = Arrays.asList(predicate::test, instanceFamilyPredicate, instanceTypePredicate);
 
         List<Compute> computes = computeService.list(predicates);
-
-        List<RuleResponseItem> items = computeService.findUnderUtilized(computes, ruleRequest.getCloudwatchTimeframeDuration(), ruleRequest.getUnderUtilizaedCpuPercentageThreshold())
+        List<PossibleUpgradeInfo> underUtilized = computeService.findUnderUtilized(computes, ruleRequest.getCloudwatchTimeframeDuration(), ruleRequest.getUnderUtilizedCpuPercentageThreshold());
+        List<RuleResponseItem> items = underUtilized
                 .stream()
                 .map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
                 .collect(toList());
@@ -107,7 +108,7 @@ public class UnderUtilizedInstanceCpuRule extends AbstractGreenbotRule implement
 
         String[] split = StringUtils.split(instanceTypesToIgnore, ",");
         instanceTypePredicate = InstanceTypePredicate.builder()
-                .instaceTypesToIgnore(Arrays.asList(split))
+                .instanceTypesToIgnore(Arrays.asList(split))
                 .build();
     }
 

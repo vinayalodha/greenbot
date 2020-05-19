@@ -15,26 +15,27 @@
  */
 package greenbot.rule.model.cloud;
 
-import java.util.*;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Resource {
 
-	@EqualsAndHashCode.Include
-	@NonNull
-	private String id;
+    @EqualsAndHashCode.Include
+    @NonNull
+    private String id;
 
-	private String name;
+    private String name;
 
-	@Builder.Default
-	private Map<String, Tag> tags = new HashMap<String, Tag>();
+    @Builder.Default
+    private Map<String, Tag> tags = new HashMap<String, Tag>();
 
 }

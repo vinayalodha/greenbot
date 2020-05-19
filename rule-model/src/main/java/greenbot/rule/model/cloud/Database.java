@@ -15,13 +15,13 @@
  */
 package greenbot.rule.model.cloud;
 
-import java.util.Collections;
-import java.util.Map;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author Vinay Lodha
@@ -29,14 +29,14 @@ import lombok.experimental.SuperBuilder;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public class Database extends Resource implements HasCpuUtilization {
-	private String region;
-	private String engine;
-	private String instanceClass;
+    private String region;
+    private String engine;
+    private String instanceClass;
 
-	@Override
-	public Map<String, String> metadata() {
-		return Collections.singletonMap(HasCpuUtilization.NAMESPACE, "AWS/RDS");
-	}
+    @Override
+    public Map<String, String> metadata() {
+        return Collections.singletonMap(HasCpuUtilization.NAMESPACE, "AWS/RDS");
+    }
 }

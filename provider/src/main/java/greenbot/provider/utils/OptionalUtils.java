@@ -23,11 +23,11 @@ import java.util.Optional;
  * @author Vinay Lodha
  */
 public class OptionalUtils {
-	public static <T> List<T> buildList(List<Optional<T>> optionals) {
-		List<T> retval = new ArrayList<T>();
-		for (Optional<T> obj : optionals) {
-			obj.ifPresent(retval::add);
-		}
-		return retval;
-	}
+    public static <T> List<T> buildList(List<Optional<T>> optionals) {
+        List<T> retval = new ArrayList<T>();
+        for (Optional<T> obj : optionals) {
+            obj.ifPresent(retval::add);
+        }
+        return retval;
+    }
 }

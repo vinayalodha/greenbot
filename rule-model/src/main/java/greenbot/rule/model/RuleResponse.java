@@ -15,17 +15,11 @@
  */
 package greenbot.rule.model;
 
+import lombok.*;
+
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Singular;
-
 /**
- * 
  * @author Vinay Lodha
  */
 @Data
@@ -34,32 +28,32 @@ import lombok.Singular;
 @NoArgsConstructor
 public class RuleResponse {
 
-	private int id;
+    private int id;
 
-	@Singular
-	@NonNull
-	private List<String> infoMessages;
+    @Singular
+    @NonNull
+    private List<String> infoMessages;
 
-	@Singular
-	@NonNull
-	private List<String> warningMessages;
+    @Singular
+    @NonNull
+    private List<String> warningMessages;
 
-	@Singular
-	@NonNull
-	private List<String> errorMessages;
+    @Singular
+    @NonNull
+    private List<String> errorMessages;
 
-	@Singular
-	@NonNull
-	private List<RuleResponseItem> items;
+    @Singular
+    @NonNull
+    private List<RuleResponseItem> items;
 
-	public static RuleResponse empty() {
-		return RuleResponse.builder().build();
-	}
+    public static RuleResponse empty() {
+        return RuleResponse.builder().build();
+    }
 
-	public static RuleResponse build(List<RuleResponseItem> items) {
-		return RuleResponse.builder()
-				.items(items)
-				.build();
-	}
+    public static RuleResponse build(List<RuleResponseItem> items) {
+        return RuleResponse.builder()
+                .items(items)
+                .build();
+    }
 
 }

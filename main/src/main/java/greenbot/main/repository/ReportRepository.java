@@ -18,7 +18,6 @@ package greenbot.main.repository;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import greenbot.rule.model.RuleResponse;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.concurrent.TimeUnit;

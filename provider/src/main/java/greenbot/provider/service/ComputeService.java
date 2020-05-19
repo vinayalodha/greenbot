@@ -15,22 +15,21 @@
  */
 package greenbot.provider.service;
 
+import greenbot.rule.model.cloud.Compute;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import greenbot.rule.model.cloud.Compute;
-import greenbot.rule.model.cloud.PossibleUpgradeInfo;
-
 /**
- * 
  * @author Vinay Lodha
  */
 public interface ComputeService {
-	List<PossibleUpgradeInfo> findUnderUtilized(List<Compute> computes, int duration, int threshold);
+    List<PossibleUpgradeInfo> findUnderUtilized(List<Compute> computes, int duration, double threshold);
 
-	List<Compute> list(List<Predicate<Compute>> predicates);
+    List<Compute> list(List<Predicate<Compute>> predicates);
 
-	Map<Compute, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Compute> computes);
+    Map<Compute, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Compute> computes);
 
 }

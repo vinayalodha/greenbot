@@ -16,9 +16,8 @@
 package greenbot.rule.model;
 
 /**
- * 
  * @author Vinay Lodha
  */
 public enum AnalysisConfidence {
-	HIGH, MEDIUM, LOW;
+    HIGH, MEDIUM, LOW;
 }

@@ -23,7 +23,7 @@ spring:
       spec: expireAfterWrite=180s
 config:
   threshold:
-    max_ami_count: 500
+    max_ami_count: 10
     under_utilized_cpu_percentage: 30
     under_utilized_swap_space_percentage: 5
 
@@ -41,7 +41,7 @@ rules:
     instance_types_to_ignore: t2.nano,t3.nano,t3a.nano,t2.micro,t3.micro,t3a.micro,t2.small,t3.small,t3a.small
   UnderUtilizedDatabaseRule:
     # Milk
-    instance_types_to_ignore: db.t2.micro,db.t2.small,db.t3.micro,db.t3.small
+    instance_types_to_ignore:
 
 
  

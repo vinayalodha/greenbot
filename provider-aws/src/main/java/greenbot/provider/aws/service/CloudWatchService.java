@@ -30,31 +30,73 @@ import java.util.Optional;
 @Service
 public class CloudWatchService {
 
-	public Optional<Double> getMetricStatistics(CloudWatchMetricStatisticsRequest cloudWatchMetricStatisticsRequest) {
-		Instant now = Instant.now();
+    /**
+     * Max datapoint is 1440
+     *
+     * @param cloudWatchMetricStatisticsRequest
+     * @return
+     */
+    public Optional<Double> getMetricStatistics(CloudWatchMetricStatisticsRequest cloudWatchMetricStatisticsRequest) {
+        Instant endTime = Instant.now();
 
-		CloudWatchClient client = CloudWatchClient.builder().region(Region.of(cloudWatchMetricStatisticsRequest.getRegion())).build();
-		Dimension dimension = Dimension.builder()
-				.name(cloudWatchMetricStatisticsRequest.getDimensionKey())
-				.value(cloudWatchMetricStatisticsRequest.getDimensionValue())
-				.build();
+        CloudWatchClient client = CloudWatchClient.builder().region(Region.of(cloudWatchMetricStatisticsRequest.getRegion())).build();
+        Dimension dimension = Dimension.builder()
+                .name(cloudWatchMetricStatisticsRequest.getDimensionKey())
+                .value(cloudWatchMetricStatisticsRequest.getDimensionValue())
+                .build();
 
-		GetMetricStatisticsRequest request = GetMetricStatisticsRequest.builder()
-				.startTime(now.minusSeconds((cloudWatchMetricStatisticsRequest.getDuration() + 1) * 60))
-				.endTime(now)
-				.period(cloudWatchMetricStatisticsRequest.getDuration() * 60)
-				.statistics(Statistic.AVERAGE)
-				.statisticsWithStrings("Average")
-				.unit(StandardUnit.PERCENT)
-				.namespace(cloudWatchMetricStatisticsRequest.getNamespace())
-				.metricName(cloudWatchMetricStatisticsRequest.getMetricName())
-				.dimensions(dimension)
-				.build();
+        Instant startTime = endTime.minusSeconds(cloudWatchMetricStatisticsRequest.getDuration() * 60);
+        GetMetricStatisticsRequest request = GetMetricStatisticsRequest.builder()
+                .startTime(startTime)
+                .endTime(endTime)
+                .period(calculatePeriod(startTime, endTime))
+                .statistics(Statistic.AVERAGE)
+                .statisticsWithStrings("Average")
+                .unit(StandardUnit.PERCENT)
+                .namespace(cloudWatchMetricStatisticsRequest.getNamespace())
+                .metricName(cloudWatchMetricStatisticsRequest.getMetricName())
+                .dimensions(dimension)
+                .build();
 
-		GetMetricStatisticsResponse response = client.getMetricStatistics(request);
-		if (response.hasDatapoints() && response.datapoints().size() > 0) {
-			return Optional.of(response.datapoints().get(0).average());
-		}
-		return Optional.empty();
-	}
+        GetMetricStatisticsResponse response = client.getMetricStatistics(request);
+        if (response.hasDatapoints() && response.datapoints().size() > 0) {
+            Optional<Double> sum = response.datapoints().stream().map(Datapoint::average).reduce((a, b) -> a + b);
+            if (sum.isPresent())
+                return Optional.of(sum.get() / response.datapoints().size());
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * https://aws.amazon.com/premiumsupport/knowledge-center/cloudwatch-getmetricstatistics-data/
+     * <p>
+     * The granularity, in seconds, of the returned data points. For metrics with regular resolution, a period can be as short as one minute (60 seconds) and must be a multiple of 60. For high-resolution metrics that are collected at intervals of less than one minute, the period can be 1, 5, 10, 30, 60, or any multiple of 60. High-resolution metrics are those metrics stored by a PutMetricData call that includes a StorageResolution of 1 second.
+     * <p>
+     * If the StartTime parameter specifies a time stamp that is greater than 3 hours ago, you must specify the period as follows or no data points in that time range is returned:
+     * <p>
+     * Start time between 3 hours and 15 days ago - Use a multiple of 60 seconds (1 minute).
+     * <p>
+     * Start time between 15 and 63 days ago - Use a multiple of 300 seconds (5 minutes).
+     * <p>
+     * Start time greater than 63 days ago - Use a multiple of 3600 seconds (1 hour).
+     * <p>
+     * Type: Integer
+     * <p>
+     * Valid Range: Minimum value of 1.
+     * <p>
+     * Required: Yes
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    private int calculatePeriod(Instant startTime, Instant endTime) {
+        long durationInSec = endTime.getEpochSecond() - startTime.getEpochSecond();
+        // max datapoint 1440 and resolution of each datapoint is 5 mins aka 300 sec
+        if ((1440 * 300) >= durationInSec) {
+            // sec
+            return 300;
+        }
+        return 3600;
+    }
 }

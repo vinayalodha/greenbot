@@ -18,7 +18,6 @@ package greenbot.rule.model.cloud;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 
  * @author Vinay Lodha
  */
 @SuperBuilder

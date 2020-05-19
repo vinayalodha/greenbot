@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.rule.utils;
+package greenbot.provider.predicates;
 
-import greenbot.rule.model.RuleResponseItem;
-import greenbot.rule.model.cloud.PossibleUpgradeInfo;
+import greenbot.rule.model.cloud.Database;
+import lombok.Builder;
+import lombok.Data;
+
+import java.util.Collection;
+import java.util.function.Predicate;
 
 /**
  * @author Vinay Lodha
  */
-public class ConversionUtils {
-    private ConversionUtils() {
-    }
+@Data
+@Builder
+public class RdsInstanceClassPredicate implements Predicate<Database> {
 
-    public static RuleResponseItem toRuleResponseItem(PossibleUpgradeInfo possibleUpgradeInfo, String ruleId) {
-        return RuleResponseItem.builder()
-                .resourceId(possibleUpgradeInfo.getResourceId())
-                .service(possibleUpgradeInfo.getService())
-                .confidence(possibleUpgradeInfo.getConfidence())
-                .message(possibleUpgradeInfo.getReason())
-                .ruleId(ruleId)
-                .build();
+    private final Collection<String> instanceTypesToIgnore;
+
+    public boolean test(Database compute) {
+        return !instanceTypesToIgnore.contains(compute.getInstanceClass().toString());
     }
 
 }

@@ -15,10 +15,9 @@
  */
 package greenbot.provider.aws.converter;
 
+import greenbot.rule.model.cloud.Database;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-
-import greenbot.rule.model.cloud.Database;
 import software.amazon.awssdk.services.rds.model.DBInstance;
 
 /**
@@ -26,13 +25,13 @@ import software.amazon.awssdk.services.rds.model.DBInstance;
  */
 @Component
 public class DbInstanceToDatabaseConverter implements Converter<DBInstance, Database> {
-	public Database convert(DBInstance instance) {
-		// Optional[db.t2.micro]
-		return Database.builder()
-				.id(instance.dbInstanceIdentifier())
-				.name(instance.dbName())
-				.instanceClass(instance.dbInstanceClass())
-				.engine(instance.engine())
-				.build();
-	}
+    public Database convert(DBInstance instance) {
+        // Optional[db.t2.micro]
+        return Database.builder()
+                .id(instance.dbInstanceArn())
+                .name(instance.dbInstanceIdentifier())
+                .instanceClass(instance.dbInstanceClass())
+                .engine(instance.engine())
+                .build();
+    }
 }

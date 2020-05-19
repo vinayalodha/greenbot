@@ -15,21 +15,20 @@
  */
 package greenbot.provider.service;
 
+import greenbot.rule.model.cloud.Database;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import greenbot.rule.model.cloud.Database;
-import greenbot.rule.model.cloud.PossibleUpgradeInfo;
-
 /**
- * 
- * 
  * @author Vinay Lodha
  */
 public interface DatabaseService {
-	List<Database> list(List<Predicate<Database>> predicates);
+    List<Database> list(List<Predicate<Database>> predicates);
 
-	Map<Database, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Database> databases);
+    List<PossibleUpgradeInfo> findUnderUtilized(List<Database> computes, int duration, double cpuThreshold, double Threshold);
 
+    Map<Database, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Database> databases);
 }

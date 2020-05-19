@@ -21,19 +21,19 @@ import greenbot.rule.model.cloud.Tag;
 import lombok.experimental.UtilityClass;
 
 /**
- * 
  * @author Vinay Lodha
  */
 @UtilityClass
 public class RuleRequestDataProvider {
 
-	public RuleRequest simple() {
-		return RuleRequest.builder()
-				.includedTag(Tag.builder().key("owner").value("greenbot").build())
-				.amiThreshold(0)
-				.cloudwatchTimeframeDuration(120)
-				.provider(Provider.AWS)
-				.underUtilizaedCpuPercentageThreshold(20)
-				.build();
-	}
+    public RuleRequest simple() {
+        return RuleRequest.builder()
+                .includedTag(Tag.builder().key("owner").value("greenbot").build())
+                .amiThreshold(0)
+                .cloudwatchTimeframeDuration(1440)
+                .provider(Provider.AWS)
+                .underUtilizedCpuPercentageThreshold(20d)
+                .swapSwapPercentage(5d)
+                .build();
+    }
 }

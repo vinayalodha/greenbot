@@ -37,6 +37,7 @@ public class ConfigService implements InitializingBean {
     public static final String EXCLUDED_TAG = "excluded_tag";
     public static final String INCLUDED_TAG = "included_tag";
     public static final String UNDER_UTILIZED_CPU_PERCENTAGE = "under_utilized_cpu_percentage";
+    public static final String UNDER_UTILIZED_SWAP_SPACE_PERCENTAGE = "under_utilized_swap_space_percentage";
 
     public static final String CLOUDWATCH_CONFIG_DURATION = "cloudwatch_config_duration";
     public static final String RULES_TO_IGNORE = "rules_to_ignore";
@@ -45,7 +46,10 @@ public class ConfigService implements InitializingBean {
     private int amiThreshold;
 
     @Value("${config.threshold.under_utilized_cpu_percentage}")
-    private int underUtilizedCpuPercentageThreshold;
+    private double underUtilizedCpuPercentageThreshold;
+
+    @Value("${config.threshold.under_utilized_swap_space_percentage}")
+    private double underUtilizedSwapSpacePercentageThreshold;
 
     @Value("${config.cloudwatch.timeframe}")
     private int cloudwatchTimeframeDuration;
@@ -58,8 +62,10 @@ public class ConfigService implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        if (cloudwatchTimeframeDuration % 5 != 0 || cloudwatchTimeframeDuration <= 9) {
-            throw new RuntimeException("config.cloudwatch.timeframe should be multiple of 5 and greater than 9");
+        // cloud watch can accommodate maximum of 1440 datapoints with resolution of 1 hour
+        // 1440 * 1 * 60 = 86400 mins
+        if (cloudwatchTimeframeDuration <= 9 || cloudwatchTimeframeDuration >= 86400) {
+            throw new RuntimeException("config.cloudwatch.timeframe greater than 9 minutes and less than 86400 minutes");
         }
 
         ConfigParam excludedTag = ConfigParam.builder()
@@ -80,30 +86,37 @@ public class ConfigService implements InitializingBean {
                 .description("Threshold AMI count above which too_many_instance_images_rule rule will raise a concern")
                 .build();
 
-        ConfigParam underUtilizaedCpuPercentage = ConfigParam.builder()
+        ConfigParam underUtilizedCpuPercentage = ConfigParam.builder()
                 .key(UNDER_UTILIZED_CPU_PERCENTAGE)
                 .value(String.valueOf(underUtilizedCpuPercentageThreshold))
                 .description("Average CPU utilization threshold for under-utilized machine")
+                .build();
+
+        ConfigParam underUtilizedSwapSpacePercentage = ConfigParam.builder()
+                .key(UNDER_UTILIZED_SWAP_SPACE_PERCENTAGE)
+                .value(String.valueOf(underUtilizedSwapSpacePercentageThreshold))
+                .description("NOT USED YET : Average swap memory percentage threshold for under-utilized database")
                 .build();
 
         ConfigParam cloudwatchTimeframeDurationConfig = ConfigParam.builder()
                 .key(CLOUDWATCH_CONFIG_DURATION)
                 .value(String.valueOf(cloudwatchTimeframeDuration))
                 .description(
-                        "Duration for which cloudwatch data to be analyzed(in mins), should be multiple of 5 with min value of 10")
+                        "Duration for which cloudwatch data to be analyzed(in minutes), should be multiple of 5 with min value of 10")
                 .build();
 
         ConfigParam rulesToIgnore = ConfigParam.builder()
                 .key(RULES_TO_IGNORE)
                 .value("")
                 .description(
-                        "Comma seprated rule ids to ignore for example too_many_instance_images_rule,delete_orphan_instance_storage_rule")
+                        "Comma separated rule ids to ignore for example too_many_instance_images_rule,delete_orphan_instance_storage_rule")
                 .build();
 
         emptyConfigParams = Arrays.asList(excludedTag,
                 includedTag,
                 tooManyAmiTag,
-                underUtilizaedCpuPercentage,
+                underUtilizedCpuPercentage,
+                underUtilizedSwapSpacePercentage,
                 cloudwatchTimeframeDurationConfig,
                 rulesToIgnore);
     }

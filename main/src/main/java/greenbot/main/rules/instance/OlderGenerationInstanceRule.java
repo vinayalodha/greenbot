@@ -40,6 +40,7 @@ import static java.util.stream.Collectors.toList;
 @Component
 @AllArgsConstructor
 public class OlderGenerationInstanceRule extends greenbot.main.rules.AbstractGreenbotRule {
+    private final List<String> permissions = Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances");
 
     private final ComputeService computeService;
     private final ConversionService conversionService;
@@ -66,7 +67,7 @@ public class OlderGenerationInstanceRule extends greenbot.main.rules.AbstractGre
         return RuleInfo.builder()
                 .id(buildRuleId())
                 .description("Check if Compute instances can be optimized")
-                .permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
+                .permissions(permissions)
                 .build();
     }
 
