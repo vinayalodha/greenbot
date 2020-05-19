@@ -1,4 +1,4 @@
-# underutilized\_instance\_cpu\_rule
+# under\_utilized\_instance\_cpu\_rule
 
 This rule checks if average CPU utilization is below threshold level \(default is 30% , refer **under\_utilized\_cpu\_percentage** config param\) , analysis window is controlled by **cloudwatch\_config\_duration** config param \(default is 1 week\)
 

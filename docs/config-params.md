@@ -21,18 +21,23 @@ Config parameters are represent by JSON on home page when you launch [localhost:
     },
     {
         "key": "under_utilized_cpu_percentage",
-        "value": "30",
+        "value": "30.0",
         "description": "Average CPU utilization threshold for under-utilized machine"
+    },
+    {
+        "key": "under_utilized_swap_space_percentage",
+        "value": "5.0",
+        "description": "NOT USED YET : Average swap memory percentage threshold for under-utilized database"
     },
     {
         "key": "cloudwatch_config_duration",
         "value": "10080",
-        "description": "Duration for which cloudwatch data to be analyzed(in mins), should be multiple of 5 with min value of 10"
+        "description": "Duration for which cloudwatch data to be analyzed(in minutes), should be multiple of 5 with min value of 10"
     },
     {
         "key": "rules_to_ignore",
         "value": "",
-        "description": "Comma seprated rule ids to ignore for example too_many_instance_images_rule,delete_orphan_instance_storage_rule"
+        "description": "Comma separated rule ids to ignore for example too_many_instance_images_rule,delete_orphan_instance_storage_rule"
     }
 ]
 ```
