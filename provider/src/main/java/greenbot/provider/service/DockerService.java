@@ -15,17 +15,16 @@
  */
 package greenbot.provider.service;
 
-import java.util.List;
-import java.util.Map;
-
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- * 
  * @author Vinay Lodha
  */
 public interface DockerService {
 
-	Map<Compute, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Compute> computes);
+    Map<Compute, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Compute> computes);
 }

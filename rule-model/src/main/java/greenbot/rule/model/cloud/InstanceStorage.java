@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 
 /**
  * InstanceStoage == EBS for AWS
- * 
+ *
  * @author Vinay Lodha
  */
 @SuperBuilder

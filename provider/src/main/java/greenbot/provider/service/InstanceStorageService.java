@@ -15,15 +15,14 @@
  */
 package greenbot.provider.service;
 
+import greenbot.rule.model.cloud.InstanceStorage;
+
 import java.util.List;
 import java.util.function.Predicate;
 
-import greenbot.rule.model.cloud.InstanceStorage;
-
 /**
- * 
  * @author Vinay Lodha
  */
 public interface InstanceStorageService {
-	List<InstanceStorage> orphans(List<Predicate<InstanceStorage>> predicates);
+    List<InstanceStorage> orphans(List<Predicate<InstanceStorage>> predicates);
 }

@@ -15,25 +15,24 @@
  */
 package greenbot.provider.predicates;
 
-import java.util.Collection;
-import java.util.function.Predicate;
-
 import greenbot.rule.model.cloud.Compute;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Collection;
+import java.util.function.Predicate;
+
 /**
- * 
  * @author Vinay Lodha
  */
 @Data
 @Builder
 public class InstanceTypePredicate implements Predicate<Compute> {
 
-	private final Collection<String> instaceTypesToIgnore;
+    private final Collection<String> instanceTypesToIgnore;
 
-	public boolean test(Compute compute) {
-		return !instaceTypesToIgnore.contains(compute.getInstanceType().toString());
-	}
+    public boolean test(Compute compute) {
+        return !instanceTypesToIgnore.contains(compute.getInstanceType().toString());
+    }
 
 }

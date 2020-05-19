@@ -15,52 +15,50 @@
  */
 package greenbot.provider.aws.converter;
 
-import static java.util.stream.Collectors.toMap;
-import static org.apache.commons.lang3.StringUtils.split;
-
-import java.util.Map;
-import java.util.function.Function;
-
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
-
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.InstanceType;
 import greenbot.rule.model.cloud.Tag;
 import greenbot.rule.utils.TagUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.ec2.model.Instance;
 
+import java.util.Map;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toMap;
+import static org.apache.commons.lang3.StringUtils.split;
+
 /**
- * 
  * @author Vinay Lodha
  */
 @Component
 @AllArgsConstructor
 public class InstanceToComputeConverter implements Converter<Instance, Compute> {
 
-	private final Ec2TagToTagConverter ec2TagToTagConverter;
+    private final Ec2TagToTagConverter ec2TagToTagConverter;
 
-	@Override
-	public Compute convert(Instance instance) {
-		Map<String, Tag> tags = instance.tags()
-				.stream()
-				.map(ec2TagToTagConverter::convert)
-				.collect(toMap(Tag::getKey, Function.identity()));
+    @Override
+    public Compute convert(Instance instance) {
+        Map<String, Tag> tags = instance.tags()
+                .stream()
+                .map(ec2TagToTagConverter::convert)
+                .collect(toMap(Tag::getKey, Function.identity()));
 
-		return Compute.builder()
-				.id(instance.instanceId())
-				.instanceType(buildInstanceType(instance))
-				.tags(tags)
-				.name(TagUtils.getValue(tags.get("Name")))
-				.build();
-	}
+        return Compute.builder()
+                .id(instance.instanceId())
+                .instanceType(buildInstanceType(instance))
+                .tags(tags)
+                .name(TagUtils.getValue(tags.get("Name")))
+                .build();
+    }
 
-	private InstanceType buildInstanceType(Instance instance) {
-		String[] tokens = split(instance.instanceTypeAsString(), '.');
-		return InstanceType.builder()
-				.family(tokens[0])
-				.size(tokens[1])
-				.build();
-	}
+    private InstanceType buildInstanceType(Instance instance) {
+        String[] tokens = split(instance.instanceTypeAsString(), '.');
+        return InstanceType.builder()
+                .family(tokens[0])
+                .size(tokens[1])
+                .build();
+    }
 }

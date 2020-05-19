@@ -21,7 +21,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 
  * @author Vinay Lodha
  */
 @Data
@@ -29,7 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConfigParam {
-	private String key;
-	private String value;
-	private String description;
+    private String key;
+    private String value;
+    private String description;
 }

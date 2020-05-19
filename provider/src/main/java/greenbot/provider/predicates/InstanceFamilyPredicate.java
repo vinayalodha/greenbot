@@ -15,25 +15,24 @@
  */
 package greenbot.provider.predicates;
 
-import java.util.Collection;
-import java.util.function.Predicate;
-
 import greenbot.rule.model.cloud.Compute;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Collection;
+import java.util.function.Predicate;
+
 /**
- * 
  * @author Vinay Lodha
  */
 @Data
 @Builder
 public class InstanceFamilyPredicate implements Predicate<Compute> {
 
-	private final Collection<String> allowedFamilies;
+    private final Collection<String> allowedFamilies;
 
-	public boolean test(Compute compute) {
-		return allowedFamilies.contains(compute.getInstanceType().getFamily());
-	}
+    public boolean test(Compute compute) {
+        return allowedFamilies.contains(compute.getInstanceType().getFamily());
+    }
 
 }

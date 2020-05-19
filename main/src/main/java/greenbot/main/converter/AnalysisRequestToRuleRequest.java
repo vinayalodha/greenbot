@@ -30,7 +30,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -48,24 +47,27 @@ public class AnalysisRequestToRuleRequest implements Converter<AnalysisRequest, 
     public RuleRequest convert(AnalysisRequest analysisRequest) {
         List<ConfigParam> configParams = analysisRequest.getConfigParams();
 
-        String str = getParamValue(configParams, ConfigService.EXCLUDED_TAG);
-        Tag excludedTag = conversionService.convert(str, Tag.class);
+        String parameterValue = getParamValue(configParams, ConfigService.EXCLUDED_TAG);
+        Tag excludedTag = conversionService.convert(parameterValue, Tag.class);
 
-        str = getParamValue(configParams, ConfigService.INCLUDED_TAG);
-        Tag includedTag = conversionService.convert(str, Tag.class);
+        parameterValue = getParamValue(configParams, ConfigService.INCLUDED_TAG);
+        Tag includedTag = conversionService.convert(parameterValue, Tag.class);
 
         int amiThreshold = getIntParam(configParams, ConfigService.TOO_MANY_AMI_THRESHOLD);
-        int underUtilizedCpuPercentageThreshold = getIntParam(configParams,
+        Double underUtilizedCpuPercentageThreshold = getDoubleParam(configParams,
                 ConfigService.UNDER_UTILIZED_CPU_PERCENTAGE);
+        Double underUtilizedSwapSpacePercentageThreshold = getDoubleParam(configParams,
+                ConfigService.UNDER_UTILIZED_SWAP_SPACE_PERCENTAGE);
         int cloudwatchTimeFrameDuration = getIntParam(configParams, ConfigService.CLOUDWATCH_CONFIG_DURATION);
 
-        str = getParamValue(configParams, ConfigService.RULES_TO_IGNORE);
-        List<String> rules = Arrays.stream(StringUtils.split(str, ",")).collect(toList());
+        parameterValue = getParamValue(configParams, ConfigService.RULES_TO_IGNORE);
+        List<String> rules = Arrays.stream(StringUtils.split(parameterValue, ",")).collect(toList());
         return RuleRequest.builder()
                 .includedTag(includedTag)
                 .excludedTag(excludedTag)
                 .amiThreshold(amiThreshold)
-                .underUtilizaedCpuPercentageThreshold(underUtilizedCpuPercentageThreshold)
+                .underUtilizedCpuPercentageThreshold(underUtilizedCpuPercentageThreshold)
+                .swapSwapPercentage(underUtilizedSwapSpacePercentageThreshold)
                 .cloudwatchTimeframeDuration(cloudwatchTimeFrameDuration)
                 .rulesToIgnore(rules)
                 .build();
@@ -75,16 +77,16 @@ public class AnalysisRequestToRuleRequest implements Converter<AnalysisRequest, 
         return Integer.parseInt(getParamValue(params, key));
     }
 
+    private Double getDoubleParam(List<ConfigParam> params, String key) {
+        return Double.parseDouble(getParamValue(params, key));
+    }
+
     private String getParamValue(List<ConfigParam> params, String key) {
-        Optional<ConfigParam> configParam = params
+        return params
                 .stream()
                 .filter(cp -> cp.getKey().equals(key))
-                .findAny();
-
-         if(configParam.isPresent()){
-             return configParam.get().getValue();
-         }
-         return null;
+                .findAny()
+                .map(ConfigParam::getValue).orElse(null);
     }
 
     @Override

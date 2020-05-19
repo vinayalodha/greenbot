@@ -15,39 +15,41 @@
  */
 package greenbot.main.terraform;
 
+import com.microsoft.terraform.TerraformClient;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 
-import com.microsoft.terraform.TerraformClient;
-
-import lombok.SneakyThrows;
-
 /**
- * 
  * @author Vinay Lodha
  */
+@Slf4j
 public class TerraformUtils {
 
-	@SneakyThrows
-	public static void apply(String path) {
-		try (TerraformClient client = new TerraformClient()) {
-			client.setOutputListener(System.out::println);
-			client.setErrorListener(System.err::println);
+    @SneakyThrows
+    public static void apply(String path) {
+        try (TerraformClient client = new TerraformClient()) {
+            client.setOutputListener(System.out::println);
+            client.setErrorListener(System.err::println);
 
-			client.setWorkingDirectory(new File(path));
-			client.plan().get();
-			client.apply().get();
-		}
-	}
+            client.setWorkingDirectory(new File(path));
+            client.plan().get();
+            client.apply().get();
+            log.info("Terraform apply done for plan " + path);
+        }
+    }
 
-	@SneakyThrows
-	public static void destroy(String path) {
-		try (TerraformClient client = new TerraformClient()) {
-			client.setOutputListener(System.out::println);
-			client.setErrorListener(System.err::println);
+    @SneakyThrows
+    public static void destroy(String path) {
+        try (TerraformClient client = new TerraformClient()) {
+            client.setOutputListener(System.out::println);
+            client.setErrorListener(System.err::println);
 
-			client.setWorkingDirectory(new File(path));
-			client.destroy().get();
-		}
-	}
+            client.setWorkingDirectory(new File(path));
+            client.destroy().get();
+            log.info("Terraform destroy done for plan " + path);
+        }
+    }
 
 }

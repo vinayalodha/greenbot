@@ -18,10 +18,9 @@ package greenbot.provider.service;
 import greenbot.rule.model.cloud.Tag;
 
 /**
- * 
  * @author Vinay Lodha
  */
 public interface InstanceImageService {
-	boolean isGreaterThanThreshold(int threshold, Tag includedTag, Tag excludedTag);
+    boolean isGreaterThanThreshold(int threshold, Tag includedTag, Tag excludedTag);
 
 }

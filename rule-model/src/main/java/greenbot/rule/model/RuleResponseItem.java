@@ -19,17 +19,16 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * 
  * @author Vinay Lodha
  */
 @Data
 @Builder
 public class RuleResponseItem {
 
-	private String resourceId;
-	private String ruleId;
-	private AnalysisConfidence confidence;
-	private String message;
-	private String approxCostSaving;
-	private String service;
+    private String resourceId;
+    private String ruleId;
+    private AnalysisConfidence confidence;
+    private String message;
+    private String approxCostSaving;
+    private String service;
 }

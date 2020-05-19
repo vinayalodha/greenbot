@@ -15,52 +15,50 @@
  */
 package greenbot.provider.aws.service;
 
-import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Predicate;
-
-import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Service;
-
 import greenbot.provider.service.InstanceStorageService;
 import greenbot.rule.model.cloud.InstanceStorage;
 import lombok.AllArgsConstructor;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.DescribeVolumesResponse;
 import software.amazon.awssdk.services.ec2.model.Volume;
 import software.amazon.awssdk.services.ec2.paginators.DescribeVolumesIterable;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
+
 /**
- * 
  * @author Vinay Lodha
  */
 @Service
 @AllArgsConstructor
 public class AwsInstanceStorageService implements InstanceStorageService {
 
-	private final RegionService regionService;
-	private final ConversionService conversionService;
+    private final RegionService regionService;
+    private final ConversionService conversionService;
 
-	@Override
-	public List<InstanceStorage> orphans(List<Predicate<InstanceStorage>> predicates) {
+    @Override
+    public List<InstanceStorage> orphans(List<Predicate<InstanceStorage>> predicates) {
 
-		return regionService.regions()
-				.parallelStream()
-				.map(region -> Ec2Client.builder().region(region).build())
-				.map(Ec2Client::describeVolumesPaginator)
-				.flatMap(DescribeVolumesIterable::stream)
-				.map(DescribeVolumesResponse::volumes)
-				.flatMap(Collection::stream)
-				.filter(volume -> equalsAnyIgnoreCase("available", volume.stateAsString()))
-				.map(this::convert)
-				.filter(storage -> predicates.stream().allMatch(predicate -> predicate.test(storage)))
-				.collect(toList());
-	}
+        return regionService.regions()
+                .parallelStream()
+                .map(region -> Ec2Client.builder().region(region).build())
+                .map(Ec2Client::describeVolumesPaginator)
+                .flatMap(DescribeVolumesIterable::stream)
+                .map(DescribeVolumesResponse::volumes)
+                .flatMap(Collection::stream)
+                .filter(volume -> equalsAnyIgnoreCase("available", volume.stateAsString()))
+                .map(this::convert)
+                .filter(storage -> predicates.stream().allMatch(predicate -> predicate.test(storage)))
+                .collect(toList());
+    }
 
-	private InstanceStorage convert(Volume volume) {
-		return conversionService.convert(volume, InstanceStorage.class);
-	}
+    private InstanceStorage convert(Volume volume) {
+        return conversionService.convert(volume, InstanceStorage.class);
+    }
 }

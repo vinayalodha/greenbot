@@ -24,10 +24,10 @@ import lombok.Data;
 @Data
 @Builder
 public class InstanceType {
-	private String family;
-	private String size;
+    private String family;
+    private String size;
 
-	public String toString() {
-		return family + "." + size;
-	}
+    public String toString() {
+        return family + "." + size;
+    }
 }

@@ -15,12 +15,12 @@
  */
 package greenbot.provider.predicates;
 
-import java.util.function.Predicate;
-
 import greenbot.rule.model.cloud.Resource;
 import greenbot.rule.model.cloud.Tag;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.function.Predicate;
 
 /**
  * @author Vinay Lodha
@@ -28,12 +28,12 @@ import lombok.Data;
 @Data
 @Builder
 public class TagPredicate implements Predicate<Resource> {
-	private final Tag includedTag;
-	private final Tag excludedTag;
+    private final Tag includedTag;
+    private final Tag excludedTag;
 
-	@Override
-	public boolean test(Resource compute) {
-		return (includedTag == null || compute.getTags().values().contains(includedTag))
-				&& (excludedTag == null || !compute.getTags().values().contains(excludedTag));
-	}
+    @Override
+    public boolean test(Resource compute) {
+        return (includedTag == null || compute.getTags().values().contains(includedTag))
+                && (excludedTag == null || !compute.getTags().values().contains(excludedTag));
+    }
 }

@@ -25,8 +25,8 @@ import lombok.Data;
 @Data
 @Builder
 public class PossibleUpgradeInfo {
-	private String reason;
-	private AnalysisConfidence confidence;
-	private String service;
-	private String resourceId;
+    private String reason;
+    private AnalysisConfidence confidence;
+    private String service;
+    private String resourceId;
 }

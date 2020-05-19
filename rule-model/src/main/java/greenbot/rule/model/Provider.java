@@ -16,9 +16,8 @@
 package greenbot.rule.model;
 
 /**
- * 
  * @author Vinay Lodha
  */
 public enum Provider {
-	AWS
+    AWS
 }

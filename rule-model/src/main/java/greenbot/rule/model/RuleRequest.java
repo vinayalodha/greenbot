@@ -15,38 +15,40 @@
  */
 package greenbot.rule.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import greenbot.rule.model.cloud.Tag;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * 
  * @author Vinay Lodha
  */
 @Data
 @Builder
 public class RuleRequest {
 
-	@Builder.Default
-	private Provider provider = Provider.AWS;
+    @Builder.Default
+    private Provider provider = Provider.AWS;
 
-	private Tag excludedTag;
-	private Tag includedTag;
+    private Tag excludedTag;
+    private Tag includedTag;
 
-	@NonNull
-	private Integer amiThreshold;
+    @NonNull
+    private Integer amiThreshold;
 
-	@NonNull
-	private Integer underUtilizaedCpuPercentageThreshold;
+    @NonNull
+    private Double underUtilizedCpuPercentageThreshold;
 
-	@NonNull
-	private Integer cloudwatchTimeframeDuration;
+    @NonNull
+    private Double swapSwapPercentage;
 
-	@Builder.Default
-	private List<String> rulesToIgnore = new ArrayList<String>();
+    @NonNull
+    private Integer cloudwatchTimeframeDuration;
+
+    @Builder.Default
+    private List<String> rulesToIgnore = new ArrayList<String>();
 
 }

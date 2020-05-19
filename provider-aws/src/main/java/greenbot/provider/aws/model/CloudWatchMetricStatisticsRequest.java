@@ -24,10 +24,10 @@ import lombok.Data;
 @Data
 @Builder
 public class CloudWatchMetricStatisticsRequest {
-	private String region;
-	private String namespace;
-	private String metricName;
-	private int duration;
-	private String dimensionKey;
-	private String dimensionValue;
+    private String region;
+    private String namespace;
+    private String metricName;
+    private int duration;
+    private String dimensionKey;
+    private String dimensionValue;
 }
