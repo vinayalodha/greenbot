@@ -64,12 +64,7 @@ limitations under the License.
             <artifactId>ec2</artifactId>
             <version>${aws.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>s3</artifactId>
-            <version>${aws.version}</version>
-        </dependency>
+        
 
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
