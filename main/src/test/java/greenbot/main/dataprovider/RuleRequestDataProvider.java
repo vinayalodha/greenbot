@@ -32,8 +32,8 @@ public class RuleRequestDataProvider {
                 .amiThreshold(0)
                 .cloudwatchTimeframeDuration(1440)
                 .provider(Provider.AWS)
-                .underUtilizedCpuPercentageThreshold(20d)
-                .swapSwapPercentage(5d)
+                .cpuThresholdInstance(20d)
+                .cpuThresholdDatabase(5d)
                 .build();
     }
 }
