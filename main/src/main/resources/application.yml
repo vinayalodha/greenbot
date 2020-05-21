@@ -24,8 +24,8 @@ spring:
 config:
   threshold:
     max_ami_count: 500
-    under_utilized_cpu_percentage: 30
-    under_utilized_swap_space_percentage: 5
+    under_utilized_cpu_percentage_instance: 30
+    under_utilized_cpu_percentage_database: 10
 
   cloudwatch:
     # in minutes, should be multiple of 5 and value >=10
