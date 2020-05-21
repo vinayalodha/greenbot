@@ -77,7 +77,7 @@ public class UnderUtilizedInstanceCpuRule extends AbstractGreenbotRule implement
         List<Predicate<Compute>> predicates = Arrays.asList(predicate::test, instanceFamilyPredicate, instanceTypePredicate);
 
         List<Compute> computes = computeService.list(predicates);
-        List<PossibleUpgradeInfo> underUtilized = computeService.findUnderUtilized(computes, ruleRequest.getCloudwatchTimeframeDuration(), ruleRequest.getUnderUtilizedCpuPercentageThreshold());
+        List<PossibleUpgradeInfo> underUtilized = computeService.findUnderUtilized(computes, ruleRequest.getCloudwatchTimeframeDuration(), ruleRequest.getCpuThresholdInstance());
         List<RuleResponseItem> items = underUtilized
                 .stream()
                 .map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
@@ -91,7 +91,7 @@ public class UnderUtilizedInstanceCpuRule extends AbstractGreenbotRule implement
         String desc = String.format(
                 "Find Under-utilized machines based on average CPU usage (AWS don't capture memory utilization by default). "
                         + "Only %s instance family are analyzed. CPU threshold value can be changed using %s config param",
-                INSTANCE_CSV, ConfigService.UNDER_UTILIZED_CPU_PERCENTAGE);
+                INSTANCE_CSV, ConfigService.UNDER_UTILIZED_CPU_PERCENTAGE_INSTANCE);
         return RuleInfo.builder()
                 .id(buildRuleId())
                 .description(desc)

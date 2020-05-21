@@ -15,6 +15,7 @@
  */
 package greenbot.main.rules.database;
 
+import greenbot.main.config.ConfigService;
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.provider.predicates.RdsInstanceClassPredicate;
 import greenbot.provider.predicates.TagPredicate;
@@ -61,9 +62,9 @@ public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule implements I
         List<PossibleUpgradeInfo> underUtilized = databaseService.findUnderUtilized(databases,
                 ruleRequest.getCloudwatchTimeframeDuration(),
                 // TODO
-                10d,
+                ruleRequest.getCpuThresholdDatabase(),
                 // TODO aws cloudwatch get-metric-statistics --namespace "AWS/RDS" --metric-name SwapUsage --start-time 2020-05-18T05:24:12.555Z --end-time 2020-05-19T09:25:12.555Z --period 3600 --statistics Average --unit Percent
-                ruleRequest.getSwapSwapPercentage());
+                0d);
 
         List<RuleResponseItem> items = underUtilized
                 .stream()
@@ -77,7 +78,8 @@ public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule implements I
     public RuleInfo ruleInfo() {
         return RuleInfo.builder()
                 .id(buildRuleId())
-                .description("Check if RDS instances are under-utilized")
+                .description(String.format("Check if RDS instances are under-utilized, CPU threshold value can be changed using %s config param",
+                        ConfigService.UNDER_UTILIZED_CPU_PERCENTAGE_DATABASE))
                 .permissions(Arrays.asList("ec2:DescribeRegions", "rds:DescribeDBInstances", "cloudwatch:GetMetricStatistics"))
                 .build();
     }

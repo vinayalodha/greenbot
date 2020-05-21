@@ -54,10 +54,10 @@ public class AnalysisRequestToRuleRequest implements Converter<AnalysisRequest, 
         Tag includedTag = conversionService.convert(parameterValue, Tag.class);
 
         int amiThreshold = getIntParam(configParams, ConfigService.TOO_MANY_AMI_THRESHOLD);
-        Double underUtilizedCpuPercentageThreshold = getDoubleParam(configParams,
-                ConfigService.UNDER_UTILIZED_CPU_PERCENTAGE);
-        Double underUtilizedSwapSpacePercentageThreshold = getDoubleParam(configParams,
-                ConfigService.UNDER_UTILIZED_SWAP_SPACE_PERCENTAGE);
+        Double cpuInstance = getDoubleParam(configParams,
+                ConfigService.UNDER_UTILIZED_CPU_PERCENTAGE_INSTANCE);
+        Double cpuDatabase = getDoubleParam(configParams,
+                ConfigService.UNDER_UTILIZED_CPU_PERCENTAGE_DATABASE);
         int cloudwatchTimeFrameDuration = getIntParam(configParams, ConfigService.CLOUDWATCH_CONFIG_DURATION);
 
         parameterValue = getParamValue(configParams, ConfigService.RULES_TO_IGNORE);
@@ -66,8 +66,8 @@ public class AnalysisRequestToRuleRequest implements Converter<AnalysisRequest, 
                 .includedTag(includedTag)
                 .excludedTag(excludedTag)
                 .amiThreshold(amiThreshold)
-                .underUtilizedCpuPercentageThreshold(underUtilizedCpuPercentageThreshold)
-                .swapSwapPercentage(underUtilizedSwapSpacePercentageThreshold)
+                .cpuThresholdInstance(cpuInstance)
+                .cpuThresholdDatabase(cpuDatabase)
                 .cloudwatchTimeframeDuration(cloudwatchTimeFrameDuration)
                 .rulesToIgnore(rules)
                 .build();

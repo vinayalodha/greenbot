@@ -40,10 +40,9 @@ public class RuleRequest {
     private Integer amiThreshold;
 
     @NonNull
-    private Double underUtilizedCpuPercentageThreshold;
-
+    private Double cpuThresholdInstance;
     @NonNull
-    private Double swapSwapPercentage;
+    private Double cpuThresholdDatabase;
 
     @NonNull
     private Integer cloudwatchTimeframeDuration;
