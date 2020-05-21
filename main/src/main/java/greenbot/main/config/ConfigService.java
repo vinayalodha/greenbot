@@ -38,8 +38,8 @@ public class ConfigService implements InitializingBean {
     public static final String TOO_MANY_AMI_THRESHOLD = "too_many_ami_threshold";
     public static final String EXCLUDED_TAG = "excluded_tag";
     public static final String INCLUDED_TAG = "included_tag";
-    public static final String UNDER_UTILIZED_CPU_PERCENTAGE = "under_utilized_cpu_percentage";
-    public static final String UNDER_UTILIZED_SWAP_SPACE_PERCENTAGE = "under_utilized_swap_space_percentage";
+    public static final String UNDER_UTILIZED_CPU_PERCENTAGE_INSTANCE = "under_utilized_cpu_percentage_instance";
+    public static final String UNDER_UTILIZED_CPU_PERCENTAGE_DATABASE = "under_utilized_cpu_percentage_database";
 
     public static final String CLOUDWATCH_CONFIG_DURATION = "cloudwatch_config_duration";
     public static final String RULES_TO_IGNORE = "rules_to_ignore";
@@ -47,11 +47,11 @@ public class ConfigService implements InitializingBean {
     @Value("${config.threshold.max_ami_count}")
     private int amiThreshold;
 
-    @Value("${config.threshold.under_utilized_cpu_percentage}")
-    private double underUtilizedCpuPercentageThreshold;
+    @Value("${config.threshold.under_utilized_cpu_percentage_instance}")
+    private double cpuInstance;
 
-    @Value("${config.threshold.under_utilized_swap_space_percentage}")
-    private double underUtilizedSwapSpacePercentageThreshold;
+    @Value("${config.threshold.under_utilized_cpu_percentage_database}")
+    private double cpuDatabase;
 
     @Value("${config.cloudwatch.timeframe}")
     private int cloudwatchTimeframeDuration;
@@ -93,16 +93,16 @@ public class ConfigService implements InitializingBean {
                 .description("Threshold AMI count above which too_many_instance_images_rule rule will raise a concern")
                 .build();
 
-        ConfigParam underUtilizedCpuPercentage = ConfigParam.builder()
-                .key(UNDER_UTILIZED_CPU_PERCENTAGE)
-                .value(String.valueOf(underUtilizedCpuPercentageThreshold))
-                .description("Average CPU utilization threshold for under-utilized machine")
+        ConfigParam cpuInstanceConfigParam = ConfigParam.builder()
+                .key(UNDER_UTILIZED_CPU_PERCENTAGE_INSTANCE)
+                .value(String.valueOf(cpuInstance))
+                .description("Average CPU utilization threshold for under-utilized ec2 machine")
                 .build();
 
-        ConfigParam underUtilizedSwapSpacePercentage = ConfigParam.builder()
-                .key(UNDER_UTILIZED_SWAP_SPACE_PERCENTAGE)
-                .value(String.valueOf(underUtilizedSwapSpacePercentageThreshold))
-                .description("NOT USED YET : Average swap memory percentage threshold for under-utilized database")
+        ConfigParam cpuDatabaseConfigParam = ConfigParam.builder()
+                .key(UNDER_UTILIZED_CPU_PERCENTAGE_DATABASE)
+                .value(String.valueOf(cpuDatabase))
+                .description("Average CPU utilization threshold for under-utilized RDS instances")
                 .build();
 
         ConfigParam cloudwatchTimeframeDurationConfig = ConfigParam.builder()
@@ -122,8 +122,8 @@ public class ConfigService implements InitializingBean {
         emptyConfigParams = Arrays.asList(excludedTag,
                 includedTag,
                 tooManyAmiTag,
-                underUtilizedCpuPercentage,
-                underUtilizedSwapSpacePercentage,
+                cpuInstanceConfigParam,
+                cpuDatabaseConfigParam,
                 cloudwatchTimeframeDurationConfig,
                 rulesToIgnore);
     }
