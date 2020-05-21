@@ -17,6 +17,7 @@ package greenbot.main.config;
 
 import greenbot.main.converter.AnalysisRequestToRuleRequest;
 import greenbot.rule.model.ConfigParam;
+import lombok.val;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Update {@link AnalysisRequestToRuleRequest} also
@@ -56,6 +58,10 @@ public class ConfigService implements InitializingBean {
 
     private List<ConfigParam> emptyConfigParams = Collections.emptyList();
 
+    public static void main(String[] args) {
+        System.out.println(TimeUnit.DAYS.toMinutes(60));
+    }
+
     public List<ConfigParam> getDefaultConfig() {
         return emptyConfigParams;
     }
@@ -63,9 +69,10 @@ public class ConfigService implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         // cloud watch can accommodate maximum of 1440 datapoints with resolution of 1 hour
-        // 1440 * 1 * 60 = 86400 mins
-        if (cloudwatchTimeframeDuration <= 9 || cloudwatchTimeframeDuration >= 86400) {
-            throw new RuntimeException("config.cloudwatch.timeframe greater than 9 minutes and less than 86400 minutes");
+        // 60mins * 24hours * 60days = 86400 mins
+        val minutes = TimeUnit.DAYS.toMinutes(60);
+        if (cloudwatchTimeframeDuration <= 9 || cloudwatchTimeframeDuration >= minutes) {
+            throw new RuntimeException(String.format("config.cloudwatch.timeframe greater than 9 minutes and less than %s minutes", minutes));
         }
 
         ConfigParam excludedTag = ConfigParam.builder()

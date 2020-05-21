@@ -23,7 +23,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class RuleResponseItem {
+public class RuleResponseItem implements Comparable<RuleResponseItem> {
 
     private String resourceId;
     private String ruleId;
@@ -31,4 +31,25 @@ public class RuleResponseItem {
     private String message;
     private String approxCostSaving;
     private String service;
+
+    @Override
+    public int compareTo(RuleResponseItem o) {
+        return toInt(this).compareTo(toInt(o));
+    }
+
+    private Integer toInt(RuleResponseItem o) {
+        int confidence;
+        if (o.getConfidence() == AnalysisConfidence.HIGH) {
+            confidence = 1;
+        } else if (o.getConfidence() == AnalysisConfidence.MEDIUM) {
+            confidence = 2;
+        } else if (o.getConfidence() == AnalysisConfidence.LOW) {
+            confidence = 3;
+        } else {
+            confidence = 4;
+        }
+        return confidence;
+    }
+
+
 }

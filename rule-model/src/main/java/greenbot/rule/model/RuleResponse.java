@@ -18,6 +18,7 @@ package greenbot.rule.model;
 import lombok.*;
 
 import java.util.List;
+import java.util.SortedSet;
 
 /**
  * @author Vinay Lodha
@@ -44,7 +45,7 @@ public class RuleResponse {
 
     @Singular
     @NonNull
-    private List<RuleResponseItem> items;
+    private SortedSet<RuleResponseItem> items;
 
     public static RuleResponse empty() {
         return RuleResponse.builder().build();
