@@ -93,10 +93,13 @@ public class CloudWatchService {
     private int calculatePeriod(Instant startTime, Instant endTime) {
         long durationInSec = endTime.getEpochSecond() - startTime.getEpochSecond();
         // max datapoint 1440 and resolution of each datapoint is 5 mins aka 300 sec
-        if ((1440 * 300) >= durationInSec) {
+        if ((1439 * 300) >= durationInSec) {
             // sec
             return 300;
+        } else if ((1439 * 3600) >= durationInSec) {
+            return 3600;
         }
-        return 3600;
+        throw new RuntimeException("cloudwatch window is too big to fit in 1440 datapoints of 1 hour");
     }
+
 }

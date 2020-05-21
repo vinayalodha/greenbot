@@ -19,12 +19,15 @@ import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.main.rules.service.TagAnalyzer;
 import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.ComputeService;
+import greenbot.provider.service.DatabaseService;
 import greenbot.rule.model.*;
 import greenbot.rule.model.cloud.Compute;
+import greenbot.rule.model.cloud.Resource;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -40,25 +43,38 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 
     private final TagAnalyzer devTagAnalyzer;
     private final ComputeService computeService;
+    private final DatabaseService databaseService;
 
     private final ConversionService conversionService;
 
     @Override
     public RuleResponse doWork(RuleRequest ruleRequest) {
-        // TODO also check for RDS, Fargate
+        // TODO also check for Fargate
         TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
 
-        List<Compute> computes = computeService.list(Collections.singletonList(predicate::test));
-        List<RuleResponseItem> items = computes.stream()
+        List<? extends Resource> computes = computeService.list(Collections.singletonList(predicate::test));
+        List<? extends Resource> databases = databaseService.list(Collections.singletonList(predicate::test));
+        List<Resource> resources = new ArrayList<>();
+        resources.addAll(databases);
+        resources.addAll(computes);
+        List<RuleResponseItem> items = resources.stream()
                 .filter(compute -> devTagAnalyzer.isDevTagPresent(compute.getTags().values()))
-                .map(compute -> RuleResponseItem.builder()
-                        .resourceId(compute.getId())
-                        .service("EC2")
-                        .confidence(AnalysisConfidence.MEDIUM)
-                        .message(
-                                "Usually dev/staging/test resources don't need to run for 24 hours. Consider adding mechanism to stop them for part of day/weekend when it is unused")
-                        .ruleId(buildRuleId())
-                        .build())
+                .map(resource -> {
+                    String service;
+                    if (resource instanceof Compute) {
+                        service = "EC2";
+                    } else {
+                        service = "RDS";
+                    }
+                    return RuleResponseItem.builder()
+                            .resourceId(resource.getId())
+                            .service(service)
+                            .confidence(AnalysisConfidence.LOW)
+                            .message(
+                                    "Usually dev/staging/test resources don't need to run for 24 hours. Consider adding lifecycle to stop them for part of day/weekend when it is unused")
+                            .ruleId(buildRuleId())
+                            .build();
+                })
                 .collect(toList());
 
         return RuleResponse.build(items);
@@ -69,7 +85,7 @@ public class DevResourcesRule extends AbstractGreenbotRule {
         return RuleInfo.builder()
                 .id(buildRuleId())
                 .description("Does dev/staging/test resources running 24 hours?")
-                .permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
+                .permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances", "rds:DescribeDBInstances"))
                 .build();
     }
 
