@@ -51,7 +51,7 @@ public class InstanceToComputeConverter implements Converter<Instance, Compute> 
                 .id(instance.instanceId())
                 .instanceType(buildInstanceType(instance))
                 .tags(tags)
-                .serviceType(tags.get(APP_NAME_TAG).getValue() != null ? "Elastic Beanstalk/EC2" : "EC2")
+                .serviceType(tags.get(APP_NAME_TAG) != null ? "Elastic Beanstalk/EC2" : "EC2")
                 .name(TagUtils.getValue(tags.get("Name")))
                 .build();
     }

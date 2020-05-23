@@ -56,11 +56,7 @@ public class DatabaseUpgradeRule extends AbstractGreenbotRule {
 
     @Override
     public RuleInfo ruleInfo() {
-        return RuleInfo.builder()
-                .id(buildRuleId())
-                .description("Check if RDS instances can be optimized")
-                .permissions(Arrays.asList("ec2:DescribeRegions", "rds:DescribeDBInstances"))
-                .build();
+        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "rds:DescribeDBInstances"));
     }
 
 }

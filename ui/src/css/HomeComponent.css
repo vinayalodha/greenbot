@@ -31,5 +31,5 @@ pre {
 }
 
 ul {
-    list-style: circle;
+    list-style: disc !important;
 }

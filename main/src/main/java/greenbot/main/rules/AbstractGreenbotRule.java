@@ -16,6 +16,9 @@
 package greenbot.main.rules;
 
 import greenbot.rule.model.GreenbotRule;
+import greenbot.rule.model.RuleInfo;
+
+import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -27,6 +30,14 @@ public abstract class AbstractGreenbotRule implements GreenbotRule {
     protected String buildRuleId() {
         String[] tokens = splitByCharacterTypeCamelCase(getClass().getSimpleName());
         return lowerCase(join(tokens, '_'));
+    }
+
+    public RuleInfo buildRuleInfo(List<String> permissions) {
+        return RuleInfo.builder()
+                .id(buildRuleId())
+                .docs("https://vinay-lodha.gitbook.io/greenbot/rules/" + buildRuleId())
+                .permissions(permissions)
+                .build();
     }
 
 }

@@ -25,6 +25,7 @@ import { FooterComponent } from "./messages/FooterComponent";
 import './css/HomeComponent.css'
 import { ResultComponent } from "./ResultComponent";
 import 'bulma/css/bulma.css'
+import './css/MessagesListComponent.css'
 
 type HomeComponentState = {
 	analysisResponse: AnalysisResponse,

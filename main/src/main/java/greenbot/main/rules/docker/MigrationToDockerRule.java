@@ -60,11 +60,7 @@ public class MigrationToDockerRule extends AbstractGreenbotRule {
 
     @Override
     public RuleInfo ruleInfo() {
-        return RuleInfo.builder()
-                .id(buildRuleId())
-                .description("Check for workloads which can be migrated to Docker")
-                .permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
-                .build();
+        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"));
     }
 
 }

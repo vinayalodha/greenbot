@@ -63,11 +63,7 @@ public class OlderGenerationInstanceRule extends greenbot.main.rules.AbstractGre
 
     @Override
     public RuleInfo ruleInfo() {
-        return RuleInfo.builder()
-                .id(buildRuleId())
-                .description("Check if Compute instances can be optimized")
-                .permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"))
-                .build();
+        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"));
     }
 
 }

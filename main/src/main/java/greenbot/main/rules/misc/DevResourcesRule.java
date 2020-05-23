@@ -72,11 +72,7 @@ public class DevResourcesRule extends AbstractGreenbotRule {
 
     @Override
     public RuleInfo ruleInfo() {
-        return RuleInfo.builder()
-                .id(buildRuleId())
-                .description("Does dev/staging/test resources running 24 hours?")
-                .permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances", "rds:DescribeDBInstances"))
-                .build();
+        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances", "rds:DescribeDBInstances"));
     }
 
 }

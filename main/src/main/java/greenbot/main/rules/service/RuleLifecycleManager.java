@@ -51,9 +51,7 @@ public class RuleLifecycleManager {
         if (message != null) {
             return RuleResponse.builder()
                     .id(Math.abs(new Random().nextInt()))
-                    .errorMessage(
-                            "Unable to load AWS regions. most likely AWS CLI is not configured or network connectivity with AWS API is unavailable. Exception Stacktrace : "
-                                    + message)
+                    .errorMessage("Unable to load AWS regions. most likely AWS CLI is not configured or network connectivity with AWS API is unavailable. Exception Stacktrace : " + message)
                     .build();
         }
         log.info("Rule execution started");
@@ -70,9 +68,7 @@ public class RuleLifecycleManager {
                         log.info(String.format("Execution of rule:%s done", ruleId));
                         return retval;
                     } catch (Exception e) {
-                        log.error(String.format(
-                                "Exception occurred while executing rule:%s Please raise bug report if issue persist",
-                                ruleId), e);
+                        log.error(String.format("Exception occurred while executing rule:%s Please raise bug report if issue persist", ruleId), e);
                         errorMessages.add("rule:" + ruleId + " - " + exceptionToString(e));
                     }
                     return null;
@@ -99,8 +95,7 @@ public class RuleLifecycleManager {
     }
 
     private String exceptionToString(Exception e) {
-        return abbreviate(
-                getRootCauseMessage(e) + Arrays.toString(getRootCauseStackTrace(e)), 400);
+        return abbreviate(getRootCauseMessage(e) + Arrays.toString(getRootCauseStackTrace(e)), 400);
     }
 
     public List<ConfigParam> getConfigParams() {
