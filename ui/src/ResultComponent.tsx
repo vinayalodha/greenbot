@@ -31,7 +31,7 @@ export class ResultComponent extends Component<ResultProps, {}> {
 
 		for (const item of this.props.result.items) {
 			var url1= "https://vinay-lodha.gitbook.io/greenbot/rules/" + item.ruleId;
-			var linkNode = <a href= {url1}>{item.ruleId}</a>
+			var linkNode = <a target="_blank" rel="noopener noreferrer" href= {url1}>{item.ruleId}</a>
 			items.push(
 				<tr>
 					<td>{item.resourceId}</td>
