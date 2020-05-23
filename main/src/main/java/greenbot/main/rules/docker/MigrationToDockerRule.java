@@ -45,8 +45,8 @@ public class MigrationToDockerRule extends AbstractGreenbotRule {
     private final ConversionService conversionService;
 
     @Override
-    public RuleResponse doWork(RuleRequest ruleRequest) {
-        TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
+    public RuleResponse doWork(RuleRequest request) {
+        TagPredicate predicate = conversionService.convert(request, TagPredicate.class);
         List<Compute> computes = computeService.list(Collections.singletonList(predicate::test));
         Map<Compute, List<PossibleUpgradeInfo>> upgradeMap = dockerService.checkUpgradePossibility(computes);
 

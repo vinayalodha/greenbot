@@ -29,4 +29,10 @@ public class PossibleUpgradeInfo {
     private AnalysisConfidence confidence;
     private String service;
     private String resourceId;
+
+    public static PossibleUpgradeInfoBuilder fromResource(Resource resource) {
+        return PossibleUpgradeInfo.builder()
+                .resourceId(resource.getId())
+                .service(resource.getServiceType());
+    }
 }

@@ -35,6 +35,8 @@ public class Resource {
 
     private String name;
 
+    private String serviceType;
+
     @Builder.Default
     private Map<String, Tag> tags = new HashMap<String, Tag>();
 

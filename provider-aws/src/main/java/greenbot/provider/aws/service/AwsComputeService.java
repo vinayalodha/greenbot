@@ -15,6 +15,7 @@
  */
 package greenbot.provider.aws.service;
 
+import greenbot.provider.aws.UpgradeMapUtils;
 import greenbot.provider.aws.model.CloudWatchMetricStatisticsRequest;
 import greenbot.provider.service.ComputeService;
 import greenbot.provider.utils.OptionalUtils;
@@ -45,48 +46,9 @@ import static org.apache.commons.lang3.StringUtils.startsWithAny;
 @AllArgsConstructor
 public class AwsComputeService implements ComputeService {
 
-    private static final Map<String, String> INSTANCE_UPGRADE_MAP = buildInstanceUpgradeMap();
-
     private final RegionService regionService;
     private final ConversionService conversionService;
     private final CloudWatchService cloudWatchService;
-
-    private static Map<String, String> buildInstanceUpgradeMap() {
-
-        Map<String, String> retval = new LinkedHashMap<>();
-
-        // Milk
-        retval.put("c1", "c5");
-        retval.put("c3", "c5");
-        retval.put("c4", "c5");
-        retval.put("cc1", "c5");
-        retval.put("cc2", "c5");
-
-        retval.put("g2", "g4dn");
-        retval.put("g3", "g4dn");
-        retval.put("g3s", "g4dn");
-
-        retval.put("i2", "i3");
-
-        retval.put("m1", "m5a");
-        retval.put("m3", "m5a");
-        retval.put("m4", "m5a");
-        retval.put("m5", "m5a");
-        retval.put("m5d", "m5ad");
-
-        retval.put("p2", "p3");
-
-        retval.put("r3", "r5a");
-        retval.put("r4", "r5a");
-        retval.put("r5", "r5a");
-        retval.put("r5d", "r5ad");
-
-        retval.put("t1", "t3a");
-        retval.put("t2", "t3a");
-        retval.put("t3", "t3a");
-
-        return retval;
-    }
 
     @Override
     public List<PossibleUpgradeInfo> findUnderUtilized(List<Compute> computes, int duration, double threshold) {
@@ -102,17 +64,15 @@ public class AwsComputeService implements ComputeService {
                             .build();
 
                     Optional<Double> averageValue = cloudWatchService.getMetricStatistics(request);
-                    if (averageValue.isPresent() && averageValue.get() < threshold) {
-                        return PossibleUpgradeInfo.builder()
-                                .confidence(AnalysisConfidence.MEDIUM)
-                                .resourceId(compute.getId())
-                                .service("EC2")
-                                .reason(String.format(
-                                        "CPU is underutilized, average CPU usage is %.2f. Consider using smaller instance size",
-                                        averageValue.get()))
-                                .build();
-                    }
-                    return null;
+                    return averageValue
+                            .filter(value -> value < threshold)
+                            .map(value ->
+                                    PossibleUpgradeInfo.fromResource(compute)
+                                            .confidence(AnalysisConfidence.MEDIUM)
+                                            .reason(String.format("CPU is underutilized, average CPU usage is %.2f. Consider using smaller instance size",
+                                                    averageValue.get()))
+                                            .build())
+                            .orElse(null);
                 })
                 .filter(Objects::nonNull)
                 .collect(toList());
@@ -160,25 +120,15 @@ public class AwsComputeService implements ComputeService {
         Optional<PossibleUpgradeInfo> a = isFamilyCanBeUpgraded(compute);
         Optional<PossibleUpgradeInfo> b = armRecommendation(compute);
         Optional<PossibleUpgradeInfo> c = infChips(compute);
-        addServiceAndResourceId(a, compute.getId());
-        addServiceAndResourceId(b, compute.getId());
-        addServiceAndResourceId(c, compute.getId());
-        return OptionalUtils.buildList(Arrays.asList(a, b, c));
-    }
 
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private void addServiceAndResourceId(Optional<PossibleUpgradeInfo> a, String resourceId) {
-        a.ifPresent(b -> {
-            b.setService("EC2");
-            b.setResourceId(resourceId);
-        });
+        return OptionalUtils.buildList(Arrays.asList(a, b, c));
     }
 
     private Optional<PossibleUpgradeInfo> infChips(Compute compute) {
         String family = compute.getInstanceType().getFamily();
         // Milk
         if (startsWithAny(family, "g3", "g2", "p3", "p2")) {
-            PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.builder()
+            PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.fromResource(compute)
                     .reason("Consider using inf1 instances if you performing machine learning inference")
                     .confidence(AnalysisConfidence.MEDIUM)
                     .build();
@@ -203,7 +153,7 @@ public class AwsComputeService implements ComputeService {
             return Optional.empty();
         }
 
-        PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.builder()
+        PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.fromResource(compute)
                 .reason(message)
                 .confidence(AnalysisConfidence.LOW)
                 .build();
@@ -212,11 +162,11 @@ public class AwsComputeService implements ComputeService {
 
     private Optional<PossibleUpgradeInfo> isFamilyCanBeUpgraded(Compute compute) {
         String family = compute.getInstanceType().getFamily();
-        String upgradableFamily = INSTANCE_UPGRADE_MAP.get(family);
+        String upgradableFamily = UpgradeMapUtils.instanceUpgradeMap().get(family);
         if (upgradableFamily == null)
             return Optional.empty();
 
-        PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.builder()
+        PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.fromResource(compute)
                 .reason(String.format("Consider upgrading to newer instance family from %s to %s", family,
                         upgradableFamily))
                 .confidence(AnalysisConfidence.HIGH)

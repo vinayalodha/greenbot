@@ -49,12 +49,10 @@ public class AwsDockerService implements DockerService {
         for (String key : beanstalkComputeMap.keySet()) {
             Compute compute = beanstalkComputeMap.get(key).get(0);
             String appName = compute.getTags().get(APP_NAME_TAG).getValue();
-            PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.builder()
+            PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.fromResource(compute)
                     .confidence(AnalysisConfidence.MEDIUM)
-                    .reason(String.format("Consider migrating beanstalk application %s to Amazon ECS",
-                            appName))
+                    .reason(String.format("Consider migrating beanstalk application %s to Amazon ECS", appName))
                     .resourceId(appName)
-                    .service("Elastic Beanstalk")
                     .build();
             retVal.put(compute, Collections.singletonList(possibleUpgradeInfo));
         }

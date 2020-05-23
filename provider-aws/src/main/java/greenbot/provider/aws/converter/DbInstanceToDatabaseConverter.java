@@ -29,6 +29,7 @@ public class DbInstanceToDatabaseConverter implements Converter<DBInstance, Data
         // Optional[db.t2.micro]
         return Database.builder()
                 .id(instance.dbInstanceArn())
+                .serviceType("RDS")
                 .name(instance.dbInstanceIdentifier())
                 .instanceClass(instance.dbInstanceClass())
                 .engine(instance.engine())

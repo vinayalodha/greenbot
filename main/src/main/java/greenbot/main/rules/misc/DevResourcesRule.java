@@ -21,7 +21,6 @@ import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.ComputeService;
 import greenbot.provider.service.DatabaseService;
 import greenbot.rule.model.*;
-import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.Resource;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -60,18 +59,9 @@ public class DevResourcesRule extends AbstractGreenbotRule {
         List<RuleResponseItem> items = resources.stream()
                 .filter(compute -> devTagAnalyzer.isDevTagPresent(compute.getTags().values()))
                 .map(resource -> {
-                    String service;
-                    if (resource instanceof Compute) {
-                        service = "EC2";
-                    } else {
-                        service = "RDS";
-                    }
-                    return RuleResponseItem.builder()
-                            .resourceId(resource.getId())
-                            .service(service)
+                    return RuleResponseItem.fromResource(resource)
                             .confidence(AnalysisConfidence.LOW)
-                            .message(
-                                    "Usually dev/staging/test resources don't need to run for 24 hours. Consider adding lifecycle to stop them for part of day/weekend when it is unused")
+                            .message("Usually dev/staging/test resources don't need to run for 24 hours. Consider adding lifecycle to stop them for part of day/weekend when it is unused")
                             .ruleId(buildRuleId())
                             .build();
                 })

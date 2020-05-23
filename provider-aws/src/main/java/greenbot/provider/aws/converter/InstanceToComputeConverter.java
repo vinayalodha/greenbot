@@ -36,6 +36,7 @@ import static org.apache.commons.lang3.StringUtils.split;
 @Component
 @AllArgsConstructor
 public class InstanceToComputeConverter implements Converter<Instance, Compute> {
+    public static final String APP_NAME_TAG = "elasticbeanstalk:environment-name";
 
     private final Ec2TagToTagConverter ec2TagToTagConverter;
 
@@ -50,6 +51,7 @@ public class InstanceToComputeConverter implements Converter<Instance, Compute> 
                 .id(instance.instanceId())
                 .instanceType(buildInstanceType(instance))
                 .tags(tags)
+                .serviceType(tags.get(APP_NAME_TAG).getValue() != null ? "Elastic Beanstalk/EC2" : "EC2")
                 .name(TagUtils.getValue(tags.get("Name")))
                 .build();
     }
