@@ -20,7 +20,7 @@ package greenbot.rule.model;
  */
 public interface GreenbotRule {
 
-    RuleResponse doWork(RuleRequest ruleRequest);
+    RuleResponse doWork(RuleRequest request);
 
     RuleInfo ruleInfo();
 }

@@ -15,6 +15,7 @@
  */
 package greenbot.rule.model;
 
+import greenbot.rule.model.cloud.Resource;
 import lombok.Builder;
 import lombok.Data;
 
@@ -31,6 +32,12 @@ public class RuleResponseItem implements Comparable<RuleResponseItem> {
     private String message;
     private String approxCostSaving;
     private String service;
+
+    public static RuleResponseItemBuilder fromResource(Resource resource) {
+        return RuleResponseItem.builder()
+                .resourceId(resource.getId())
+                .service(resource.getServiceType());
+    }
 
     @Override
     public int compareTo(RuleResponseItem o) {

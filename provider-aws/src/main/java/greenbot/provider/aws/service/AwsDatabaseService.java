@@ -15,6 +15,7 @@
  */
 package greenbot.provider.aws.service;
 
+import greenbot.provider.aws.UpgradeMapUtils;
 import greenbot.provider.aws.model.CloudWatchMetricStatisticsRequest;
 import greenbot.provider.service.DatabaseService;
 import greenbot.provider.utils.OptionalUtils;
@@ -57,53 +58,37 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @AllArgsConstructor
 public class AwsDatabaseService implements DatabaseService {
 
-    private static final Map<String, String> INSTANCE_UPGRADE_MAP = buildMap();
     private final RegionService regionService;
     private final ConversionService conversionService;
     private final CloudWatchService cloudWatchService;
 
-    private static Map<String, String> buildMap() {
-        Map<String, String> retVal = new HashMap<>();
-        // Milk
-        retVal.put("db.t2", "db.t3");
-        retVal.put("db.m3", "db.m5");
-        retVal.put("db.m4", "db.m5");
-        retVal.put("db.r3", "db.r5");
-        retVal.put("db.r4", "db.r5");
-        return retVal;
-    }
-
     @Override
     public List<PossibleUpgradeInfo> findUnderUtilized(List<Database> databases, int duration, double cpuThreshold, double swapSpaceThreshold) {
         return databases.stream()
-                .map(database -> {
-                    CloudWatchMetricStatisticsRequest request = CloudWatchMetricStatisticsRequest.builder()
-                            .dimensionKey("DBInstanceIdentifier")
-                            .dimensionValue(database.getName())
-                            .region(database.getRegion())
-                            .duration(duration)
-                            .metricName("CPUUtilization")
-                            .namespace("AWS/RDS")
-                            .build();
-
-                    Optional<Double> averageValue = cloudWatchService.getMetricStatistics(request);
-                    return averageValue
-                            .filter(value -> value < cpuThreshold)
-                            .map(value -> {
-                                return PossibleUpgradeInfo.builder()
-                                        .confidence(AnalysisConfidence.MEDIUM)
-                                        .resourceId(database.getId())
-                                        .service("RDS")
-                                        .reason(String.format(
-                                                "RDS instance CPU is underutilized, average CPU usage is %.2f. Consider using smaller instance size",
-                                                averageValue.get()))
-                                        .build();
-
-                            })
-                            .orElse(null);
-                })
+                .map(database -> findUnderUtilized(database, cpuThreshold, duration))
                 .filter(Objects::nonNull)
                 .collect(toList());
+    }
+
+    private PossibleUpgradeInfo findUnderUtilized(Database database, double cpuThreshold, int duration) {
+        CloudWatchMetricStatisticsRequest request = CloudWatchMetricStatisticsRequest.builder()
+                .dimensionKey("DBInstanceIdentifier")
+                .dimensionValue(database.getName())
+                .region(database.getRegion())
+                .duration(duration)
+                .metricName("CPUUtilization")
+                .namespace("AWS/RDS")
+                .build();
+
+        Optional<Double> averageValue = cloudWatchService.getMetricStatistics(request);
+        return averageValue
+                .filter(value -> value < cpuThreshold)
+                .map(value ->
+                        PossibleUpgradeInfo.fromResource(database)
+                                .confidence(AnalysisConfidence.MEDIUM)
+                                .reason(String.format("RDS instance CPU is underutilized, average CPU usage is %.2f. Consider using smaller instance size", averageValue.get()))
+                                .build())
+                .orElse(null);
     }
 
     private List<PossibleUpgradeInfo> checkUpgradePossibility(Database database) {
@@ -128,9 +113,7 @@ public class AwsDatabaseService implements DatabaseService {
                 .stream()
                 .map(this::list)
                 .flatMap(Collection::stream)
-                .filter(database -> {
-                    return predicates.stream().allMatch(predicate -> predicate.test(database));
-                })
+                .filter(database -> predicates.stream().allMatch(predicate -> predicate.test(database)))
                 .collect(toList());
     }
 
@@ -155,12 +138,7 @@ public class AwsDatabaseService implements DatabaseService {
                     if (listTagsForResourceResponse.hasTagList()) {
                         val tagMap = listTagsForResourceResponse.tagList()
                                 .stream()
-                                .map(tag -> {
-                                    return Tag.builder()
-                                            .key(tag.key())
-                                            .value(tag.value())
-                                            .build();
-                                })
+                                .map(tag -> Tag.builder().key(tag.key()).value(tag.value()).build())
                                 .collect(toMap(Tag::getKey, Function.identity()));
                         return databaseBuilder.tags(tagMap).build();
                     }
@@ -178,9 +156,7 @@ public class AwsDatabaseService implements DatabaseService {
             message = format(template, database.getEngine(), "aurora-postgresql");
         }
         if (message != null) {
-            return of(PossibleUpgradeInfo.builder()
-                    .resourceId(database.getId())
-                    .service("RDS")
+            return of(PossibleUpgradeInfo.fromResource(database)
                     .reason(message)
                     .confidence(AnalysisConfidence.LOW)
                     .build());
@@ -194,15 +170,13 @@ public class AwsDatabaseService implements DatabaseService {
             return Optional.empty();
         }
         String key = StringUtils.substringBeforeLast(instanceClass, ".");
-        String value = INSTANCE_UPGRADE_MAP.get(key);
+        String value = UpgradeMapUtils.databaseUpgradeMap().get(key);
         if (isEmpty(value)) {
             return empty();
         }
 
         String message = format("Consider upgrading instance class from %s to %s", key, value);
-        return of(PossibleUpgradeInfo.builder()
-                .resourceId(database.getId())
-                .service("RDS")
+        return of(PossibleUpgradeInfo.fromResource(database)
                 .reason(message)
                 .confidence(AnalysisConfidence.HIGH)
                 .build());

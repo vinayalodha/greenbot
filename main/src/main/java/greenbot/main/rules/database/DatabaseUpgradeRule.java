@@ -41,7 +41,7 @@ public class DatabaseUpgradeRule extends AbstractGreenbotRule {
     private DatabaseService databaseService;
 
     @Override
-    public RuleResponse doWork(RuleRequest ruleRequest) {
+    public RuleResponse doWork(RuleRequest request) {
         List<Database> databases = databaseService.list(Collections.emptyList());
         Map<Database, List<PossibleUpgradeInfo>> upgrades = databaseService.checkUpgradePossibility(databases);
 

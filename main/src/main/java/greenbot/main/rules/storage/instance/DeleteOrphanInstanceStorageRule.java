@@ -44,9 +44,7 @@ public class DeleteOrphanInstanceStorageRule extends AbstractGreenbotRule {
         TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
         List<RuleResponseItem> items = instanceStorageService.orphans(Collections.singletonList(predicate::test))
                 .stream()
-                .map(storage -> RuleResponseItem.builder()
-                        .resourceId(storage.getId())
-                        .service("EBS")
+                .map(storage -> RuleResponseItem.fromResource(storage)
                         .confidence(AnalysisConfidence.MEDIUM)
                         .message("EBS storage is not attached to EC2, are they used?")
                         .ruleId(buildRuleId())

@@ -46,6 +46,7 @@ public class VolumeToInstanceStorageConverter implements Converter<Volume, Insta
         return InstanceStorage.builder()
                 .id(source.volumeId())
                 .tags(tags)
+                .serviceType("EBS")
                 .build();
     }
 
