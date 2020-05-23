@@ -30,11 +30,13 @@ export class ResultComponent extends Component<ResultProps, {}> {
 		const items = []
 
 		for (const item of this.props.result.items) {
+			var url1= "https://vinay-lodha.gitbook.io/greenbot/rules/" + item.ruleId;
+			var linkNode = <a href= {url1}>{item.ruleId}</a>
 			items.push(
 				<tr>
 					<td>{item.resourceId}</td>
 					<td>{item.service}</td>
-					<td>{item.ruleId}</td>
+					<td>{linkNode}</td>
 					<td>{item.confidence}</td>
 					<td>{item.message}</td>
 				</tr>

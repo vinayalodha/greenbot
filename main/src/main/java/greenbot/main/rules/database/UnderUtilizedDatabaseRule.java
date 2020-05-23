@@ -15,7 +15,6 @@
  */
 package greenbot.main.rules.database;
 
-import greenbot.main.config.ConfigService;
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.provider.predicates.RdsInstanceClassPredicate;
 import greenbot.provider.predicates.TagPredicate;
@@ -76,12 +75,7 @@ public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule implements I
 
     @Override
     public RuleInfo ruleInfo() {
-        return RuleInfo.builder()
-                .id(buildRuleId())
-                .description(String.format("Check if RDS instances are under-utilized, CPU threshold value can be changed using %s config param",
-                        ConfigService.UNDER_UTILIZED_CPU_PERCENTAGE_DATABASE))
-                .permissions(Arrays.asList("ec2:DescribeRegions", "rds:DescribeDBInstances", "cloudwatch:GetMetricStatistics"))
-                .build();
+        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "rds:DescribeDBInstances", "cloudwatch:GetMetricStatistics"));
     }
 
     public void afterPropertiesSet() {

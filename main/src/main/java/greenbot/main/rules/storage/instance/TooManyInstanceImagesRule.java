@@ -56,10 +56,6 @@ public class TooManyInstanceImagesRule extends AbstractGreenbotRule {
 
     @Override
     public RuleInfo ruleInfo() {
-        return RuleInfo.builder()
-                .id(buildRuleId())
-                .description("Too may AMI, do cleanup policy exits?")
-                .permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeImages"))
-                .build();
+        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeImages"));
     }
 }

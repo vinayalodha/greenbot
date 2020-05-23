@@ -28,7 +28,7 @@ import java.util.List;
 @Builder
 public class RuleInfo {
     private final String id;
-    private final String description;
+    private final String docs;
     @Builder.Default
-    private final List<String> permissions = new ArrayList<String>();
+    private final List<String> permissions = new ArrayList<>();
 }

@@ -15,7 +15,6 @@
  */
 package greenbot.main.rules.instance;
 
-import greenbot.main.config.ConfigService;
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.provider.predicates.InstanceFamilyPredicate;
 import greenbot.provider.predicates.InstanceTypePredicate;
@@ -88,16 +87,7 @@ public class UnderUtilizedInstanceCpuRule extends AbstractGreenbotRule implement
 
     @Override
     public RuleInfo ruleInfo() {
-        String desc = String.format(
-                "Find Under-utilized machines based on average CPU usage (AWS don't capture memory utilization by default). "
-                        + "Only %s instance family are analyzed. CPU threshold value can be changed using %s config param",
-                INSTANCE_CSV, ConfigService.UNDER_UTILIZED_CPU_PERCENTAGE_INSTANCE);
-        return RuleInfo.builder()
-                .id(buildRuleId())
-                .description(desc)
-                .permissions(
-                        Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances", "cloudwatch:GetMetricStatistics"))
-                .build();
+        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances", "cloudwatch:GetMetricStatistics"));
     }
 
     @Override

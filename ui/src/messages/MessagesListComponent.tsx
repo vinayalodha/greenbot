@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, {Component} from "react";
-
+import './../css/MessagesListComponent.css'
 class MessagesListComponentProps {
     messages: String[] = [];
     type!: string
@@ -30,7 +30,7 @@ export class MessagesListComponent extends Component<MessagesListComponentProps,
         const items = []
 
         for (const message of this.props.messages) {
-            items.push(<li>{message}</li>)
+            items.push(<li className="circle">{message}</li>)
         }
         return (
             <article className={this.props.type}>

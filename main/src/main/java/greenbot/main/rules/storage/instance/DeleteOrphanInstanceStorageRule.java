@@ -57,10 +57,6 @@ public class DeleteOrphanInstanceStorageRule extends AbstractGreenbotRule {
 
     @Override
     public RuleInfo ruleInfo() {
-        return RuleInfo.builder()
-                .id(buildRuleId())
-                .description("Check for orphan EBS drives")
-                .permissions(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeVolumes"))
-                .build();
+        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeVolumes"));
     }
 }
