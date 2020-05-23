@@ -7,7 +7,7 @@
 
 ## Rules​
 
-* [under\_utilized\_instance\_cpu\_rule](rules/underutilized_instance_cpu_rule.md)
+* [under\_utilized\_instance\_cpu\_rule](rules/under_utilized_instance_cpu_rule.md)
 * [under\_utilized\_database\_rule](rules/under_utilized_database_rule.md)
 * [older\_generation\_instance\_rule](rules/older_ec2_generation_rule.md)
 * [delete\_orphan\_instance\_storage\_rule](rules/delete_orphan_instance_storage_rule.md)
