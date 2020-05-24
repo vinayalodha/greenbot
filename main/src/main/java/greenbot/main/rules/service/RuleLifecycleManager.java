@@ -78,11 +78,16 @@ public class RuleLifecycleManager {
                 .reduce(responseReducer)
                 .orElse(RuleResponse.builder().build());
         log.info("Rule execution done");
+        List<RuleResponseItem> sortedItems = new ArrayList<>(response.getItems());
+        Collections.sort(sortedItems);
         return response.toBuilder()
                 .errorMessages(errorMessages)
+                .clearItems()
+                .items(sortedItems)
                 .id(Math.abs(new Random().nextInt()))
                 .build();
     }
+
 
     private String checkIfAWSCliConfigured() {
         try {

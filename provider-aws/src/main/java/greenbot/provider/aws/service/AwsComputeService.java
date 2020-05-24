@@ -37,7 +37,6 @@ import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.startsWithAny;
 
 /**
  * @author Vinay Lodha
@@ -54,28 +53,31 @@ public class AwsComputeService implements ComputeService {
     public List<PossibleUpgradeInfo> findUnderUtilized(List<Compute> computes, int duration, double threshold) {
         return computes.stream()
                 .map(compute -> {
-                    CloudWatchMetricStatisticsRequest request = CloudWatchMetricStatisticsRequest.builder()
-                            .dimensionKey("InstanceId")
-                            .dimensionValue(compute.getId())
-                            .region(compute.getRegion())
-                            .duration(duration)
-                            .metricName("CPUUtilization")
-                            .namespace("AWS/EC2")
-                            .build();
-
-                    Optional<Double> averageValue = cloudWatchService.getMetricStatistics(request);
-                    return averageValue
-                            .filter(value -> value < threshold)
-                            .map(value ->
-                                    PossibleUpgradeInfo.fromResource(compute)
-                                            .confidence(AnalysisConfidence.MEDIUM)
-                                            .reason(String.format("CPU is underutilized, average CPU usage is %.2f. Consider using smaller instance size",
-                                                    averageValue.get()))
-                                            .build())
-                            .orElse(null);
+                    return findUnderUtilized(compute, threshold, duration);
                 })
                 .filter(Objects::nonNull)
                 .collect(toList());
+    }
+
+    private PossibleUpgradeInfo findUnderUtilized(Compute compute, double threshold, int duration) {
+        CloudWatchMetricStatisticsRequest request = CloudWatchMetricStatisticsRequest.builder()
+                .dimensionKey("InstanceId")
+                .dimensionValue(compute.getId())
+                .region(compute.getRegion())
+                .duration(duration)
+                .metricName("CPUUtilization")
+                .namespace("AWS/EC2")
+                .build();
+
+        Optional<Double> averageValue = cloudWatchService.getMetricStatistics(request);
+        return averageValue
+                .filter(value -> value < threshold)
+                .map(value ->
+                        PossibleUpgradeInfo.fromResource(compute)
+                                .confidence(AnalysisConfidence.MEDIUM)
+                                .reason(String.format("CPU is underutilized, average CPU usage is %.2f. Consider using smaller instance size", averageValue.get()))
+                                .build())
+                .orElse(null);
     }
 
     @Override
@@ -126,35 +128,24 @@ public class AwsComputeService implements ComputeService {
 
     private Optional<PossibleUpgradeInfo> infChips(Compute compute) {
         String family = compute.getInstanceType().getFamily();
-        // Milk
-        if (startsWithAny(family, "g3", "g2", "p3", "p2")) {
-            PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.fromResource(compute)
-                    .reason("Consider using inf1 instances if you performing machine learning inference")
-                    .confidence(AnalysisConfidence.MEDIUM)
-                    .build();
-            return Optional.of(possibleUpgradeInfo);
-        }
-        return Optional.empty();
+        boolean isFamilyCanBeUpgraded = UpgradeMapUtils.inf1InstanceUpgradeMap().containsKey(family);
+        if (!isFamilyCanBeUpgraded)
+            return Optional.empty();
+
+        PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.fromResource(compute)
+                .reason("Consider using inf1 instances if you performing machine learning inference")
+                .confidence(AnalysisConfidence.MEDIUM)
+                .build();
+        return Optional.of(possibleUpgradeInfo);
     }
 
     private Optional<PossibleUpgradeInfo> armRecommendation(Compute compute) {
         String family = compute.getInstanceType().getFamily();
-        // Milk
-        String message = null;
-        if (startsWithAny(family, "t1", "t2", "t3")) {
-            message = "Consider switching to a1 instances if your application workload support ARM";
-        } else if (startsWithAny(family, "m1", "m2", "m3", "m4", "m5")) {
-            message = "Consider switching to m6g instances if your application workload support ARM";
-        } else if (startsWithAny(family, "r3", "r4", "r5")) {
-            message = "Consider switching to r5a instances if your application workload support ARM";
-        }
-
-        if (message == null) {
+        String armRecommendation = UpgradeMapUtils.armInstanceUpgradeMap().get(family);
+        if (armRecommendation == null)
             return Optional.empty();
-        }
-
         PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.fromResource(compute)
-                .reason(message)
+                .reason(String.format("Consider switching to %s instances if your application workload support ARM", armRecommendation))
                 .confidence(AnalysisConfidence.LOW)
                 .build();
         return Optional.of(possibleUpgradeInfo);

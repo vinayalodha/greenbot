@@ -49,7 +49,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  * @author Vinay Lodha
  */
 @Component
-public class UnderUtilizedInstanceCpuRule extends AbstractGreenbotRule implements InitializingBean {
+public class UnderUtilizedInstanceRule extends AbstractGreenbotRule implements InitializingBean {
 
     private static final Collection<String> GP_CPU_FAMILIES = Stream.of(
             GENERAL_PURPOSE_FAMILY_LIST, CPU_INTENSIVE_CPU_FAMILY_LIST)

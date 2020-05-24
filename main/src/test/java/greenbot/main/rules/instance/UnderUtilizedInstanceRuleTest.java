@@ -15,39 +15,38 @@
  */
 package greenbot.main.rules.instance;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import greenbot.main.TerraformTest;
 import greenbot.main.dataprovider.RuleRequestDataProvider;
 import greenbot.main.terraform.TerraformUtils;
 import greenbot.rule.model.RuleResponse;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * 
  * @author Vinay Lodha
  */
 @SpringBootTest
-public class OlderGenerationInstanceRuleTest {
+public class UnderUtilizedInstanceRuleTest {
 
-	@Autowired
-	private OlderGenerationInstanceRule rule;
+    @Autowired
+    private UnderUtilizedInstanceRule rule;
 
-	@Test
-	@TerraformTest
-	public void sanity() {
-
-		String path = "./src/test/resources/terraform/OlderGenerationInstanceRule";
-		try {
-			TerraformUtils.apply(path);
-			RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
-			assertEquals(7, response.getItems().size());
-		} finally {
-			TerraformUtils.destroy(path);
-		}
-
-	}
+    @Test
+    @TerraformTest
+    @SneakyThrows
+    public void sanity() {
+        String path = "./src/test/resources/terraform/UnderUtilizedInstanceRule";
+        try {
+            TerraformUtils.apply(path);
+            Thread.sleep(11 * 60 * 1000);
+            RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
+            assertEquals(2, response.getItems().size());
+        } finally {
+            TerraformUtils.destroy(path);
+        }
+    }
 }
