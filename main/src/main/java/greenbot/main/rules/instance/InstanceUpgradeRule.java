@@ -39,7 +39,7 @@ import static java.util.stream.Collectors.toList;
  */
 @Component
 @AllArgsConstructor
-public class OlderGenerationInstanceRule extends greenbot.main.rules.AbstractGreenbotRule {
+public class InstanceUpgradeRule extends greenbot.main.rules.AbstractGreenbotRule {
 
     private final ComputeService computeService;
     private final ConversionService conversionService;

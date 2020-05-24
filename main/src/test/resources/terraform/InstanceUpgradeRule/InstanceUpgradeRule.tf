@@ -10,7 +10,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
+See the License for the specific language governing permissions andR
 limitations under the License.
 */
 provider "aws" {
@@ -21,20 +21,24 @@ data "aws_ami" "ubuntu" {
   most_recent = true
 
   filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
+    name = "name"
+    values = [
+      "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
   }
 
   filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
+    name = "virtualization-type"
+    values = [
+      "hvm"]
   }
 
-  owners = ["099720109477"] # Canonical
+  owners = [
+    "099720109477"]
+  # Canonical
 }
 
 resource "aws_instance" "one" {
-  ami           = "${data.aws_ami.ubuntu.id}"
+  ami = "${data.aws_ami.ubuntu.id}"
   instance_type = "t2.micro"
 
   tags = {
@@ -44,7 +48,7 @@ resource "aws_instance" "one" {
 
 
 resource "aws_instance" "two" {
-  ami           = "${data.aws_ami.ubuntu.id}"
+  ami = "${data.aws_ami.ubuntu.id}"
   instance_type = "t3a.micro"
 
   tags = {
@@ -53,7 +57,7 @@ resource "aws_instance" "two" {
 }
 
 resource "aws_instance" "three" {
-  ami           = "${data.aws_ami.ubuntu.id}"
+  ami = "${data.aws_ami.ubuntu.id}"
   instance_type = "m5.large"
 
   tags = {
@@ -62,7 +66,7 @@ resource "aws_instance" "three" {
 }
 
 resource "aws_elastic_beanstalk_application" "older_gen_instance_beanstalk_application" {
-  name        = "older_gen_instance_beanstalk_application"
+  name = "older_gen_instance_beanstalk_application"
   description = "older_gen_instance_beanstalk_application"
   tags = {
     owner = "greenbot"
@@ -70,8 +74,8 @@ resource "aws_elastic_beanstalk_application" "older_gen_instance_beanstalk_appli
 }
 
 resource "aws_elastic_beanstalk_environment" "older_gen_instance_beanstalk_application_env" {
-  name                = "env-older-gen"
-  application         = "${aws_elastic_beanstalk_application.older_gen_instance_beanstalk_application.name}"
+  name = "env-older-gen"
+  application = "${aws_elastic_beanstalk_application.older_gen_instance_beanstalk_application.name}"
   solution_stack_name = "64bit Amazon Linux 2 v3.0.1 running Corretto 11"
 
   setting {
@@ -80,9 +84,9 @@ resource "aws_elastic_beanstalk_environment" "older_gen_instance_beanstalk_appli
     value = "t3.micro"
   }
   setting {
-      namespace = "aws:autoscaling:launchconfiguration"
-      name = "IamInstanceProfile"
-      value = "aws-elasticbeanstalk-ec2-role"
+    namespace = "aws:autoscaling:launchconfiguration"
+    name = "IamInstanceProfile"
+    value = "aws-elasticbeanstalk-ec2-role"
   }
 
   tags = {
