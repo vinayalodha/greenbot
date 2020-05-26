@@ -54,7 +54,7 @@ public class CacheUpgradeRule extends greenbot.main.rules.AbstractGreenbotRule {
 
     @Override
     public RuleInfo ruleInfo() {
-        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "ec2:DescribeInstances"));
+        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "elasticache:DescribeCacheClusters"));
     }
 
 }

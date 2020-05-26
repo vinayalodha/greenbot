@@ -10,7 +10,8 @@
         "ec2:DescribeRegions",
         "ec2:DescribeVolumes",
         "rds:DescribeDBInstances",
-        "cloudwatch:GetMetricStatistics"
+        "cloudwatch:GetMetricStatistics",
+        "elasticache:DescribeCacheClusters"
       ],
       "Resource": "*"
     }
