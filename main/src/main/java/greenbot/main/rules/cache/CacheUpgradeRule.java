@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (https://github.com/vinay-lodha)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,45 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main.rules.docker;
+package greenbot.main.rules.cache;
 
-import greenbot.main.rules.AbstractGreenbotRule;
-import greenbot.provider.service.ComputeService;
-import greenbot.provider.service.DockerService;
+import greenbot.provider.service.CacheService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
-import greenbot.rule.model.cloud.Compute;
+import greenbot.rule.model.cloud.Cache;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import greenbot.rule.utils.ConversionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Vinay Lodha
  */
-@Service
-public class MigrationToDockerRule extends AbstractGreenbotRule {
+@Component
+public class CacheUpgradeRule extends greenbot.main.rules.AbstractGreenbotRule {
 
     @Autowired
-    private DockerService dockerService;
-
-    @Autowired
-    private ComputeService computeService;
+    private CacheService cacheService;
 
     @Override
     public RuleResponse doWork(RuleRequest request) {
-        List<Compute> computes = computeService.list(Collections.singletonList(getTagPredicate(request)::test));
-        Map<Compute, List<PossibleUpgradeInfo>> upgradeMap = dockerService.checkUpgradePossibility(computes);
-
-        List<RuleResponseItem> items = upgradeMap.values().stream()
+        List<Cache> caches = cacheService.list(Collections.emptyList());
+        Map<Cache, List<PossibleUpgradeInfo>> upgrades = cacheService.checkUpgradePossibility(caches);
+        List<RuleResponseItem> items = upgrades.values()
+                .stream()
                 .flatMap(Collection::stream)
-                .map(obj -> ConversionUtils.toRuleResponseItem(obj, buildRuleId()))
-                .collect(Collectors.toList());
+                .map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
+                .collect(toList());
 
         return RuleResponse.build(items);
     }

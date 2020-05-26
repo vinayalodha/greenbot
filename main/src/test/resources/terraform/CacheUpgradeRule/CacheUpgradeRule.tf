@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (https://github.com/vinay-lodha)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.rule.model.cloud;
-
-import java.util.Map;
-
-/**
- * @author Vinay Lodha
- */
-public interface HasCpuUtilization {
-    String NAMESPACE = "namespace";
-
-    public Map<String, String> metadata();
+provider "aws" {
+  region = "us-east-2"
 }
+resource "aws_elasticache_cluster" "example" {
+  cluster_id = "cluster-example"
+  engine = "memcached"
+  node_type = "cache.t2.small"
+  num_cache_nodes = 1
+  parameter_group_name = "default.memcached1.5"
+  port = 11211
+  tags = {
+    Name = "greenbot_db_name"
+    owner = "greenbot"
+  }
+}
+

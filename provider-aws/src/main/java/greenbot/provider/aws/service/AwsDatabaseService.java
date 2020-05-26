@@ -26,7 +26,6 @@ import greenbot.rule.model.cloud.Tag;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.regions.Region;
@@ -46,7 +45,6 @@ import static java.util.Optional.of;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Engine Types :
@@ -66,11 +64,12 @@ public class AwsDatabaseService implements DatabaseService {
     public List<PossibleUpgradeInfo> findUnderUtilized(List<Database> databases, int duration, double cpuThreshold, double swapSpaceThreshold) {
         return databases.stream()
                 .map(database -> findUnderUtilized(database, cpuThreshold, duration))
-                .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(toList());
     }
 
-    private PossibleUpgradeInfo findUnderUtilized(Database database, double cpuThreshold, int duration) {
+    private Optional<PossibleUpgradeInfo> findUnderUtilized(Database database, double cpuThreshold, int duration) {
         CloudWatchMetricStatisticsRequest request = CloudWatchMetricStatisticsRequest.builder()
                 .dimensionKey("DBInstanceIdentifier")
                 .dimensionValue(database.getName())
@@ -83,18 +82,17 @@ public class AwsDatabaseService implements DatabaseService {
         Optional<Double> averageValue = cloudWatchService.getMetricStatistics(request);
         return averageValue
                 .filter(value -> value < cpuThreshold)
-                .map(value ->
-                        PossibleUpgradeInfo.fromResource(database)
-                                .confidence(AnalysisConfidence.MEDIUM)
-                                .reason(String.format("RDS instance CPU is underutilized, average CPU usage is %.2f. Consider using smaller instance size", averageValue.get()))
-                                .build())
-                .orElse(null);
+                .map(value -> PossibleUpgradeInfo.fromResource(database)
+                        .confidence(AnalysisConfidence.MEDIUM)
+                        .reason(String.format("RDS instance CPU is underutilized, average CPU usage is %.2f. Consider using smaller instance size", averageValue.get()))
+                        .build()
+                );
     }
 
     private List<PossibleUpgradeInfo> checkUpgradePossibility(Database database) {
         Optional<PossibleUpgradeInfo> a = migrationToAurora(database);
         Optional<PossibleUpgradeInfo> b = olderGenFamily(database);
-        return OptionalUtils.buildList(Arrays.asList(a, b));
+        return OptionalUtils.toList(Arrays.asList(a, b));
     }
 
     @Override
@@ -127,8 +125,8 @@ public class AwsDatabaseService implements DatabaseService {
                 .filter(instance -> equalsAnyIgnoreCase(instance.dbInstanceStatus(), "available"))
                 .map(dbInstance -> conversionService.convert(dbInstance, Database.class))
                 .filter(Objects::nonNull)
-                // add tags
                 .map(database -> {
+                    // add tags
                     ListTagsForResourceRequest listTagsForResourceRequest = ListTagsForResourceRequest.builder()
                             .resourceName(database.getId()).build();
 
@@ -165,20 +163,12 @@ public class AwsDatabaseService implements DatabaseService {
     }
 
     private Optional<PossibleUpgradeInfo> olderGenFamily(Database database) {
-        String instanceClass = database.getInstanceClass();
-        if (isEmpty(instanceClass)) {
-            return Optional.empty();
-        }
-        String key = StringUtils.substringBeforeLast(instanceClass, ".");
-        String value = UpgradeMapUtils.databaseUpgradeMap().get(key);
-        if (isEmpty(value)) {
-            return empty();
-        }
-
-        String message = format("Consider upgrading instance class from %s to %s", key, value);
-        return of(PossibleUpgradeInfo.fromResource(database)
-                .reason(message)
-                .confidence(AnalysisConfidence.HIGH)
-                .build());
+        String family = database.getInstanceClass().getFamily();
+        return UpgradeMapUtils.databaseUpgradeMap(family)
+                .map(o -> PossibleUpgradeInfo.fromResource(database)
+                        .reason(format("Consider upgrading instance class from %s to %s", family, o))
+                        .confidence(AnalysisConfidence.HIGH)
+                        .build()
+                );
     }
 }

@@ -15,8 +15,8 @@
  */
 package greenbot.provider.aws.converter;
 
+import greenbot.provider.converter.StringToInstanceType;
 import greenbot.rule.model.cloud.Compute;
-import greenbot.rule.model.cloud.InstanceType;
 import greenbot.rule.model.cloud.Tag;
 import greenbot.rule.utils.TagUtils;
 import lombok.AllArgsConstructor;
@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toMap;
-import static org.apache.commons.lang3.StringUtils.split;
 
 /**
  * @author Vinay Lodha
@@ -37,7 +36,7 @@ import static org.apache.commons.lang3.StringUtils.split;
 @AllArgsConstructor
 public class InstanceToComputeConverter implements Converter<Instance, Compute> {
     public static final String APP_NAME_TAG = "elasticbeanstalk:environment-name";
-
+    // aws:ec2spot:fleet-request-id
     private final Ec2TagToTagConverter ec2TagToTagConverter;
 
     @Override
@@ -46,21 +45,12 @@ public class InstanceToComputeConverter implements Converter<Instance, Compute> 
                 .stream()
                 .map(ec2TagToTagConverter::convert)
                 .collect(toMap(Tag::getKey, Function.identity()));
-
         return Compute.builder()
                 .id(instance.instanceId())
-                .instanceType(buildInstanceType(instance))
+                .instanceType(new StringToInstanceType().convert(instance.instanceTypeAsString()))
                 .tags(tags)
                 .serviceType(tags.get(APP_NAME_TAG) != null ? "Elastic Beanstalk/EC2" : "EC2")
-                .name(TagUtils.getValue(tags.get("Name")))
-                .build();
-    }
-
-    private InstanceType buildInstanceType(Instance instance) {
-        String[] tokens = split(instance.instanceTypeAsString(), '.');
-        return InstanceType.builder()
-                .family(tokens[0])
-                .size(tokens[1])
+                .name(TagUtils.getValue(tags.get("Name")).orElse(""))
                 .build();
     }
 }

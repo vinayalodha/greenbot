@@ -3,10 +3,11 @@ package greenbot.provider.aws;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class UpgradeMapUtils {
 
-    public static Map<String, String> inf1InstanceUpgradeMap() {
+    public static Optional<String> inf1InstanceUpgradeMap(String key) {
         Map<String, String> retval = new LinkedHashMap<>();
 
         // Milk
@@ -14,11 +15,22 @@ public class UpgradeMapUtils {
         retval.put("g3", "inf1");
         retval.put("p2", "inf1");
         retval.put("p3", "inf1");
-        return retval;
+        return Optional.of(retval.get(key));
 
     }
 
-    public static Map<String, String> armInstanceUpgradeMap() {
+    public static Optional<String> elasticCacheUpgradeMap(String key) {
+        Map<String, String> retval = new LinkedHashMap<>();
+        // Milk
+        retval.put("cache.t2", "cache.t3");
+        retval.put("cache.m3", "cache.m5");
+        retval.put("cache.m4", "cache.m5");
+        retval.put("cache.r3", "cache.r5");
+        retval.put("cache.r4", "cache.r5");
+        return Optional.of(retval.get(key));
+    }
+
+    public static Optional<String> armInstanceUpgradeMap(String key) {
         Map<String, String> retval = new LinkedHashMap<>();
 
         // Milk
@@ -49,10 +61,10 @@ public class UpgradeMapUtils {
         retval.put("cc2", "c6g");
         retval.put("c5", "c6g");
 
-        return retval;
+        return Optional.of(retval.get(key));
     }
 
-    public static Map<String, String> instanceUpgradeMap() {
+    public static Optional<String> instanceUpgradeMap(String key) {
 
         Map<String, String> retval = new LinkedHashMap<>();
 
@@ -86,10 +98,10 @@ public class UpgradeMapUtils {
         retval.put("t2", "t3a");
         retval.put("t3", "t3a");
 
-        return retval;
+        return Optional.ofNullable(retval.get(key));
     }
 
-    public static Map<String, String> databaseUpgradeMap() {
+    public static Optional<String> databaseUpgradeMap(String key) {
         Map<String, String> retVal = new HashMap<>();
         // Milk
         retVal.put("db.t2", "db.t3");
@@ -97,6 +109,6 @@ public class UpgradeMapUtils {
         retVal.put("db.m4", "db.m5");
         retVal.put("db.r3", "db.r5");
         retVal.put("db.r4", "db.r5");
-        return retVal;
+        return Optional.of(retVal.get(key));
     }
 }

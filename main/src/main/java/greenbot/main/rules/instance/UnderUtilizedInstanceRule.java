@@ -18,7 +18,6 @@ package greenbot.main.rules.instance;
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.provider.predicates.InstanceFamilyPredicate;
 import greenbot.provider.predicates.InstanceTypePredicate;
-import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
@@ -31,7 +30,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -43,7 +41,6 @@ import java.util.stream.Stream;
 import static greenbot.provider.aws.utils.InstanceTypeUtils.CPU_INTENSIVE_CPU_FAMILY_LIST;
 import static greenbot.provider.aws.utils.InstanceTypeUtils.GENERAL_PURPOSE_FAMILY_LIST;
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * @author Vinay Lodha
@@ -56,27 +53,21 @@ public class UnderUtilizedInstanceRule extends AbstractGreenbotRule implements I
             .flatMap(Collection::stream)
             .collect(toList());
 
-    private static final String INSTANCE_CSV = join(GP_CPU_FAMILIES);
-
     @Value("${rules.UnderutilizedInstanceCpuRule.instance_types_to_ignore}")
     private String instanceTypesToIgnore;
 
     @Autowired
     private ComputeService computeService;
 
-    @Autowired
-    private ConversionService conversionService;
-
     private InstanceFamilyPredicate instanceFamilyPredicate;
     private InstanceTypePredicate instanceTypePredicate;
 
     @Override
-    public RuleResponse doWork(RuleRequest ruleRequest) {
-        TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
-        List<Predicate<Compute>> predicates = Arrays.asList(predicate::test, instanceFamilyPredicate, instanceTypePredicate);
+    public RuleResponse doWork(RuleRequest request) {
+        List<Predicate<Compute>> predicates = Arrays.asList(getTagPredicate(request)::test, instanceFamilyPredicate, instanceTypePredicate);
 
         List<Compute> computes = computeService.list(predicates);
-        List<PossibleUpgradeInfo> underUtilized = computeService.findUnderUtilized(computes, ruleRequest.getCloudwatchTimeframeDuration(), ruleRequest.getCpuThresholdInstance());
+        List<PossibleUpgradeInfo> underUtilized = computeService.findUnderUtilized(computes, request.getCloudwatchTimeframeDuration(), request.getCpuThresholdInstance());
         List<RuleResponseItem> items = underUtilized
                 .stream()
                 .map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))

@@ -16,6 +16,7 @@
 package greenbot.provider.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,11 +24,20 @@ import java.util.Optional;
  * @author Vinay Lodha
  */
 public class OptionalUtils {
-    public static <T> List<T> buildList(List<Optional<T>> optionals) {
+    public static <T> List<T> toList(List<Optional<T>> optionals) {
+        if (optionals == null)
+            return Collections.emptyList();
+
         List<T> retval = new ArrayList<T>();
         for (Optional<T> obj : optionals) {
+            if (obj == null)
+                continue;
             obj.ifPresent(retval::add);
         }
         return retval;
+    }
+
+    public static <T> List<T> toList(Optional<T> optional) {
+        return toList(Collections.singletonList(optional));
     }
 }

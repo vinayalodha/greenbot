@@ -15,8 +15,12 @@
  */
 package greenbot.main.rules;
 
+import greenbot.provider.predicates.TagPredicate;
 import greenbot.rule.model.GreenbotRule;
 import greenbot.rule.model.RuleInfo;
+import greenbot.rule.model.RuleRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 
 import java.util.List;
 
@@ -26,6 +30,8 @@ import static org.apache.commons.lang3.StringUtils.*;
  * @author Vinay Lodha
  */
 public abstract class AbstractGreenbotRule implements GreenbotRule {
+    @Autowired
+    private ConversionService conversionService;
 
     protected String buildRuleId() {
         String[] tokens = splitByCharacterTypeCamelCase(getClass().getSimpleName());
@@ -40,4 +46,8 @@ public abstract class AbstractGreenbotRule implements GreenbotRule {
                 .build();
     }
 
+
+    protected TagPredicate getTagPredicate(RuleRequest request) {
+        return conversionService.convert(request, TagPredicate.class);
+    }
 }

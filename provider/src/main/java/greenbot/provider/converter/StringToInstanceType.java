@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (https://github.com/vinay-lodha)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.provider.aws.converter;
+package greenbot.provider.converter;
 
-import greenbot.provider.converter.StringToInstanceType;
-import greenbot.rule.model.cloud.Database;
+import greenbot.rule.model.cloud.InstanceType;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.rds.model.DBInstance;
 
 /**
+ * cache.t2.medium
+ * or t3a.large
+ *
  * @author Vinay Lodha
  */
 @Component
-public class DbInstanceToDatabaseConverter implements Converter<DBInstance, Database> {
+public class StringToInstanceType implements Converter<String, InstanceType> {
 
-    public Database convert(DBInstance instance) {
-        // Optional[db.t2.micro]
-        return Database.builder()
-                .id(instance.dbInstanceArn())
-                .serviceType("RDS")
-                .name(instance.dbInstanceIdentifier())
-                .instanceClass(new StringToInstanceType().convert(instance.dbInstanceClass()))
-                .engine(instance.engine())
+    @Override
+    public InstanceType convert(String source) {
+        if (StringUtils.isBlank(source))
+            return InstanceType.builder().family("").size("").build();
+        return InstanceType.builder()
+                .family(StringUtils.substringBeforeLast(source, "."))
+                .size(StringUtils.substringAfterLast(source, "."))
                 .build();
     }
 }

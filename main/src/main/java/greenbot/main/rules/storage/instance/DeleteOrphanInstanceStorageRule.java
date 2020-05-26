@@ -16,33 +16,29 @@
 package greenbot.main.rules.storage.instance;
 
 import greenbot.main.rules.AbstractGreenbotRule;
-import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.InstanceStorageService;
 import greenbot.rule.model.*;
-import lombok.AllArgsConstructor;
-import org.springframework.core.convert.ConversionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 /**
  * @author Vinay Lodha
  */
 @Component
-@AllArgsConstructor
 public class DeleteOrphanInstanceStorageRule extends AbstractGreenbotRule {
 
-    private final InstanceStorageService instanceStorageService;
-    private final ConversionService conversionService;
+    @Autowired
+    private InstanceStorageService instanceStorageService;
 
     @Override
-    public RuleResponse doWork(RuleRequest ruleRequest) {
-        TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
-        List<RuleResponseItem> items = instanceStorageService.orphans(Collections.singletonList(predicate::test))
+    public RuleResponse doWork(RuleRequest request) {
+        List<RuleResponseItem> items = instanceStorageService.orphans(singletonList(getTagPredicate(request)::test))
                 .stream()
                 .map(storage -> RuleResponseItem.fromResource(storage)
                         .confidence(AnalysisConfidence.MEDIUM)

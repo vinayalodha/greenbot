@@ -15,7 +15,6 @@
  */
 package greenbot.main.rules.instance;
 
-import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
@@ -24,8 +23,7 @@ import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import greenbot.rule.utils.ConversionUtils;
-import lombok.AllArgsConstructor;
-import org.springframework.core.convert.ConversionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -38,17 +36,14 @@ import static java.util.stream.Collectors.toList;
  * @author Vinay Lodha
  */
 @Component
-@AllArgsConstructor
 public class InstanceUpgradeRule extends greenbot.main.rules.AbstractGreenbotRule {
 
-    private final ComputeService computeService;
-    private final ConversionService conversionService;
+    @Autowired
+    private ComputeService computeService;
 
     @Override
-    public RuleResponse doWork(RuleRequest ruleRequest) {
-        TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
-
-        List<Compute> computes = computeService.list(Collections.singletonList(predicate::test));
+    public RuleResponse doWork(RuleRequest request) {
+        List<Compute> computes = computeService.list(Collections.singletonList(getTagPredicate(request)::test));
         Map<Compute, List<PossibleUpgradeInfo>> possibleUpgradeInfos = computeService.checkUpgradePossibility(computes);
 
         List<RuleResponseItem> items = possibleUpgradeInfos.values()

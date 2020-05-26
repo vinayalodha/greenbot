@@ -17,13 +17,11 @@ package greenbot.main.rules.misc;
 
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.main.rules.service.TagAnalyzer;
-import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.ComputeService;
 import greenbot.provider.service.DatabaseService;
 import greenbot.rule.model.*;
 import greenbot.rule.model.cloud.Resource;
-import lombok.AllArgsConstructor;
-import org.springframework.core.convert.ConversionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,22 +35,22 @@ import static java.util.stream.Collectors.toList;
  * @author Vinay Lodha
  */
 @Service
-@AllArgsConstructor
 public class DevResourcesRule extends AbstractGreenbotRule {
 
-    private final TagAnalyzer devTagAnalyzer;
-    private final ComputeService computeService;
-    private final DatabaseService databaseService;
+    @Autowired
+    private TagAnalyzer devTagAnalyzer;
 
-    private final ConversionService conversionService;
+    @Autowired
+    private ComputeService computeService;
+
+    @Autowired
+    private DatabaseService databaseService;
 
     @Override
-    public RuleResponse doWork(RuleRequest ruleRequest) {
+    public RuleResponse doWork(RuleRequest request) {
         // TODO also check for Fargate
-        TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
-
-        List<? extends Resource> computes = computeService.list(Collections.singletonList(predicate::test));
-        List<? extends Resource> databases = databaseService.list(Collections.singletonList(predicate::test));
+        List<? extends Resource> computes = computeService.list(Collections.singletonList(getTagPredicate(request)::test));
+        List<? extends Resource> databases = databaseService.list(Collections.singletonList(getTagPredicate(request)::test));
         List<Resource> resources = new ArrayList<>();
         resources.addAll(databases);
         resources.addAll(computes);

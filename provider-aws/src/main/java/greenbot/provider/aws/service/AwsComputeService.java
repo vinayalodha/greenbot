@@ -15,7 +15,6 @@
  */
 package greenbot.provider.aws.service;
 
-import greenbot.provider.aws.UpgradeMapUtils;
 import greenbot.provider.aws.model.CloudWatchMetricStatisticsRequest;
 import greenbot.provider.service.ComputeService;
 import greenbot.provider.utils.OptionalUtils;
@@ -35,6 +34,7 @@ import software.amazon.awssdk.services.ec2.paginators.DescribeInstancesIterable;
 import java.util.*;
 import java.util.function.Predicate;
 
+import static greenbot.provider.aws.UpgradeMapUtils.*;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
 
@@ -52,9 +52,7 @@ public class AwsComputeService implements ComputeService {
     @Override
     public List<PossibleUpgradeInfo> findUnderUtilized(List<Compute> computes, int duration, double threshold) {
         return computes.stream()
-                .map(compute -> {
-                    return findUnderUtilized(compute, threshold, duration);
-                })
+                .map(compute -> findUnderUtilized(compute, threshold, duration))
                 .filter(Objects::nonNull)
                 .collect(toList());
     }
@@ -102,6 +100,7 @@ public class AwsComputeService implements ComputeService {
                     return equalsAnyIgnoreCase(name, "stopped", "running");
                 })
                 .map(instance -> convert(instance, region))
+                .filter(Objects::nonNull)
                 .filter(compute -> predicates.stream().allMatch(predicate -> predicate.test(compute)))
                 .collect(toList());
     }
@@ -123,46 +122,38 @@ public class AwsComputeService implements ComputeService {
         Optional<PossibleUpgradeInfo> b = armRecommendation(compute);
         Optional<PossibleUpgradeInfo> c = infChips(compute);
 
-        return OptionalUtils.buildList(Arrays.asList(a, b, c));
+        return OptionalUtils.toList(Arrays.asList(a, b, c));
     }
 
     private Optional<PossibleUpgradeInfo> infChips(Compute compute) {
         String family = compute.getInstanceType().getFamily();
-        boolean isFamilyCanBeUpgraded = UpgradeMapUtils.inf1InstanceUpgradeMap().containsKey(family);
-        if (!isFamilyCanBeUpgraded)
-            return Optional.empty();
-
-        PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.fromResource(compute)
-                .reason("Consider using inf1 instances if you performing machine learning inference")
-                .confidence(AnalysisConfidence.MEDIUM)
-                .build();
-        return Optional.of(possibleUpgradeInfo);
+        return inf1InstanceUpgradeMap(family)
+                .map(o -> PossibleUpgradeInfo.fromResource(compute)
+                        .reason("Consider using inf1 instances if you performing machine learning inference")
+                        .confidence(AnalysisConfidence.MEDIUM)
+                        .build()
+                );
     }
 
     private Optional<PossibleUpgradeInfo> armRecommendation(Compute compute) {
         String family = compute.getInstanceType().getFamily();
-        String armRecommendation = UpgradeMapUtils.armInstanceUpgradeMap().get(family);
-        if (armRecommendation == null)
-            return Optional.empty();
-        PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.fromResource(compute)
-                .reason(String.format("Consider switching to %s instances if your application workload support ARM", armRecommendation))
-                .confidence(AnalysisConfidence.LOW)
-                .build();
-        return Optional.of(possibleUpgradeInfo);
+        return armInstanceUpgradeMap(family)
+                .map(obj -> PossibleUpgradeInfo.fromResource(compute)
+                        .reason(String.format("Consider switching to %s instances if your application workload support ARM", obj))
+                        .confidence(AnalysisConfidence.LOW)
+                        .build()
+                );
     }
 
     private Optional<PossibleUpgradeInfo> isFamilyCanBeUpgraded(Compute compute) {
         String family = compute.getInstanceType().getFamily();
-        String upgradableFamily = UpgradeMapUtils.instanceUpgradeMap().get(family);
-        if (upgradableFamily == null)
-            return Optional.empty();
-
-        PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.fromResource(compute)
-                .reason(String.format("Consider upgrading to newer instance family from %s to %s", family,
-                        upgradableFamily))
-                .confidence(AnalysisConfidence.HIGH)
-                .build();
-        return Optional.of(possibleUpgradeInfo);
+        return instanceUpgradeMap(family)
+                .map(val ->
+                        PossibleUpgradeInfo.fromResource(compute)
+                                .reason(String.format("Consider upgrading to newer instance family from %s to %s", family, val))
+                                .confidence(compute.getTags().get("aws:ec2spot:fleet-request-id") == null ? AnalysisConfidence.HIGH : AnalysisConfidence.LOW)
+                                .build()
+                );
     }
 
     private Compute convert(Instance instance, Region region) {

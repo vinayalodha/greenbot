@@ -16,25 +16,23 @@
 package greenbot.provider.aws.converter;
 
 import greenbot.provider.converter.StringToInstanceType;
-import greenbot.rule.model.cloud.Database;
+import greenbot.rule.model.cloud.Cache;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.rds.model.DBInstance;
+import software.amazon.awssdk.services.elasticache.model.CacheCluster;
 
 /**
  * @author Vinay Lodha
  */
 @Component
-public class DbInstanceToDatabaseConverter implements Converter<DBInstance, Database> {
+public class CacheClusterToCacheConverter implements Converter<CacheCluster, Cache> {
 
-    public Database convert(DBInstance instance) {
-        // Optional[db.t2.micro]
-        return Database.builder()
-                .id(instance.dbInstanceArn())
-                .serviceType("RDS")
-                .name(instance.dbInstanceIdentifier())
-                .instanceClass(new StringToInstanceType().convert(instance.dbInstanceClass()))
-                .engine(instance.engine())
+    public Cache convert(CacheCluster cacheCluster) {
+
+        return Cache.builder()
+                .id(cacheCluster.cacheClusterId())
+                .serviceType("ElastiCache")
+                .instanceType(new StringToInstanceType().convert(cacheCluster.cacheNodeType()))
                 .build();
     }
 }

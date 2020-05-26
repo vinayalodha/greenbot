@@ -60,9 +60,8 @@ public class CloudWatchService {
 
         GetMetricStatisticsResponse response = client.getMetricStatistics(request);
         if (response.hasDatapoints() && response.datapoints().size() > 0) {
-            Optional<Double> sum = response.datapoints().stream().map(Datapoint::average).reduce((a, b) -> a + b);
-            if (sum.isPresent())
-                return Optional.of(sum.get() / response.datapoints().size());
+            Optional<Double> sum = response.datapoints().stream().map(Datapoint::average).reduce(Double::sum);
+            return Optional.of(sum.get() / response.datapoints().size());
         }
         return Optional.empty();
     }
