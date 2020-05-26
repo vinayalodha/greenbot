@@ -20,9 +20,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Collections;
-import java.util.Map;
-
 /**
  * @author Vinay Lodha
  */
@@ -30,13 +27,7 @@ import java.util.Map;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @SuperBuilder
-public class Compute extends Resource implements HasCpuUtilization {
+public class Compute extends Resource {
     private InstanceType instanceType;
     private String region;
-
-    @Override
-    public Map<String, String> metadata() {
-        return Collections.singletonMap(HasCpuUtilization.NAMESPACE, "AWS/EC2");
-    }
-
 }

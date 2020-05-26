@@ -18,7 +18,7 @@ package greenbot.main.rules.storage.instance;
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.provider.service.InstanceImageService;
 import greenbot.rule.model.*;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -27,10 +27,10 @@ import java.util.Arrays;
  * @author Vinay Lodha
  */
 @Component
-@AllArgsConstructor
 public class TooManyInstanceImagesRule extends AbstractGreenbotRule {
 
-    private final InstanceImageService instanceImageService;
+    @Autowired
+    private InstanceImageService instanceImageService;
 
     @Override
     public RuleResponse doWork(RuleRequest ruleRequest) {

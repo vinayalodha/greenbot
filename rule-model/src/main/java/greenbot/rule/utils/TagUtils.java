@@ -17,14 +17,15 @@ package greenbot.rule.utils;
 
 import greenbot.rule.model.cloud.Tag;
 
+import java.util.Optional;
+
 /**
  * @author Vinay Lodha
  */
 public class TagUtils {
-    public static String getValue(Tag tag) {
+    public static Optional<String> getValue(Tag tag) {
         if (tag == null)
-            return null;
-
-        return tag.getValue();
+            return Optional.empty();
+        return Optional.ofNullable(tag.getValue());
     }
 }

@@ -38,6 +38,6 @@ public class Resource {
     private String serviceType;
 
     @Builder.Default
-    private Map<String, Tag> tags = new HashMap<String, Tag>();
+    private Map<String, Tag> tags = new HashMap<>();
 
 }

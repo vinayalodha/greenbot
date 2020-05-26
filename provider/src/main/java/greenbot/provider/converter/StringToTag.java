@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  * @author Vinay Lodha
  */
 @Component
-public class StringToTagConverter implements Converter<String, Tag> {
+public class StringToTag implements Converter<String, Tag> {
 
     @Override
     public Tag convert(String source) {

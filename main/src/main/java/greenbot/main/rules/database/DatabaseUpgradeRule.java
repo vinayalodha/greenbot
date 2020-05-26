@@ -42,7 +42,7 @@ public class DatabaseUpgradeRule extends AbstractGreenbotRule {
 
     @Override
     public RuleResponse doWork(RuleRequest request) {
-        List<Database> databases = databaseService.list(Collections.emptyList());
+        List<Database> databases = databaseService.list(Collections.singletonList(getTagPredicate(request)::test));
         Map<Database, List<PossibleUpgradeInfo>> upgrades = databaseService.checkUpgradePossibility(databases);
 
         List<RuleResponseItem> items = upgrades.values()

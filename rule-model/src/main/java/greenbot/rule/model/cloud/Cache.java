@@ -27,8 +27,6 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @SuperBuilder(toBuilder = true)
-public class Database extends Resource {
-    private String region;
-    private String engine;
-    private InstanceType instanceClass;
+public class Cache extends Resource {
+    private InstanceType instanceType;
 }

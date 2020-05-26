@@ -17,7 +17,6 @@ package greenbot.main.rules.database;
 
 import greenbot.main.rules.AbstractGreenbotRule;
 import greenbot.provider.predicates.RdsInstanceClassPredicate;
-import greenbot.provider.predicates.TagPredicate;
 import greenbot.provider.service.DatabaseService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
@@ -30,7 +29,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -45,8 +43,6 @@ import static java.util.stream.Collectors.toList;
 public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule implements InitializingBean {
     @Autowired
     private DatabaseService databaseService;
-    @Autowired
-    private ConversionService conversionService;
 
     @Value("${rules.UnderUtilizedDatabaseRule.instance_types_to_ignore}")
     private String instanceTypesToIgnore;
@@ -54,14 +50,12 @@ public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule implements I
     private RdsInstanceClassPredicate rdsInstanceClassPredicate;
 
     @Override
-    public RuleResponse doWork(RuleRequest ruleRequest) {
-        TagPredicate predicate = conversionService.convert(ruleRequest, TagPredicate.class);
-
-        List<Database> databases = databaseService.list(Arrays.asList(predicate::test, rdsInstanceClassPredicate));
+    public RuleResponse doWork(RuleRequest request) {
+        List<Database> databases = databaseService.list(Arrays.asList(getTagPredicate(request)::test, rdsInstanceClassPredicate));
         List<PossibleUpgradeInfo> underUtilized = databaseService.findUnderUtilized(databases,
-                ruleRequest.getCloudwatchTimeframeDuration(),
+                request.getCloudwatchTimeframeDuration(),
                 // TODO
-                ruleRequest.getCpuThresholdDatabase(),
+                request.getCpuThresholdDatabase(),
                 // TODO aws cloudwatch get-metric-statistics --namespace "AWS/RDS" --metric-name SwapUsage --start-time 2020-05-18T05:24:12.555Z --end-time 2020-05-19T09:25:12.555Z --period 3600 --statistics Average --unit Percent
                 0d);
 

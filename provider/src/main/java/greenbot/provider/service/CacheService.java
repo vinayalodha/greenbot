@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.rule.model.cloud;
+package greenbot.provider.service;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
+import greenbot.rule.model.cloud.Cache;
+import greenbot.rule.model.cloud.PossibleUpgradeInfo;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * @author Vinay Lodha
  */
-@Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@SuperBuilder(toBuilder = true)
-public class Database extends Resource {
-    private String region;
-    private String engine;
-    private InstanceType instanceClass;
+public interface CacheService {
+    List<Cache> list(List<Predicate<Cache>> predicates);
+
+    Map<Cache, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Cache> databases);
 }
