@@ -15,32 +15,31 @@
  */
 package greenbot.main.testutils;
 
-import static java.util.stream.Collectors.toCollection;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import software.amazon.awssdk.services.ec2.model.InstanceType;
 
 import java.util.Collection;
 import java.util.TreeSet;
 
-import org.junit.jupiter.api.Test;
-
-import software.amazon.awssdk.services.ec2.model.InstanceType;
+import static java.util.stream.Collectors.toCollection;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vinay Lodha
  */
 public class PrintInstanceTypes {
 
-	// https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instance-types.html
-	@Test
-	public void sanity() {
+    // https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instance-types.html
+    @Test
+    public void sanity() {
 
-		Collection<String> set = InstanceType.knownValues()
-				.stream()
-				.map(InstanceType::toString)
-				.collect(toCollection(TreeSet::new));
+        Collection<String> set = InstanceType.knownValues()
+                .stream()
+                .map(InstanceType::toString)
+                .collect(toCollection(TreeSet::new));
 
-		// set.forEach(System.err::println);
+        // set.forEach(System.err::println);
 
-		assertEquals(280, set.size());
-	}
+        assertEquals(280, set.size());
+    }
 }
