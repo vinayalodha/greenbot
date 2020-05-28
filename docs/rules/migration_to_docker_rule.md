@@ -1,6 +1,6 @@
 # migration\_to\_docker\_rule
 
-Check if Elastic Beanstalk is used or not, if yes then suggest migration to Docker
+Check if Elastic Beanstalk is used or not, if yes then suggest migration to ECS, Fargate or EKS 
 
 ## Permissions
 
