@@ -21,15 +21,16 @@ import greenbot.provider.service.DockerService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
-import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import greenbot.rule.utils.ConversionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Vinay Lodha
@@ -45,15 +46,9 @@ public class MigrationToDockerRule extends AbstractGreenbotRule {
 
     @Override
     public RuleResponse doWork(RuleRequest request) {
-        List<Compute> computes = computeService.list(Collections.singletonList(getTagPredicate(request)::test));
+        List<Compute> computes = computeService.list(Collections.singletonList(tagPredicate(request)::test));
         Map<Compute, List<PossibleUpgradeInfo>> upgradeMap = dockerService.checkUpgradePossibility(computes);
-
-        List<RuleResponseItem> items = upgradeMap.values().stream()
-                .flatMap(Collection::stream)
-                .map(obj -> ConversionUtils.toRuleResponseItem(obj, buildRuleId()))
-                .collect(Collectors.toList());
-
-        return RuleResponse.build(items);
+        return ConversionUtils.toRuleResponse(upgradeMap, buildRuleId());
     }
 
     @Override

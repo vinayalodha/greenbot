@@ -49,8 +49,8 @@ public class DevResourcesRule extends AbstractGreenbotRule {
     @Override
     public RuleResponse doWork(RuleRequest request) {
         // TODO also check for Fargate
-        List<? extends Resource> computes = computeService.list(Collections.singletonList(getTagPredicate(request)::test));
-        List<? extends Resource> databases = databaseService.list(Collections.singletonList(getTagPredicate(request)::test));
+        List<? extends Resource> computes = computeService.list(Collections.singletonList(tagPredicate(request)::test));
+        List<? extends Resource> databases = databaseService.list(Collections.singletonList(tagPredicate(request)::test));
         List<Resource> resources = new ArrayList<>();
         resources.addAll(databases);
         resources.addAll(computes);

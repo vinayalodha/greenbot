@@ -31,7 +31,7 @@ resource "aws_db_instance" "default" {
 
   tags = {
     Name = "greenbot_db_name"
-    owner = "greenbot"
+    owner = "vinay"
   }
 }
 

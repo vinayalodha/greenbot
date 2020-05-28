@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Vinay Lodha (https://github.com/vinay-lodha)
+ * Copyright 2020 Vinay Lodha (https://github.com/vinay-lodha)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,43 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main.rules.database;
+package greenbot.main.rules.misc;
 
 import greenbot.main.rules.AbstractGreenbotRule;
-import greenbot.provider.service.DatabaseService;
+import greenbot.provider.aws.model.AutoScalingGroup;
+import greenbot.provider.aws.service.AutoScalingGroupService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
-import greenbot.rule.model.cloud.Database;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import greenbot.rule.utils.ConversionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.Collections.singletonList;
 
 /**
  * @author Vinay Lodha
  */
-@Component
-public class DatabaseUpgradeRule extends AbstractGreenbotRule {
+@Service
+public class AutoScalingGroupOptimizationRule extends AbstractGreenbotRule {
 
     @Autowired
-    private DatabaseService databaseService;
+    private AutoScalingGroupService autoScalingGroupService;
 
     @Override
     public RuleResponse doWork(RuleRequest request) {
-        List<Database> databases = databaseService.list(Collections.singletonList(tagPredicate(request)::test));
-        Map<Database, List<PossibleUpgradeInfo>> upgrades = databaseService.checkUpgradePossibility(databases);
-        return ConversionUtils.toRuleResponse(upgrades, buildRuleId());
+        List<AutoScalingGroup> resources = autoScalingGroupService.list(singletonList(tagPredicate(request)::test));
+        Map<AutoScalingGroup, List<PossibleUpgradeInfo>> possibleUpgradeInfos = autoScalingGroupService.checkUpgradePossibility(resources);
+
+        return ConversionUtils.toRuleResponse(possibleUpgradeInfos, buildRuleId());
     }
 
     @Override
     public RuleInfo ruleInfo() {
-        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "rds:DescribeDBInstances"));
+        return buildRuleInfo(Arrays.asList("ec2:DescribeRegions", "autoscaling:DescribeAutoScalingGroups"));
     }
 
 }

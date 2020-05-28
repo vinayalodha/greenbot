@@ -29,7 +29,12 @@ limitations under the License.
     </issueManagement>
     <inceptionYear>2019</inceptionYear>
     <description>GitHub: https://github.com/vinay-lodha/greenbot</description>
-
+    <developers>
+        <developer>
+            <name>Vinay Lodha</name>
+            <url>https://github.com/vinay-lodha</url>
+        </developer>
+    </developers>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>

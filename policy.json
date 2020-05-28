@@ -11,7 +11,8 @@
         "ec2:DescribeVolumes",
         "rds:DescribeDBInstances",
         "cloudwatch:GetMetricStatistics",
-        "elasticache:DescribeCacheClusters"
+        "elasticache:DescribeCacheClusters",
+        "autoscaling:DescribeAutoScalingGroups"
       ],
       "Resource": "*"
     }

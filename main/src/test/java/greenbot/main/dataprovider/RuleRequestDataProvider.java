@@ -28,7 +28,7 @@ public class RuleRequestDataProvider {
 
     public RuleRequest simple() {
         return RuleRequest.builder()
-                .includedTag(Tag.builder().key("owner").value("greenbot").build())
+                .includedTag(Tag.builder().key("owner").value("vinay").build())
                 .amiThreshold(0)
                 .cloudwatchTimeframeDuration(1440)
                 .provider(Provider.AWS)

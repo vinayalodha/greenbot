@@ -25,7 +25,7 @@ resource "aws_elasticache_cluster" "example" {
   port = 11211
   tags = {
     Name = "greenbot_db_name"
-    owner = "greenbot"
+    owner = "vinay"
   }
 }
 

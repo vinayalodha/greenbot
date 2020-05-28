@@ -15,7 +15,9 @@
  */
 package greenbot.provider.aws.service;
 
+import greenbot.provider.aws.UpgradeMapUtils;
 import greenbot.provider.aws.model.CloudWatchMetricStatisticsRequest;
+import greenbot.provider.aws.utils.AwsTags;
 import greenbot.provider.service.ComputeService;
 import greenbot.provider.utils.OptionalUtils;
 import greenbot.rule.model.AnalysisConfidence;
@@ -34,7 +36,8 @@ import software.amazon.awssdk.services.ec2.paginators.DescribeInstancesIterable;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static greenbot.provider.aws.UpgradeMapUtils.*;
+import static greenbot.provider.aws.UpgradeMapUtils.armInstanceUpgradeMap;
+import static greenbot.provider.aws.UpgradeMapUtils.inf1InstanceUpgradeMap;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
 
@@ -147,11 +150,17 @@ public class AwsComputeService implements ComputeService {
 
     private Optional<PossibleUpgradeInfo> isFamilyCanBeUpgraded(Compute compute) {
         String family = compute.getInstanceType().getFamily();
-        return instanceUpgradeMap(family)
+        AnalysisConfidence confidence;
+        if (compute.getTags().get(AwsTags.FLEET_ID) == null || compute.getTags().get(AwsTags.ASG_NAME) == null)
+            confidence = AnalysisConfidence.HIGH;
+        else
+            confidence = AnalysisConfidence.LOW;
+
+        return UpgradeMapUtils.instanceUpgradeMap(family)
                 .map(val ->
                         PossibleUpgradeInfo.fromResource(compute)
                                 .reason(String.format("Consider upgrading to newer instance family from %s to %s", family, val))
-                                .confidence(compute.getTags().get("aws:ec2spot:fleet-request-id") == null ? AnalysisConfidence.HIGH : AnalysisConfidence.LOW)
+                                .confidence(confidence)
                                 .build()
                 );
     }

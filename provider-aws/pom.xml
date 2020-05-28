@@ -58,13 +58,13 @@ limitations under the License.
                 </exclusion>
             </exclusions>
         </dependency>
+
         <!-- AWS stuff -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>ec2</artifactId>
             <version>${aws.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
@@ -81,6 +81,12 @@ limitations under the License.
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>elasticache</artifactId>
+            <version>${aws.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>autoscaling</artifactId>
             <version>${aws.version}</version>
         </dependency>
 

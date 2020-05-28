@@ -21,7 +21,6 @@ import greenbot.provider.service.DatabaseService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
-import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Database;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import greenbot.rule.utils.ConversionUtils;
@@ -33,8 +32,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * @author Vinay Lodha
@@ -51,7 +48,7 @@ public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule implements I
 
     @Override
     public RuleResponse doWork(RuleRequest request) {
-        List<Database> databases = databaseService.list(Arrays.asList(getTagPredicate(request)::test, rdsInstanceClassPredicate));
+        List<Database> databases = databaseService.list(Arrays.asList(tagPredicate(request)::test, rdsInstanceClassPredicate));
         List<PossibleUpgradeInfo> underUtilized = databaseService.findUnderUtilized(databases,
                 request.getCloudwatchTimeframeDuration(),
                 // TODO
@@ -59,12 +56,7 @@ public class UnderUtilizedDatabaseRule extends AbstractGreenbotRule implements I
                 // TODO aws cloudwatch get-metric-statistics --namespace "AWS/RDS" --metric-name SwapUsage --start-time 2020-05-18T05:24:12.555Z --end-time 2020-05-19T09:25:12.555Z --period 3600 --statistics Average --unit Percent
                 0d);
 
-        List<RuleResponseItem> items = underUtilized
-                .stream()
-                .map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
-                .collect(toList());
-
-        return RuleResponse.build(items);
+        return RuleResponse.build(ConversionUtils.toRuleResponseItems(underUtilized, buildRuleId()));
     }
 
     @Override

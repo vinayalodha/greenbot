@@ -40,7 +40,6 @@ public class GreenbotServer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-
         TimerTask task = new TimerTask() {
 
             @Override
