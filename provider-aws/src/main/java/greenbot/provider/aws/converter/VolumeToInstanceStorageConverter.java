@@ -41,6 +41,7 @@ public class VolumeToInstanceStorageConverter implements Converter<Volume, Insta
     public InstanceStorage convert(Volume source) {
         Map<String, Tag> tags = new HashMap<>();
         if (source.hasTags()) {
+            //noinspection ConstantConditions
             tags = source.tags()
                     .stream()
                     .map(ec2TagToTagConverter::convert)

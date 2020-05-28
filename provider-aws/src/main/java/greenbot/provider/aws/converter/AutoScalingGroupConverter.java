@@ -36,7 +36,7 @@ public class AutoScalingGroupConverter implements Converter<AutoScalingGroup, gr
     @Override
     public greenbot.provider.aws.model.AutoScalingGroup convert(AutoScalingGroup source) {
 
-        greenbot.provider.aws.model.AutoScalingGroup.AutoScalingGroupBuilder builder = greenbot.provider.aws.model.AutoScalingGroup.builder()
+        greenbot.provider.aws.model.AutoScalingGroup.AutoScalingGroupBuilder<?, ?> builder = greenbot.provider.aws.model.AutoScalingGroup.builder()
                 .id(source.autoScalingGroupName())
                 .name(source.autoScalingGroupName())
                 .serviceType("Auto Scaling Group")

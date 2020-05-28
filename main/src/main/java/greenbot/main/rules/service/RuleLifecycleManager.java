@@ -100,7 +100,7 @@ public class RuleLifecycleManager {
     }
 
     private String exceptionToString(Exception e) {
-        return abbreviate(getRootCauseMessage(e) + Arrays.toString(getRootCauseStackTrace(e)), 400);
+        return abbreviate(getRootCauseMessage(e) + Arrays.toString(getRootCauseStackTrace(e)), 800);
     }
 
     public List<ConfigParam> getConfigParams() {

@@ -44,6 +44,7 @@ public class InstanceToComputeConverter implements Converter<Instance, Compute> 
     public Compute convert(Instance instance) {
         Map<String, Tag> tags = new HashMap<>();
         if (instance.hasTags()) {
+            //noinspection ConstantConditions
             tags = instance.tags()
                     .stream()
                     .map(ec2TagToTagConverter::convert)

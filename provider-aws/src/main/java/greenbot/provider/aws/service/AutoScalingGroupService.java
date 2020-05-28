@@ -88,7 +88,7 @@ public class AutoScalingGroupService {
     }
 
     private Optional<PossibleUpgradeInfo> checkIfSpotIsUsedOrNot(AutoScalingGroup autoScalingGroup) {
-        if (autoScalingGroup.isMixedInstancesPolicy() == false ||
+        if (!autoScalingGroup.isMixedInstancesPolicy() ||
                 autoScalingGroup.getMaxCapacity() <= autoScalingGroup.getOnDemandBaseCapacity() ||
                 Integer.valueOf(100).equals(autoScalingGroup.getOnDemandPercentageAboveBaseCapacity())) {
             return Optional.ofNullable(PossibleUpgradeInfo.fromResource(autoScalingGroup)
@@ -104,14 +104,16 @@ public class AutoScalingGroupService {
             return Optional.empty();
 
         String message = null;
-        Integer ZERO = Integer.valueOf(0);
+        Integer ZERO = 0;
         if (ZERO.equals(asg.getMinCapacity()) && ZERO.equals(asg.getMaxCapacity()) && ZERO.equals(asg.getDesiredCapacity()))
-            message = "ASG have min, max, and desired capacity as 0 and attached to ELB, Is Load balancer needed? If not it can be deleted to save cost";
+            message = "ASG have min, max, and desired capacity as 0 and attached to ELB, " +
+                    "Is Load balancer needed? If not it can be deleted to save cost";
 
-        Integer ONE = Integer.valueOf(1);
+        Integer ONE = 1;
 
         if (ONE.equals(asg.getMaxCapacity()))
-            message = "ASG have max capacity as 1 and attached to ELB, If Autoscaling is not needed then you may directly attach IP to Route 53 to save cost associated with ELB";
+            message = "ASG have max capacity as 1 and attached to ELB, " +
+                    "If Autoscaling is not needed then you may directly attach IP to Route 53 to save cost associated with ELB";
 
         if (message == null)
             return Optional.empty();

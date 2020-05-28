@@ -32,6 +32,7 @@ import java.util.List;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @SuperBuilder(toBuilder = true)
+@SuppressWarnings("UnusedAssignment")
 public class AutoScalingGroup extends Resource {
     private Integer minCapacity;
     private Integer maxCapacity;
