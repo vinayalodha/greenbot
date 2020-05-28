@@ -1,4 +1,4 @@
-# older\_generation\_instance\_rule
+# instance\_upgrade\_rule
 
 Newer generation of EC2 are cheaper and offers better price to performance ration, e.g **t3a** instances are around 15% cheaper than **t2** instances
 
@@ -10,6 +10,11 @@ Newer generation of EC2 are cheaper and offers better price to performance ratio
 
 * [ec2:DescribeRegions](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeRegions.html)
 * [ec2:DescribeInstances](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html)
+
+## Config Parameters used
+
+* included\_tag
+* excluded\_tag
 
 
 

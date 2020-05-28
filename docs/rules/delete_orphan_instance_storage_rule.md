@@ -9,3 +9,8 @@ This rule check if there are orphan EBS drives \(EBS drives which is not attache
 * [ec2:DescribeRegions](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeRegions.html)
 * [ec2:DescribeVolumes](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVolumes.html)
 
+## Config Parameters used
+
+* included\_tag
+* excluded\_tag
+

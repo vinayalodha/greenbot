@@ -9,3 +9,9 @@ This rule checks if there are too many AMI present.
 * [ec2:DescribeRegions](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeRegions.html)
 * [ec2:DescribeImages](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeImages.html)
 
+## Config Parameters used
+
+* included\_tag
+* excluded\_tag
+* too\_many\_ami\_threshold
+

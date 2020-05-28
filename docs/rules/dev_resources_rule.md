@@ -9,3 +9,8 @@ This rule analyze tags on resources to find development, QA, staging resources.
 * [ec2:DescribeRegions](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeRegions.html)
 * [ec2:DescribeInstances](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html)
 
+## Config Parameters used
+
+* included\_tag
+* excluded\_tag
+

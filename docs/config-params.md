@@ -20,14 +20,14 @@ Config parameters are represent by JSON on home page when you launch [localhost:
         "description": "Threshold AMI count above which too_many_instance_images_rule rule will raise a concern"
     },
     {
-        "key": "under_utilized_cpu_percentage",
+        "key": "under_utilized_cpu_percentage_instance",
         "value": "30.0",
-        "description": "Average CPU utilization threshold for under-utilized machine"
+        "description": "Average CPU utilization threshold for under-utilized ec2 machine"
     },
     {
-        "key": "under_utilized_swap_space_percentage",
-        "value": "5.0",
-        "description": "NOT USED YET : Average swap memory percentage threshold for under-utilized database"
+        "key": "under_utilized_cpu_percentage_database",
+        "value": "10.0",
+        "description": "Average CPU utilization threshold for under-utilized RDS instances"
     },
     {
         "key": "cloudwatch_config_duration",

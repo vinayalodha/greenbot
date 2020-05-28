@@ -17,6 +17,8 @@ Below are the aggregated permissions IAM user need for execution all rules.
 * [ec2:DescribeImages](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeImages.html)
 * [cloudwatch:GetMetricStatistics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html)
 * [rds:DescribeDBInstances](https://docs.aws.amazon.com/cli/latest/reference/rds/describe-db-instances.html)
+* [elasticache:DescribeCacheClusters](https://docs.aws.amazon.com/cli/latest/reference/elasticache/describe-cache-clusters.html)
+* [autoscaling:DescribeAutoScalingGroups](https://docs.aws.amazon.com/cli/latest/reference/autoscaling/describe-auto-scaling-groups.html)
 
 ## Screenshot
 
