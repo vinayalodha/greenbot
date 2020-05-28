@@ -81,7 +81,7 @@ public class AutoScalingGroupService {
     }
 
     private Optional<PossibleUpgradeInfo> considerMigrationToSpotFleet(AutoScalingGroup autoScalingGroup) {
-        return Optional.of(PossibleUpgradeInfo.fromResource(autoScalingGroup)
+        return Optional.ofNullable(PossibleUpgradeInfo.fromResource(autoScalingGroup)
                 .confidence(AnalysisConfidence.LOW)
                 .reason("Consider migrating to Spot Fleet as it can dynamically allocate spot and on-demand instances based on spot availability without need to configuring ASG MixedInstancesPolicy")
                 .build());
@@ -91,7 +91,7 @@ public class AutoScalingGroupService {
         if (autoScalingGroup.isMixedInstancesPolicy() == false ||
                 autoScalingGroup.getMaxCapacity() <= autoScalingGroup.getOnDemandBaseCapacity() ||
                 Integer.valueOf(100).equals(autoScalingGroup.getOnDemandPercentageAboveBaseCapacity())) {
-            return Optional.of(PossibleUpgradeInfo.fromResource(autoScalingGroup)
+            return Optional.ofNullable(PossibleUpgradeInfo.fromResource(autoScalingGroup)
                     .confidence(AnalysisConfidence.MEDIUM)
                     .reason("Consider using spot instances in ASG MixedInstancesPolicy, it can significantly reduce cost associated with on-demand instances")
                     .build());
@@ -116,7 +116,7 @@ public class AutoScalingGroupService {
         if (message == null)
             return Optional.empty();
 
-        return Optional.of(PossibleUpgradeInfo.fromResource(asg)
+        return Optional.ofNullable(PossibleUpgradeInfo.fromResource(asg)
                 .confidence(AnalysisConfidence.HIGH)
                 .reason(message)
                 .build());

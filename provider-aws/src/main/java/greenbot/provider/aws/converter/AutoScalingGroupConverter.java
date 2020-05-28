@@ -37,7 +37,7 @@ public class AutoScalingGroupConverter implements Converter<AutoScalingGroup, gr
     public greenbot.provider.aws.model.AutoScalingGroup convert(AutoScalingGroup source) {
 
         greenbot.provider.aws.model.AutoScalingGroup.AutoScalingGroupBuilder builder = greenbot.provider.aws.model.AutoScalingGroup.builder()
-                .id(source.autoScalingGroupARN())
+                .id(source.autoScalingGroupName())
                 .name(source.autoScalingGroupName())
                 .serviceType("Auto Scaling Group")
                 .minCapacity(source.minSize())
