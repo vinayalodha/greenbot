@@ -19,16 +19,16 @@ import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
-import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import greenbot.rule.utils.ConversionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-
-import static java.util.stream.Collectors.toList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * https://aws.amazon.com/ec2/previous-generation/
@@ -43,17 +43,9 @@ public class InstanceUpgradeRule extends greenbot.main.rules.AbstractGreenbotRul
 
     @Override
     public RuleResponse doWork(RuleRequest request) {
-        List<Compute> computes = computeService.list(Collections.singletonList(getTagPredicate(request)::test));
+        List<Compute> computes = computeService.list(Collections.singletonList(tagPredicate(request)::test));
         Map<Compute, List<PossibleUpgradeInfo>> possibleUpgradeInfos = computeService.checkUpgradePossibility(computes);
-
-        List<RuleResponseItem> items = possibleUpgradeInfos.values()
-                .stream()
-                .filter(Objects::nonNull)
-                .flatMap(Collection::stream)
-                .map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
-                .collect(toList());
-
-        return RuleResponse.build(items);
+        return ConversionUtils.toRuleResponse(possibleUpgradeInfos, buildRuleId());
     }
 
     @Override

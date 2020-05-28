@@ -15,8 +15,14 @@
  */
 package greenbot.rule.utils;
 
+import greenbot.rule.model.RuleResponse;
 import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
+import greenbot.rule.model.cloud.Resource;
+
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Vinay Lodha
@@ -25,14 +31,29 @@ public class ConversionUtils {
     private ConversionUtils() {
     }
 
-    public static RuleResponseItem toRuleResponseItem(PossibleUpgradeInfo possibleUpgradeInfo, String ruleId) {
-        return RuleResponseItem.builder()
-                .resourceId(possibleUpgradeInfo.getResourceId())
-                .service(possibleUpgradeInfo.getService())
-                .confidence(possibleUpgradeInfo.getConfidence())
-                .message(possibleUpgradeInfo.getReason())
-                .ruleId(ruleId)
-                .build();
+    public static RuleResponse toRuleResponse(Map<? extends Resource, List<PossibleUpgradeInfo>> possibleUpgradeInfoMap, String ruleId) {
+        List<RuleResponseItem> items = possibleUpgradeInfoMap.values()
+                .stream()
+                .filter(Objects::nonNull)
+                .flatMap(Collection::stream)
+                .map(info -> ConversionUtils.toRuleResponseItems(Collections.singletonList(info), ruleId))
+                .flatMap(Collection::stream)
+                .collect(toList());
+
+        return RuleResponse.build(items);
+    }
+
+    public static List<RuleResponseItem> toRuleResponseItems(List<PossibleUpgradeInfo> possibleUpgradeInfos, String ruleId) {
+        return possibleUpgradeInfos
+                .stream()
+                .map(possibleUpgradeInfo -> RuleResponseItem.builder()
+                        .resourceId(possibleUpgradeInfo.getResourceId())
+                        .service(possibleUpgradeInfo.getService())
+                        .confidence(possibleUpgradeInfo.getConfidence())
+                        .message(possibleUpgradeInfo.getReason())
+                        .ruleId(ruleId)
+                        .build())
+                .collect(toList());
     }
 
 }

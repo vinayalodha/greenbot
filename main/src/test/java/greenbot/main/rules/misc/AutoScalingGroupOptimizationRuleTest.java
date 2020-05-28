@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package greenbot.main.rules.storage.instance;
+package greenbot.main.rules.misc;
 
 import greenbot.main.TerraformTest;
 import greenbot.main.dataprovider.RuleRequestDataProvider;
@@ -25,20 +25,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author Vinay Lodha
+ */
 @SpringBootTest
-public class TooManyInstanceImagesRuleTest {
+public class AutoScalingGroupOptimizationRuleTest {
 
     @Autowired
-    private TooManyInstanceImagesRule tooManyInstanceImagesRule;
+    private AutoScalingGroupOptimizationRule rule;
 
     @Test
     @TerraformTest
     public void sanity() throws Exception {
-        String path = "./src/test/resources/terraform/TooManyInstanceImagesRule";
+        String path = "./src/test/resources/terraform/AutoScalingGroupOptimizationRule";
+
         try {
             TerraformUtils.apply(path);
-            RuleResponse response = tooManyInstanceImagesRule.doWork(RuleRequestDataProvider.simple());
-            assertEquals(1, response.getItems().size());
+            RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
+            assertEquals(3, response.getItems().size());
         } finally {
             TerraformUtils.destroy(path);
         }

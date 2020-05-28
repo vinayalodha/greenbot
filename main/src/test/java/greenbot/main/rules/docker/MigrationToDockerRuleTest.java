@@ -15,39 +15,37 @@
  */
 package greenbot.main.rules.docker;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import greenbot.main.TerraformTest;
 import greenbot.main.dataprovider.RuleRequestDataProvider;
 import greenbot.main.terraform.TerraformUtils;
 import greenbot.rule.model.RuleResponse;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * 
  * @author Vinay Lodha
  */
 @SpringBootTest
 public class MigrationToDockerRuleTest {
 
-	@Autowired
-	private MigrationToDockerRule rule;
+    @Autowired
+    private MigrationToDockerRule rule;
 
-	@Test
-	@TerraformTest
-	public void sanity() {
+    @Test
+    @TerraformTest
+    public void sanity() {
 
-		String path = "./src/test/resources/terraform/MigrationToDockerRule";
-		try {
-			TerraformUtils.apply(path);
-			RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
-			assertEquals(1, response.getItems().size());
-		} finally {
-			TerraformUtils.destroy(path);
-		}
+        String path = "./src/test/resources/terraform/MigrationToDockerRule";
+        try {
+            TerraformUtils.apply(path);
+            RuleResponse response = rule.doWork(RuleRequestDataProvider.simple());
+            assertEquals(1, response.getItems().size());
+        } finally {
+            TerraformUtils.destroy(path);
+        }
 
-	}
+    }
 }

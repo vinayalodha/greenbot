@@ -47,7 +47,7 @@ public abstract class AbstractGreenbotRule implements GreenbotRule {
     }
 
 
-    protected TagPredicate getTagPredicate(RuleRequest request) {
+    protected TagPredicate tagPredicate(RuleRequest request) {
         return conversionService.convert(request, TagPredicate.class);
     }
 }

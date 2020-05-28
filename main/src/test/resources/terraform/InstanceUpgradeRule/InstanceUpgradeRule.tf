@@ -42,7 +42,7 @@ resource "aws_instance" "one" {
   instance_type = "t2.micro"
 
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
   }
 }
 
@@ -52,7 +52,7 @@ resource "aws_instance" "two" {
   instance_type = "t3a.micro"
 
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
   }
 }
 
@@ -61,7 +61,7 @@ resource "aws_instance" "three" {
   instance_type = "m5.large"
 
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
   }
 }
 
@@ -69,7 +69,7 @@ resource "aws_elastic_beanstalk_application" "older_gen_instance_beanstalk_appli
   name = "older_gen_instance_beanstalk_application"
   description = "older_gen_instance_beanstalk_application"
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
   }
 }
 
@@ -90,7 +90,7 @@ resource "aws_elastic_beanstalk_environment" "older_gen_instance_beanstalk_appli
   }
 
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
   }
 }
 

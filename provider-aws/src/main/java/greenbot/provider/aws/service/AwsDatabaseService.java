@@ -41,7 +41,7 @@ import java.util.function.Predicate;
 
 import static java.lang.String.format;
 import static java.util.Optional.empty;
-import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
@@ -154,7 +154,7 @@ public class AwsDatabaseService implements DatabaseService {
             message = format(template, database.getEngine(), "aurora-postgresql");
         }
         if (message != null) {
-            return of(PossibleUpgradeInfo.fromResource(database)
+            return ofNullable(PossibleUpgradeInfo.fromResource(database)
                     .reason(message)
                     .confidence(AnalysisConfidence.LOW)
                     .build());

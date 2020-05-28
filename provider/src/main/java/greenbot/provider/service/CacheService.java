@@ -28,5 +28,5 @@ import java.util.function.Predicate;
 public interface CacheService {
     List<Cache> list(List<Predicate<Cache>> predicates);
 
-    Map<Cache, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Cache> databases);
+    Map<Cache, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Cache> caches);
 }

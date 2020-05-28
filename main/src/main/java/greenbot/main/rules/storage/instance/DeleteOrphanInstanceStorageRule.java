@@ -38,7 +38,7 @@ public class DeleteOrphanInstanceStorageRule extends AbstractGreenbotRule {
 
     @Override
     public RuleResponse doWork(RuleRequest request) {
-        List<RuleResponseItem> items = instanceStorageService.orphans(singletonList(getTagPredicate(request)::test))
+        List<RuleResponseItem> items = instanceStorageService.orphans(singletonList(tagPredicate(request)::test))
                 .stream()
                 .map(storage -> RuleResponseItem.fromResource(storage)
                         .confidence(AnalysisConfidence.MEDIUM)

@@ -15,7 +15,7 @@ public class UpgradeMapUtils {
         retval.put("g3", "inf1");
         retval.put("p2", "inf1");
         retval.put("p3", "inf1");
-        return Optional.of(retval.get(key));
+        return Optional.ofNullable(retval.get(key));
 
     }
 
@@ -27,7 +27,7 @@ public class UpgradeMapUtils {
         retval.put("cache.m4", "cache.m5");
         retval.put("cache.r3", "cache.r5");
         retval.put("cache.r4", "cache.r5");
-        return Optional.of(retval.get(key));
+        return Optional.ofNullable(retval.get(key));
     }
 
     public static Optional<String> armInstanceUpgradeMap(String key) {
@@ -61,7 +61,7 @@ public class UpgradeMapUtils {
         retval.put("cc2", "c6g");
         retval.put("c5", "c6g");
 
-        return Optional.of(retval.get(key));
+        return Optional.ofNullable(retval.get(key));
     }
 
     public static Optional<String> instanceUpgradeMap(String key) {
@@ -109,6 +109,6 @@ public class UpgradeMapUtils {
         retVal.put("db.m4", "db.m5");
         retVal.put("db.r3", "db.r5");
         retVal.put("db.r4", "db.r5");
-        return Optional.of(retVal.get(key));
+        return Optional.ofNullable(retVal.get(key));
     }
 }

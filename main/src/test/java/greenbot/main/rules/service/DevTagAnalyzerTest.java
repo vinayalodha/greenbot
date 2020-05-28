@@ -15,26 +15,25 @@
  */
 package greenbot.main.rules.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.Arrays;
-
+import greenbot.rule.model.cloud.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-import greenbot.rule.model.cloud.Tag;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vinay Lodha
  */
 public class DevTagAnalyzerTest {
 
-	private final TagAnalyzer devTagAnalyzer = new TagAnalyzer();
+    private final TagAnalyzer devTagAnalyzer = new TagAnalyzer();
 
-	@ParameterizedTest
-	@CsvFileSource(resources = "/dev-tags.csv")
-	void withCsvSource(String key, String value, Boolean outcome) {
-		Tag tag = Tag.builder().key(key).value(value).build();
-		assertEquals(outcome, devTagAnalyzer.isDevTagPresent(Arrays.asList(tag)));
-	}
+    @ParameterizedTest
+    @CsvFileSource(resources = "/dev-tags.csv")
+    void withCsvSource(String key, String value, Boolean outcome) {
+        Tag tag = Tag.builder().key(key).value(value).build();
+        assertEquals(outcome, devTagAnalyzer.isDevTagPresent(Arrays.asList(tag)));
+    }
 }

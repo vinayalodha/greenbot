@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- provider "aws" {
+provider "aws" {
   region = "us-east-2"
 }
 
 // Create unattached EBS volume
 resource "aws_db_instance" "default" {
-  allocated_storage    = 20
-  storage_type         = "gp2"
-  engine               = "mysql"
-  engine_version       = "5.7"
-  instance_class       = "db.t2.micro"
-  name                 = "greenbot_db_name"
-  username             = "foo"
-  password             = "foobarbaz"
+  allocated_storage = 20
+  storage_type = "gp2"
+  engine = "mysql"
+  engine_version = "5.7"
+  instance_class = "db.t2.micro"
+  name = "greenbot_db_name"
+  username = "foo"
+  password = "foobarbaz"
   parameter_group_name = "default.mysql5.7"
-  skip_final_snapshot  = true
+  skip_final_snapshot = true
 
   tags = {
-    Name  = "greenbot_db_name"
-    owner = "greenbot"
+    Name = "greenbot_db_name"
+    owner = "vinay"
   }
 }
 

@@ -18,16 +18,16 @@ provider "aws" {
 }
 
 resource "aws_elastic_beanstalk_application" "beanstalk_application" {
-  name        = "beanstalk_application"
+  name = "beanstalk_application"
   description = "beanstalk_application"
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
   }
 }
 
 resource "aws_elastic_beanstalk_environment" "beanstalk_application_env" {
-  name                = "beanstalk-application"
-  application         = "${aws_elastic_beanstalk_application.beanstalk_application.name}"
+  name = "beanstalk-application"
+  application = "${aws_elastic_beanstalk_application.beanstalk_application.name}"
   solution_stack_name = "64bit Amazon Linux 2 v3.0.1 running Corretto 11"
 
   setting {
@@ -36,12 +36,12 @@ resource "aws_elastic_beanstalk_environment" "beanstalk_application_env" {
     value = "t3a.small"
   }
   setting {
-      namespace = "aws:autoscaling:launchconfiguration"
-      name = "IamInstanceProfile"
-      value = "aws-elasticbeanstalk-ec2-role"
+    namespace = "aws:autoscaling:launchconfiguration"
+    name = "IamInstanceProfile"
+    value = "aws-elasticbeanstalk-ec2-role"
   }
 
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
   }
 }

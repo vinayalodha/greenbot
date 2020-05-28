@@ -22,6 +22,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.ec2.model.Volume;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -38,11 +39,14 @@ public class VolumeToInstanceStorageConverter implements Converter<Volume, Insta
 
     @Override
     public InstanceStorage convert(Volume source) {
-        Map<String, Tag> tags = source.tags()
-                .stream()
-                .map(ec2TagToTagConverter::convert)
-                .collect(toMap(Tag::getKey, Function.identity()));
-
+        Map<String, Tag> tags = new HashMap<>();
+        if (source.hasTags()) {
+            //noinspection ConstantConditions
+            tags = source.tags()
+                    .stream()
+                    .map(ec2TagToTagConverter::convert)
+                    .collect(toMap(Tag::getKey, Function.identity()));
+        }
         return InstanceStorage.builder()
                 .id(source.volumeId())
                 .tags(tags)

@@ -15,6 +15,7 @@
  */
 package greenbot.provider.aws.converter;
 
+import greenbot.provider.aws.utils.AwsTags;
 import greenbot.provider.converter.StringToInstanceType;
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.Tag;
@@ -24,6 +25,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.ec2.model.Instance;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -35,21 +37,24 @@ import static java.util.stream.Collectors.toMap;
 @Component
 @AllArgsConstructor
 public class InstanceToComputeConverter implements Converter<Instance, Compute> {
-    public static final String APP_NAME_TAG = "elasticbeanstalk:environment-name";
     // aws:ec2spot:fleet-request-id
     private final Ec2TagToTagConverter ec2TagToTagConverter;
 
     @Override
     public Compute convert(Instance instance) {
-        Map<String, Tag> tags = instance.tags()
-                .stream()
-                .map(ec2TagToTagConverter::convert)
-                .collect(toMap(Tag::getKey, Function.identity()));
+        Map<String, Tag> tags = new HashMap<>();
+        if (instance.hasTags()) {
+            //noinspection ConstantConditions
+            tags = instance.tags()
+                    .stream()
+                    .map(ec2TagToTagConverter::convert)
+                    .collect(toMap(Tag::getKey, Function.identity()));
+        }
         return Compute.builder()
                 .id(instance.instanceId())
                 .instanceType(new StringToInstanceType().convert(instance.instanceTypeAsString()))
                 .tags(tags)
-                .serviceType(tags.get(APP_NAME_TAG) != null ? "Elastic Beanstalk/EC2" : "EC2")
+                .serviceType(tags.get(AwsTags.ELASTIC_BEANSTALK_APP_NAME) != null ? "Elastic Beanstalk/EC2" : "EC2")
                 .name(TagUtils.getValue(tags.get("Name")).orElse(""))
                 .build();
     }

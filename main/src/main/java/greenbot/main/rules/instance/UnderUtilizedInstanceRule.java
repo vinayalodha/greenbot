@@ -22,7 +22,6 @@ import greenbot.provider.service.ComputeService;
 import greenbot.rule.model.RuleInfo;
 import greenbot.rule.model.RuleRequest;
 import greenbot.rule.model.RuleResponse;
-import greenbot.rule.model.RuleResponseItem;
 import greenbot.rule.model.cloud.Compute;
 import greenbot.rule.model.cloud.PossibleUpgradeInfo;
 import greenbot.rule.utils.ConversionUtils;
@@ -64,16 +63,11 @@ public class UnderUtilizedInstanceRule extends AbstractGreenbotRule implements I
 
     @Override
     public RuleResponse doWork(RuleRequest request) {
-        List<Predicate<Compute>> predicates = Arrays.asList(getTagPredicate(request)::test, instanceFamilyPredicate, instanceTypePredicate);
+        List<Predicate<Compute>> predicates = Arrays.asList(tagPredicate(request)::test, instanceFamilyPredicate, instanceTypePredicate);
 
         List<Compute> computes = computeService.list(predicates);
         List<PossibleUpgradeInfo> underUtilized = computeService.findUnderUtilized(computes, request.getCloudwatchTimeframeDuration(), request.getCpuThresholdInstance());
-        List<RuleResponseItem> items = underUtilized
-                .stream()
-                .map(info -> ConversionUtils.toRuleResponseItem(info, buildRuleId()))
-                .collect(toList());
-
-        return RuleResponse.build(items);
+        return RuleResponse.build(ConversionUtils.toRuleResponseItems(underUtilized, buildRuleId()));
     }
 
     @Override

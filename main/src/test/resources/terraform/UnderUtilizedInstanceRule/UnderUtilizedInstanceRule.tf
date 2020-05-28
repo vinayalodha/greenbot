@@ -21,61 +21,65 @@ data "aws_ami" "ubuntu" {
   most_recent = true
 
   filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
+    name = "name"
+    values = [
+      "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
   }
 
   filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
+    name = "virtualization-type"
+    values = [
+      "hvm"]
   }
 
-  owners = ["099720109477"] # Canonical
+  owners = [
+    "099720109477"]
+  # Canonical
 }
 
 resource "aws_instance" "owner_greenbot_stressed_small" {
-  ami           = "${data.aws_ami.ubuntu.id}"
+  ami = "${data.aws_ami.ubuntu.id}"
   instance_type = "t3a.micro"
   user_data = "${file("stress_cpu.sh")}"
 
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
     Name = "owner_greenbot_stressed_small"
   }
 }
 
 resource "aws_instance" "owner_greenbot_stressed_large" {
-  ami           = "${data.aws_ami.ubuntu.id}"
+  ami = "${data.aws_ami.ubuntu.id}"
   instance_type = "t3a.medium"
   user_data = "${file("stress_cpu.sh")}"
 
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
     Name = "owner_greenbot_stressed_large"
   }
 }
 
 resource "aws_instance" "owner_greenbot_under_utilized_large" {
-  ami           = "${data.aws_ami.ubuntu.id}"
+  ami = "${data.aws_ami.ubuntu.id}"
   instance_type = "t3a.medium"
 
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
     Name = "owner_greenbot_under_utilized_large"
   }
 }
 
 resource "aws_elastic_beanstalk_application" "under_utilized_beanstalk_application" {
-  name        = "under_utilized_beanstalk_application"
+  name = "under_utilized_beanstalk_application"
   description = "under_utilized_beanstalk_application"
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
   }
 }
 
 resource "aws_elastic_beanstalk_environment" "under_utilized_beanstalk_application_env" {
-  name                = "tf-test-name"
-  application         = "${aws_elastic_beanstalk_application.under_utilized_beanstalk_application.name}"
+  name = "tf-test-name"
+  application = "${aws_elastic_beanstalk_application.under_utilized_beanstalk_application.name}"
   solution_stack_name = "64bit Amazon Linux 2 v3.0.1 running Corretto 11"
 
   setting {
@@ -84,12 +88,12 @@ resource "aws_elastic_beanstalk_environment" "under_utilized_beanstalk_applicati
     value = "t3a.medium"
   }
   setting {
-      namespace = "aws:autoscaling:launchconfiguration"
-      name = "IamInstanceProfile"
-      value = "aws-elasticbeanstalk-ec2-role"
+    namespace = "aws:autoscaling:launchconfiguration"
+    name = "IamInstanceProfile"
+    value = "aws-elasticbeanstalk-ec2-role"
   }
 
   tags = {
-    owner = "greenbot"
+    owner = "vinay"
   }
 }
