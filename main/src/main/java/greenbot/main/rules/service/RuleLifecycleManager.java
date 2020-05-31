@@ -38,11 +38,13 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseStac
 @Service
 @AllArgsConstructor
 public class RuleLifecycleManager {
+    public static final Random RANDOM = new Random();
 
     private final List<GreenbotRule> rules;
     private final RuleResponseReducer responseReducer;
     private final ConfigService configParamUtils;
     private final RegionService regionService;
+
 
     public RuleResponse execute(RuleRequest request) {
         List<String> errorMessages = new ArrayList<>();
@@ -50,7 +52,7 @@ public class RuleLifecycleManager {
         String message = checkIfAWSCliConfigured();
         if (message != null) {
             return RuleResponse.builder()
-                    .id(Math.abs(new Random().nextInt()))
+                    .id(Math.abs(RANDOM.nextInt()))
                     .errorMessage("Unable to load AWS regions. most likely AWS CLI is not configured or network connectivity with AWS API is unavailable. Exception Stacktrace : " + message)
                     .build();
         }
@@ -59,13 +61,13 @@ public class RuleLifecycleManager {
                 .map(rule -> {
                     String ruleId = rule.ruleInfo().getId();
                     if (request.getRulesToIgnore().contains(ruleId)) {
-                        log.info("skipping rule:" + ruleId);
+                        log.info("skipping rule: {}", ruleId);
                         return null;
                     }
                     try {
-                        log.info(String.format("Execution of rule:%s started", ruleId));
+                        log.info("Execution of rule:{} started", ruleId);
                         RuleResponse retval = rule.doWork(request);
-                        log.info(String.format("Execution of rule:%s done", ruleId));
+                        log.info("Execution of rule:{} done", ruleId);
                         return retval;
                     } catch (Exception e) {
                         log.error(String.format("Exception occurred while executing rule:%s Please raise bug report if issue persist", ruleId), e);
@@ -84,7 +86,7 @@ public class RuleLifecycleManager {
                 .errorMessages(errorMessages)
                 .clearItems()
                 .items(sortedItems)
-                .id(Math.abs(new Random().nextInt()))
+                .id(Math.abs(RANDOM.nextInt()))
                 .build();
     }
 

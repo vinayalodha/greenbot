@@ -24,6 +24,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.ec2.model.Instance;
+import software.amazon.awssdk.services.ec2.model.InstanceLifecycleType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +57,7 @@ public class InstanceToComputeConverter implements Converter<Instance, Compute> 
                 .tags(tags)
                 .serviceType(tags.get(AwsTags.ELASTIC_BEANSTALK_APP_NAME) != null ? "Elastic Beanstalk/EC2" : "EC2")
                 .name(TagUtils.getValue(tags.get("Name")).orElse(""))
+                .spot(instance.instanceLifecycle() == InstanceLifecycleType.SPOT)
                 .build();
     }
 }

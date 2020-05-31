@@ -36,7 +36,7 @@ public class TerraformUtils {
             client.setWorkingDirectory(new File(path));
             client.plan().get();
             client.apply().get();
-            log.info("Terraform apply done for plan " + path);
+            log.info("Terraform apply done for plan {}", path);
         }
     }
 
@@ -48,7 +48,7 @@ public class TerraformUtils {
 
             client.setWorkingDirectory(new File(path));
             client.destroy().get();
-            log.info("Terraform destroy done for plan " + path);
+            log.info("Terraform destroy done for plan {}", path);
         }
     }
 

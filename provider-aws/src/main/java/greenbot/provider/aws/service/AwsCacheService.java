@@ -67,20 +67,20 @@ public class AwsCacheService implements CacheService {
     public Map<Cache, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Cache> caches) {
         Map<Cache, List<PossibleUpgradeInfo>> retval = new HashMap<>();
         caches.forEach(cache -> {
-            List<PossibleUpgradeInfo> checkUpgradePossibility = checkUpgradePossibility(cache);
-            if (!checkUpgradePossibility.isEmpty()) {
-                retval.put(cache, checkUpgradePossibility);
+            List<PossibleUpgradeInfo> possibleUpgradeInfos = checkUpgradePossibility(cache);
+            if (!possibleUpgradeInfos.isEmpty()) {
+                retval.put(cache, possibleUpgradeInfos);
             }
         });
         return retval;
     }
 
     private List<PossibleUpgradeInfo> checkUpgradePossibility(Cache cache) {
-        String family = cache.getInstanceType().getFamily();
-        Optional<String> newFamily = UpgradeMapUtils.elasticCacheUpgradeMap(family);
-        Optional<PossibleUpgradeInfo> optional = newFamily.map(o -> {
+        String currentFamily = cache.getInstanceType().getFamily();
+        Optional<String> recommendedFamilyOptional = UpgradeMapUtils.elasticCacheUpgradeMap(currentFamily);
+        Optional<PossibleUpgradeInfo> optional = recommendedFamilyOptional.map(recommendedFamily -> {
             return PossibleUpgradeInfo.fromResource(cache)
-                    .reason(String.format("Consider upgrading ElastiCache instance class from %s to %s", family, o))
+                    .reason(String.format("Consider upgrading ElastiCache instance class from %s to %s", currentFamily, recommendedFamily))
                     .confidence(AnalysisConfidence.HIGH)
                     .build();
         });

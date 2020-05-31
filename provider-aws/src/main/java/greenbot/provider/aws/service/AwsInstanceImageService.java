@@ -54,10 +54,7 @@ public class AwsInstanceImageService implements InstanceImageService {
                     if (excludedTag == null)
                         return true;
                     return image.tags().stream()
-                            .noneMatch(tag -> {
-                                return tag.key().contentEquals(excludedTag.getKey())
-                                        && tag.value().contentEquals(excludedTag.getValue());
-                            });
+                            .noneMatch(tag -> tag.key().contentEquals(excludedTag.getKey()) && tag.value().contentEquals(excludedTag.getValue()));
                 })
                 .limit(threshold + 1)
                 .collect(Collectors.toList());

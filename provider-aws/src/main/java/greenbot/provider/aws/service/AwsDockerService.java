@@ -46,8 +46,8 @@ public class AwsDockerService implements DockerService {
         });
 
         Map<Compute, List<PossibleUpgradeInfo>> retVal = new HashMap<>();
-        for (String key : beanstalkComputeMap.keySet()) {
-            Compute compute = beanstalkComputeMap.get(key).get(0);
+        for (Map.Entry<String, List<Compute>> entry : beanstalkComputeMap.entrySet()) {
+            Compute compute = beanstalkComputeMap.get(entry.getKey()).get(0);
             String appName = compute.getTags().get(ELASTIC_BEANSTALK_APP_NAME).getValue();
             PossibleUpgradeInfo possibleUpgradeInfo = PossibleUpgradeInfo.fromResource(compute)
                     .confidence(AnalysisConfidence.MEDIUM)

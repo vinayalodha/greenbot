@@ -121,17 +121,17 @@ public class AwsComputeService implements ComputeService {
     }
 
     private List<PossibleUpgradeInfo> checkUpgradePossibility(Compute compute) {
-        Optional<PossibleUpgradeInfo> a = isFamilyCanBeUpgraded(compute);
-        Optional<PossibleUpgradeInfo> b = armRecommendation(compute);
-        Optional<PossibleUpgradeInfo> c = infChips(compute);
+        Optional<PossibleUpgradeInfo> familyCanBeUpgraded = isFamilyCanBeUpgraded(compute);
+        Optional<PossibleUpgradeInfo> armRecommendation = armRecommendation(compute);
+        Optional<PossibleUpgradeInfo> infChips = infChips(compute);
 
-        return OptionalUtils.toList(Arrays.asList(a, b, c));
+        return OptionalUtils.toList(Arrays.asList(familyCanBeUpgraded, armRecommendation, infChips));
     }
 
     private Optional<PossibleUpgradeInfo> infChips(Compute compute) {
-        String family = compute.getInstanceType().getFamily();
-        return inf1InstanceUpgradeMap(family)
-                .map(o -> PossibleUpgradeInfo.fromResource(compute)
+        String currentFamily = compute.getInstanceType().getFamily();
+        return inf1InstanceUpgradeMap(currentFamily)
+                .map(recommendedFamily -> PossibleUpgradeInfo.fromResource(compute)
                         .reason("Consider using inf1 instances if you performing machine learning inference")
                         .confidence(AnalysisConfidence.MEDIUM)
                         .build()
@@ -139,27 +139,27 @@ public class AwsComputeService implements ComputeService {
     }
 
     private Optional<PossibleUpgradeInfo> armRecommendation(Compute compute) {
-        String family = compute.getInstanceType().getFamily();
-        return armInstanceUpgradeMap(family)
-                .map(obj -> PossibleUpgradeInfo.fromResource(compute)
-                        .reason(String.format("Consider switching to %s instances if your application workload support ARM", obj))
+        String currentFamily = compute.getInstanceType().getFamily();
+        return armInstanceUpgradeMap(currentFamily)
+                .map(recommendedFamily -> PossibleUpgradeInfo.fromResource(compute)
+                        .reason(String.format("Consider switching to %s instances if your application workload support ARM", recommendedFamily))
                         .confidence(AnalysisConfidence.LOW)
                         .build()
                 );
     }
 
     private Optional<PossibleUpgradeInfo> isFamilyCanBeUpgraded(Compute compute) {
-        String family = compute.getInstanceType().getFamily();
+        String currentFamily = compute.getInstanceType().getFamily();
         AnalysisConfidence confidence;
-        if (compute.getTags().get(AwsTags.FLEET_ID) == null || compute.getTags().get(AwsTags.ASG_NAME) == null)
-            confidence = AnalysisConfidence.HIGH;
-        else
+        if (compute.getTags().get(AwsTags.FLEET_ID) != null || (compute.getTags().get(AwsTags.ASG_NAME) != null && compute.isSpot()))
             confidence = AnalysisConfidence.LOW;
+        else
+            confidence = AnalysisConfidence.HIGH;
 
-        return UpgradeMapUtils.instanceUpgradeMap(family)
-                .map(val ->
+        return UpgradeMapUtils.instanceUpgradeMap(currentFamily)
+                .map(recommendedFamily ->
                         PossibleUpgradeInfo.fromResource(compute)
-                                .reason(String.format("Consider upgrading to newer instance family from %s to %s", family, val))
+                                .reason(String.format("Consider upgrading to newer instance family from %s to %s", currentFamily, recommendedFamily))
                                 .confidence(confidence)
                                 .build()
                 );

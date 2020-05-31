@@ -79,28 +79,28 @@ public class AwsDatabaseService implements DatabaseService {
                 .namespace("AWS/RDS")
                 .build();
 
-        Optional<Double> averageValue = cloudWatchService.getMetricStatistics(request);
-        return averageValue
-                .filter(value -> value < cpuThreshold)
-                .map(value -> PossibleUpgradeInfo.fromResource(database)
+        Optional<Double> averageValueOptional = cloudWatchService.getMetricStatistics(request);
+        return averageValueOptional
+                .filter(averageCpu -> averageCpu < cpuThreshold)
+                .map(averageCpu -> PossibleUpgradeInfo.fromResource(database)
                         .confidence(AnalysisConfidence.MEDIUM)
-                        .reason(String.format("RDS instance CPU is underutilized, average CPU usage is %.2f. Consider using smaller instance size", averageValue.get()))
+                        .reason(String.format("RDS instance CPU is underutilized, average CPU usage is %.2f. Consider using smaller instance size", averageValueOptional.get()))
                         .build()
                 );
     }
 
     private List<PossibleUpgradeInfo> checkUpgradePossibility(Database database) {
-        Optional<PossibleUpgradeInfo> a = migrationToAurora(database);
-        Optional<PossibleUpgradeInfo> b = olderGenFamily(database);
-        return OptionalUtils.toList(Arrays.asList(a, b));
+        Optional<PossibleUpgradeInfo> migrationToAurora = migrationToAurora(database);
+        Optional<PossibleUpgradeInfo> olderGenFamily = olderGenFamily(database);
+        return OptionalUtils.toList(Arrays.asList(migrationToAurora, olderGenFamily));
     }
 
     @Override
     public Map<Database, List<PossibleUpgradeInfo>> checkUpgradePossibility(List<Database> databases) {
         Map<Database, List<PossibleUpgradeInfo>> retval = new HashMap<>();
-        databases.forEach(obj -> {
-            List<PossibleUpgradeInfo> result = checkUpgradePossibility(obj);
-            if (CollectionUtils.isNotEmpty(result)) retval.put(obj, result);
+        databases.forEach(database -> {
+            List<PossibleUpgradeInfo> possibleUpgradeInfos = checkUpgradePossibility(database);
+            if (CollectionUtils.isNotEmpty(possibleUpgradeInfos)) retval.put(database, possibleUpgradeInfos);
         });
         return retval;
     }
@@ -163,10 +163,10 @@ public class AwsDatabaseService implements DatabaseService {
     }
 
     private Optional<PossibleUpgradeInfo> olderGenFamily(Database database) {
-        String family = database.getInstanceClass().getFamily();
-        return UpgradeMapUtils.databaseUpgradeMap(family)
-                .map(o -> PossibleUpgradeInfo.fromResource(database)
-                        .reason(format("Consider upgrading instance class from %s to %s", family, o))
+        String currentFamily = database.getInstanceClass().getFamily();
+        return UpgradeMapUtils.databaseUpgradeMap(currentFamily)
+                .map(recommendedFamily -> PossibleUpgradeInfo.fromResource(database)
+                        .reason(format("Consider upgrading instance class from %s to %s", currentFamily, recommendedFamily))
                         .confidence(AnalysisConfidence.HIGH)
                         .build()
                 );
