@@ -11,7 +11,7 @@ To help organizations reduce carbon footprint.
 
 ## Is it safe to use GreenBot
 
-* GreenBot will **never** modify any AWS resource in your account
+* GreenBot does not modify any AWS resource in your account, only AWS read API is used.
 * Permission for all rules are listed explicitly 
 * Open-source!
 
