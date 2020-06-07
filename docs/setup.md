@@ -5,7 +5,7 @@
   * AWS corretto JDK 8 download [link](https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/downloads-list.html), installation [guide](https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/windows-7-install.html)
 * Install and configure[ AWS CLI ](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)using `aws configure`
 * Download **main.jar** from [GreenBot release](https://github.com/vinay-lodha/greenbot/releases)
-* Open terminal and execute `java -jar main-<version>.jar`, application should now be up on [`http://localhost:5000`](http://localhost:5000)
+* Open terminal and execute `java -jar main.jar`, application should now be up on [`http://localhost:5000`](http://localhost:5000)
 
 ## Permissions
 
