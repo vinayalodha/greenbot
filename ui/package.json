@@ -40,7 +40,7 @@
     },
     "devDependencies": {
         "lato-font": "^3.0.0",
-        "prettier": "^1.19.1"
+        "prettier": "^2.1.0"
     },
     "proxy": "http://localhost:5000"
 }
